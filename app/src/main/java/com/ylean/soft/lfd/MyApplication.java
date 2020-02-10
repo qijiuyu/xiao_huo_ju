@@ -3,7 +3,10 @@ package com.ylean.soft.lfd;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.zxdc.utils.library.base.BaseApplication;
+import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2020/2/5.
@@ -21,6 +24,9 @@ public class MyApplication extends BaseApplication {
 
         //初始化友盟分享
         initShare();
+
+        //初始化消息推送
+        initPush();
     }
 
 
@@ -41,5 +47,16 @@ public class MyApplication extends BaseApplication {
          * 参数: boolean 默认为false，如需查看LOG设置为true
          */
         UMConfigure.setLogEnabled(true);
+    }
+
+
+    /**
+     * 初始化消息推送
+     */
+    private void initPush(){
+        //设置开启日志,发布时请关闭日志
+        JPushInterface.setDebugMode(true);
+        //初始化 JPush
+        JPushInterface.init(this);
     }
 }
