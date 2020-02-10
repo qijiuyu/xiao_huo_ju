@@ -50,19 +50,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="8.5dp"/>
 
-    <com.ylean.soft.lfd.view.DragGrid
-        android:id="@+id/grid_tag"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="14dip"
         android:layout_marginRight="14dip"
-        android:gravity="center"
-        android:horizontalSpacing="14dip"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="4"
-        android:scrollbars="vertical"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="14.0px" />
+        android:background="@color/transparent"/>
 
 </LinearLayout>
