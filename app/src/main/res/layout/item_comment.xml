@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/black">
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginBottom="20dp">
+
+       <com.zxdc.utils.library.view.CircleImageView
+           android:id="@+id/img_head"
+           android:layout_width="33dp"
+           android:layout_height="33dp"
+           android:src="@mipmap/bb"
+           android:layout_marginLeft="15dp"/>
+
+       <TextView
+           android:id="@+id/tv_name"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="志在四方"
+           android:textColor="#ABFFFFFF"
+           android:textSize="13sp"
+           android:layout_toRightOf="@id/img_head"
+           android:layout_marginLeft="12dp"/>
+
+       <TableRow
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toRightOf="@id/img_head"
+           android:layout_marginLeft="12dp"
+           android:layout_below="@id/tv_name"
+           android:layout_marginTop="3dp"
+           android:layout_marginRight="57dp">
+
+           <TextView
+               android:id="@+id/tv_content"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="非常勿扰最终的宗旨！为您点赞。真好，祝您幸福。"
+               android:textSize="15sp"
+               android:textColor="@android:color/white"/>
+
+           <TextView
+               android:id="@+id/tv_time"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="2分钟"
+               android:textSize="12sp"
+               android:textColor="#ABFFFFFF"
+               android:layout_marginLeft="20dp"/>
+
+
+       </TableRow>
+
+       <ImageView
+           android:id="@+id/img_praise"
+           android:layout_width="18dp"
+           android:layout_height="16.5dp"
+           android:src="@mipmap/no_praise"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="15dp"
+           android:layout_marginTop="10dp"/>
+
+       <TextView
+           android:id="@+id/tv_num"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="20dp"
+           android:layout_below="@id/img_praise"
+           android:text="8"
+           android:textColor="@android:color/white"
+           android:textSize="13sp"/>
+
+   </RelativeLayout>
+
+</LinearLayout>

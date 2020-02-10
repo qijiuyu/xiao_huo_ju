@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <com.zxdc.utils.library.view.OvalImageViews
+        android:id="@+id/img_head"
+        android:layout_width="104dp"
+        android:layout_height="134dp"
+        android:src="@mipmap/aa"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="141dp"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="霸道总裁很粘人"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_blues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第85集"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="7dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="剩余 23:56"
+        android:textColor="@color/color_999999"
+        android:textSize="12sp"
+        android:layout_marginLeft="141dp"
+        android:layout_marginTop="90dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/img_head"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_D8D8D8"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+</RelativeLayout>

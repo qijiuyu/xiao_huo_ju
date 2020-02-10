@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <include layout="@layout/head"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="小火剧"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/color_666666"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="要使用本“软件”，用户需填写并提交个人或组织资料注册Oray帐号。作为帐号注册过程的一部分，用户必须同意：(1) 按照帐号注册过程的提示信息，提供有关您本人的真实信息（此类信息必须保持最新、完整且准确）；(2) 根据需要维护并更新注册人信息，使之始终保持最新、完整且准确。如果您未满 18 周岁，应在法定监护人陪同下阅读。"
+                android:textColor="@color/color_666666"
+                android:textSize="15sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:lineSpacingExtra="5dp"
+                android:letterSpacing="0.2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="客服电话"
+                android:textSize="13sp"
+                android:textColor="@color/color_999999"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="73dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="400-1234-8888"
+                android:textSize="13sp"
+                android:textColor="@color/color_999999"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

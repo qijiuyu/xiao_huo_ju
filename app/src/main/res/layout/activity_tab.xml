@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0" />
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.0"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.zxdc.utils.library.view.ClickLinearLayout
+                        android:id="@+id/lin_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/img_main"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/tab_1_true" />
+
+                        <TextView
+                            android:id="@+id/tv_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="6dp"
+                            android:text="首页"
+                            android:textColor="@color/color_333333"
+                            android:textSize="11sp" />
+
+                    </com.zxdc.utils.library.view.ClickLinearLayout>
+
+                    <com.zxdc.utils.library.view.ClickLinearLayout
+                        android:id="@+id/lin_recommend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/img_recommend"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/tab_2_false" />
+
+                        <TextView
+                            android:id="@+id/tv_recommend"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="6dp"
+                            android:text="推荐"
+                            android:textColor="@color/color_999999"
+                            android:textSize="11sp" />
+
+                    </com.zxdc.utils.library.view.ClickLinearLayout>
+
+                    <com.zxdc.utils.library.view.ClickLinearLayout
+                        android:id="@+id/lin_focus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/img_focus"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/tab_3_false" />
+
+                        <TextView
+                            android:id="@+id/tv_focus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="6dp"
+                            android:text="关注"
+                            android:textColor="@color/color_999999"
+                            android:textSize="11sp" />
+
+                    </com.zxdc.utils.library.view.ClickLinearLayout>
+
+                    <com.zxdc.utils.library.view.ClickLinearLayout
+                        android:id="@+id/lin_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/img_user"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/tab_4_false" />
+
+                        <TextView
+                            android:id="@+id/tv_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="6dp"
+                            android:text="我的"
+                            android:textColor="@color/color_999999"
+                            android:textSize="11sp" />
+
+                    </com.zxdc.utils.library.view.ClickLinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</TabHost>

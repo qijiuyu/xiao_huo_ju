@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.ylean.soft.lfd.view.MySurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+        <ProgressBar
+            android:id="@+id/pb_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14.5dp">
+
+            <ImageView
+                android:id="@+id/img_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/white_bank"
+                android:layout_marginLeft="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_blues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="当前：12集"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="17dp"
+            android:gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="17dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="54dp">
+
+                <com.zxdc.utils.library.view.CircleImageView
+                    android:id="@+id/img_head"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@mipmap/bb"/>
+
+                <ImageView
+                    android:id="@+id/img_focus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/add_focus"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/img_praise"
+                android:layout_width="30dp"
+                android:layout_height="27.5dp"
+                android:src="@mipmap/no_praise"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_praise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8877"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:layout_marginTop="8.5dp"/>
+
+            <ImageView
+                android:id="@+id/img_comm"
+                android:layout_width="30dp"
+                android:layout_height="27.5dp"
+                android:src="@mipmap/comm_icon"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_comm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1123"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:layout_marginTop="8.5dp"/>
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="30dp"
+                android:layout_height="27.5dp"
+                android:src="@mipmap/share_icon"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1123"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:layout_marginTop="8.5dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="剧情：走进非洲人民的生活"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="45dp"
+            android:layout_marginLeft="15dp"/>
+
+        <com.ylean.soft.lfd.view.AutoPollRecyclerView
+            android:id="@+id/list_comm"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="75dp"
+            android:background="@color/transparent">
+        </com.ylean.soft.lfd.view.AutoPollRecyclerView>
+
+        <View
+            android:clickable="true"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="75dp"
+            android:background="@color/transparent"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:id="@+id/img_play"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/start_video"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/img_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/no_tp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/img_select_blues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/select_blues"
+                android:layout_toLeftOf="@id/img_screen"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_toLeftOf="@id/img_select_blues"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:thumb="@drawable/seekbar_share"
+                android:layout_toRightOf="@id/img_play"
+                android:layout_toLeftOf="@id/tv_time"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/left_menu"
+        android:layout_gravity="right"
+        android:layout_width="223dp"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/id_left_menu"
+            android:name="com.ylean.soft.lfd.fragment.main.SelectBluesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/listView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp">
+  </android.support.v7.widget.RecyclerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_F9F9F9"
+        android:layout_marginTop="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp">
+
+        <com.zxdc.utils.library.view.OvalImageViews
+            android:id="@+id/img_head"
+            android:layout_width="104dp"
+            android:layout_height="133dp"
+            android:src="@mipmap/aa"
+            android:layout_marginLeft="15dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="霸道总裁很粘人"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="131dp"
+            android:layout_marginTop="13dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/tv_title"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="131dp"
+            android:gravity="center_vertical">
+
+            <com.zxdc.utils.library.view.CircleImageView
+                android:id="@+id/img_pic"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/bb"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暖男先生"
+                android:textColor="@color/color_666666"
+                android:textSize="12sp"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关注"
+                android:textSize="12sp"
+                android:textColor="@color/color_FFBC32"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/tv_title"
+            android:layout_marginTop="61dp"
+            android:layout_marginLeft="131dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="播放"
+                android:textColor="@color/color_999999"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tv_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="74.6w"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更新至"
+                android:textColor="@color/color_999999"
+                android:textSize="12sp"
+                android:layout_marginLeft="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_blues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第85集"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_F9F9F9"
+        android:layout_marginTop="25dp"/>
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/rel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:clickable="true"
+    android:tag="right">
+
+    <RelativeLayout
+        android:clickable="true"
+        android:layout_width="135dp"
+        android:layout_height="match_parent"
+        android:background="#AAFFFFFF"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/img_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/top"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/img_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"/>
+
+        <com.zxdc.utils.library.view.MyRefreshLayout
+            android:id="@+id/re_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/img_top"
+            android:layout_above="@id/img_bottom"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/transparent">
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:focusable="true"
+                android:scrollbars="none" />
+
+        </com.zxdc.utils.library.view.MyRefreshLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="5dp">
+
+        <com.zxdc.utils.library.view.OvalImageViews
+            android:id="@+id/img_head"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@mipmap/aa"
+            android:scaleType="centerCrop"/>
+        
+        <ImageView
+            android:id="@+id/img_check"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/no_check"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高甜"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/img_head"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lee="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="31dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_search"
+            android:layout_marginRight="70dp"
+            android:layout_marginLeft="15dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/gray_search"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"/>
+
+            <EditText
+                android:id="@+id/et_key"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请输入您想看的内容"
+                android:textColor="@color/color_CCCCCC"
+                android:textSize="13sp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="10dp"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="搜索记录"
+            android:textSize="16sp"
+            android:textColor="@color/color_33333"
+            android:drawableLeft="@mipmap/search_jl"
+            android:drawablePadding="10dp"
+            android:layout_marginLeft="15dp" />
+
+        <ImageView
+            android:id="@+id/img_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/remove_search"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <com.ylean.soft.lfd.view.TagsLayout
+        android:id="@+id/tag_hoistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="15dp"
+        lee:tagHorizontalSpace="10dp"
+        lee:tagVerticalSpace="5dp" >
+    </com.ylean.soft.lfd.view.TagsLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_D8D8D8"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="大家都在搜"
+        android:textSize="16sp"
+        android:textColor="@color/color_33333"
+        android:drawableLeft="@mipmap/hot_search"
+        android:drawablePadding="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="28dp"/>
+
+    <com.ylean.soft.lfd.view.TagsLayout
+        android:id="@+id/tag_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="15dp"
+        lee:tagHorizontalSpace="10dp"
+        lee:tagVerticalSpace="5dp" >
+    </com.ylean.soft.lfd.view.TagsLayout>
+
+</LinearLayout>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">utils_library</string>
+    <string name="photo">拍照</string>
+    <string name="choose_from_photo_album">从相册选择</string>
+    <string name="load_more">加载更多...</string>
+    <string name="dialog_scenic_hot_hint">温馨提示</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="version_update">版本更新</string>
+</resources>

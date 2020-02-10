@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_F8F8F8">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/bg_news">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="系统通知消息"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginTop="12.5dp"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019-04-02 13:21"
+            android:textColor="@color/color_CCCCCC"
+            android:textSize="12sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="12.5dp"/>
+
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/color_666666"
+            android:layout_below="@id/tv_title"
+            android:layout_marginRight="12.5dp"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="11dp"
+            android:lineSpacingExtra="5dp"
+            android:letterSpacing="0.1"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <color name="qian_gray">#333333</color>
+        <color name="color_FFECECEC">#FFECECEC</color>
+        <color name="color_FFFFFFFF">#FFFFFFFF</color>
+        <color name="qian_gray_two">#D4D4D4</color>
+        <color name="main_color">#00AD66</color>
+        <color name="color_33333">#333333</color>
+        <!-- 半透明 -->
+        <color name="half_transparent">#80000000</color>
+        <!-- 透明 -->
+        <color name="transparent">#00000000</color>
+
+</resources>

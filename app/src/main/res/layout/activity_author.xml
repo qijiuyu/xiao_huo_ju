@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@mipmap/bg_author">
+
+        <com.zxdc.utils.library.view.CircleImageView
+            android:id="@+id/img_head"
+            android:layout_width="97dp"
+            android:layout_height="97dp"
+            android:src="@mipmap/bb"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="65dp"
+            android:layout_marginLeft="15dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="91dp">
+
+            <TextView
+                android:id="@+id/tv_fans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2022"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="粉丝"
+                android:textSize="13sp"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/tv_fans"
+                android:layout_alignBottom="@id/tv_fans"
+                android:layout_marginLeft="5dp"/>
+
+        </RelativeLayout>
+
+        <com.zxdc.utils.library.view.ClickTextView
+            android:id="@+id/tv_focus"
+            android:layout_width="170dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_author_focus"
+            android:layout_marginTop="109dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:text="已关注"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="行走的胡萝卜"
+            android:textSize="23sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="182dp"
+            android:layout_marginLeft="15dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="TA的作品"
+        android:textColor="@color/color_FFBC32"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center_horizontal"/>
+
+    <View
+        android:layout_width="10dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/textview_color"
+        android:layout_marginLeft="55dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
