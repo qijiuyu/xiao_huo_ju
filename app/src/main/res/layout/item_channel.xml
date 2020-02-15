@@ -6,15 +6,35 @@
     android:minHeight="38.0dip"
     android:minWidth="72.0dip" >
 
-    <TextView
-        android:id="@+id/text_item"
+    <RelativeLayout
         android:layout_width="78dp"
         android:layout_height="42dp"
+        android:layout_marginBottom="15dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/bg_chanel"
-        android:gravity="center"
-        android:textColor="@color/color_33333"
-        android:textSize="15sp"
-        android:layout_marginBottom="15dp"/>
+        android:background="@drawable/bg_chanel">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/img_tag"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/ee"/>
+
+            <TextView
+                android:id="@+id/text_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_33333"
+                android:textSize="15sp"
+                android:layout_marginLeft="4.5dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

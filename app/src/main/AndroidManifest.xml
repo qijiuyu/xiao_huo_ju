@@ -43,7 +43,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.TabActivity"  android:screenOrientation="portrait"  android:launchMode="singleTask">
+        <activity android:name=".activity.init.WellcomActivity"  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,6 +51,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.init.GuideActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TabActivity"  android:screenOrientation="portrait"  android:launchMode="singleTask"/>
         <activity android:name=".activity.init.LoginActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.init.VerifyMobileActvity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.init.ResetPassWordActivity"  android:screenOrientation="portrait"/>

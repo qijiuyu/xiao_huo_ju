@@ -26,6 +26,7 @@ import com.ylean.soft.lfd.adapter.main.MainHottestAdapter;
 import com.ylean.soft.lfd.adapter.main.MainLookAdapter;
 import com.ylean.soft.lfd.adapter.main.MainOnlineAdapter;
 import com.ylean.soft.lfd.adapter.main.MainProjectAdapter;
+import com.ylean.soft.lfd.persenter.main.SelectFragmentPersenter;
 import com.ylean.soft.lfd.utils.CornerTransform;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -74,12 +75,12 @@ public class SelectFragment extends BaseFragment {
     @BindView(R.id.recycle_author)
     RecyclerView recycleAuthor;
     Unbinder unbinder;
-    //大家都在看adapter
-    private MainLookAdapter mainLookAdapter;
+    private SelectFragmentPersenter selectFragmentPersenter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //注册eventBus
         EventBus.getDefault().register(this);
+        selectFragmentPersenter=new SelectFragmentPersenter(mActivity);
     }
 
     View view;
@@ -227,7 +228,7 @@ public class SelectFragment extends BaseFragment {
      * 显示大家都在看
      */
     private void showLook(){
-        mainLookAdapter=new MainLookAdapter(mActivity);
+        MainLookAdapter mainLookAdapter=new MainLookAdapter(mActivity);
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleLook.setLayoutManager(layoutManager);

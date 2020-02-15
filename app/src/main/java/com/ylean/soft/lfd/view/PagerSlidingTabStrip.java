@@ -89,9 +89,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private int dividerWidth = 1;
 
 	//默认字体大小
-	private int tabTextSize = 15;
+	private int tabTextSize = 16;
 	//选中的字体大小
-	private int selectedTabTextSize=15;
+	private int selectedTabTextSize=16;
 	//默认字体颜色
 	private int tabTextColor = 0xFF666666;
 	//选中的字体颜色

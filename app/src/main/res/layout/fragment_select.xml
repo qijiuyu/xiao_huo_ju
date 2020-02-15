@@ -41,7 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="今日最热"
+                        android:text="热播排行"
                         android:textSize="16sp"
                         android:textColor="@color/color_FFBC32"/>
 
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/view1"
                         android:textStyle="bold"
-                        android:text="必选TOP50"
+                        android:text="精选TOP20"
                         android:textSize="16sp"
                         android:textColor="@android:color/black"/>
 
@@ -144,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="大家都在看"
+                        android:text="猜你喜欢"
                         android:textSize="16sp"
                         android:textColor="@color/color_FFBC32"/>
 

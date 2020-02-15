@@ -1,37 +1,37 @@
 package com.ylean.soft.lfd.activity.main;
 
 import android.graphics.Color;
-import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
-import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
+import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
+import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
-import com.ylean.soft.lfd.view.MySurfaceView;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
-import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.view.CircleImageView;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
+
 /**
  * 播放视频
  * Created by Administrator on 2020/2/6.
@@ -41,8 +41,10 @@ public class VideoPlayActivity extends BaseActivity {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.surfaceView)
-    public MySurfaceView surfaceView;
+    @BindView(R.id.hud_view)
+    TableLayout hubView;
+    @BindView(R.id.videoView)
+    IjkVideoView videoView;
     @BindView(R.id.pb_progressbar)
     ProgressBar pbProgressbar;
     @BindView(R.id.tv_blues)
@@ -69,25 +71,26 @@ public class VideoPlayActivity extends BaseActivity {
     SeekBar seekbar;
     @BindView(R.id.list_comm)
     AutoPollRecyclerView listComm;
-    //播放器
-    public MediaPlayer mMediaPlayer;
-    /**
-     * true：在播放
-     * false：暂停
-     */
-    private boolean isPlay;
+    //视频控制器
+    private AndroidMediaController controller;
     private String videoUrl="http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
     private Handler handler=new Handler();
+    /**
+     * true:已点赞
+     * false：未点赞
+     */
+    private boolean isPraise=false;
     private VideoPlayPersenter videoPlayPersenter;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        StatusBarUtils.transparencyBar(this);
         setContentView(R.layout.activity_videoview);
         ButterKnife.bind(this);
         //注册eventBus
         EventBus.getDefault().register(this);
         initView();
         rightMenu();
+        //播放视频
+        startPlay();
     }
 
     /**
@@ -96,12 +99,11 @@ public class VideoPlayActivity extends BaseActivity {
     private void initView(){
         //实例化MVP对象
         videoPlayPersenter=new VideoPlayPersenter(this);
-        //创建MediaPlayer对象
-        mMediaPlayer = new MediaPlayer();
-        surfaceView.setKeepScreenOn(true);
-        surfaceView.getHolder().addCallback(mCallback);
+        //实例化视频控制器
+        controller=new AndroidMediaController(this, false);
+        videoView.setHudView(hubView);
+        //进度条监听
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
-
 
         listComm.setLayoutManager(new LinearLayoutManager(this));
         listComm.setAdapter(new ScreenAdapter(this));
@@ -117,6 +119,35 @@ public class VideoPlayActivity extends BaseActivity {
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+
+    /**
+     * 播放视频
+     */
+    private void startPlay(){
+        videoView.setMediaController(controller);
+        videoView.setVideoURI(Uri.parse(videoUrl));
+        videoView.start();
+        //监听视频播放完毕
+        videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+            public void onCompletion(IMediaPlayer iMediaPlayer) {
+                videoView.seekTo(0);
+            }
+        });
+        //监听视频加载完成
+        videoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+            public void onPrepared(IMediaPlayer iMediaPlayer) {
+                //显示视频播放时长
+                videoPlayPersenter.showVideoTime(videoView, tvTime);
+                //设置播放进度条的最大值
+                seekbar.setMax(videoView.getDuration());
+                //动态更新播放进度
+                handler.postDelayed(runnable, 0);
+                //隐藏进度圈
+                pbProgressbar.setVisibility(View.GONE);
+            }
+        });
     }
 
 
@@ -138,6 +169,14 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //点赞
             case R.id.img_praise:
+                if(isPraise){
+                    isPraise=false;
+                    imgPraise.setImageResource(R.mipmap.no_praise);
+                }else{
+                    isPraise=true;
+                    imgPraise.setImageResource(R.mipmap.yes_praise);
+                }
+                imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                 break;
             //评论
             case R.id.img_comm:
@@ -149,11 +188,11 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //播放/暂停
             case R.id.img_play:
-                if(mMediaPlayer.isPlaying()){
-                    mMediaPlayer.pause();
+                if(videoView.isPlaying()){
+                    videoView.pause();
                     imgPlay.setImageResource(R.mipmap.play_icon);
                 }else{
-                    mMediaPlayer.start();
+                    videoView.start();
                     imgPlay.setImageResource(R.mipmap.start_video);
                 }
                 break;
@@ -176,87 +215,17 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback(){
-        public void surfaceCreated(SurfaceHolder holder) {
-            new Thread(new Runnable() {
-                public void run() {
-                    //播放视频
-                    playVideo();
-                }
-            }).start();
-        }
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            mMediaPlayer.setDisplay(holder);
-        }
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-                mMediaPlayer.stop();
-                pbProgressbar.setVisibility(View.VISIBLE);
-            }
-        }
-    };
-
-
-    /**
-     * 播放视频
-     */
-    private void playVideo() {
-        try {
-            mMediaPlayer.reset(); // 重置
-            mMediaPlayer.setDataSource(videoUrl);
-            //把视频画面输出到SurfaceView中
-            mMediaPlayer.setDisplay(surfaceView.getHolder());
-            //当装载流媒体完毕的时候回调
-            mMediaPlayer.setOnPreparedListener(new PreparedListener());
-            //监听视频播放完成
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp) {
-                    mMediaPlayer.seekTo(0);
-                    seekbar.setProgress(0);
-                    imgPlay.setImageResource(R.mipmap.play_icon);
-                }
-            });
-            //设置全屏播放视频不会变形
-            mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-            //同步的方式装载流媒体文件
-            mMediaPlayer.prepare();
-            //设置播放进度条的最大值
-            seekbar.setMax(mMediaPlayer.getDuration());
-            //动态更新播放进度
-            handler.postDelayed(runnable, 0);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     /**
      * 动态更新播放进度
      */
     private Runnable runnable = new Runnable() {
         public void run() {
-            if (mMediaPlayer.isPlaying()) {
-                seekbar.setProgress(mMediaPlayer.getCurrentPosition());
+            if (videoView.isPlaying()) {
+                seekbar.setProgress(videoView.getCurrentPosition());
             }
             handler.postDelayed(runnable, 1000);
         }
     };
-
-
-    /**
-     * 当装载流媒体完毕的时候回调
-     */
-    class PreparedListener implements MediaPlayer.OnPreparedListener {
-        public void onPrepared(MediaPlayer mp) {
-            //根据屏幕宽高改变视频分辨率
-            videoPlayPersenter.updateSurfaceSize();
-            //显示视频播放时长
-            showVideoTime();
-            pbProgressbar.setVisibility(View.GONE); // 取消dialog
-            //开始播放
-            mMediaPlayer.start();
-        }
-    }
 
 
     private SeekBar.OnSeekBarChangeListener mSeekBarListener = new SeekBar.OnSeekBarChangeListener() {
@@ -271,27 +240,12 @@ public class VideoPlayActivity extends BaseActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
             // 取得当前进度条的刻度
             int progress = seekBar.getProgress();
-            if (mMediaPlayer.isPlaying()) {
+            if (videoView.isPlaying()) {
                 // 设置当前播放的位置
-                mMediaPlayer.seekTo(progress);
+                videoView.seekTo(progress);
             }
         }
     };
-
-    /**
-     * 显示视频播放时长
-     */
-    private void showVideoTime(){
-        int time=mMediaPlayer.getDuration()/1000;
-        final int hoursInt = time / 3600;
-        final int minutesInt = (time - hoursInt * 3600) / 60;
-        final int secondsInt = time - hoursInt * 3600 - minutesInt * 60;
-        if(hoursInt==0){
-            tvTime.setText(String.format("%02d", minutesInt) + ":" + String.format("%02d", secondsInt));
-        } else{
-            tvTime.setText(String.format("%02d", hoursInt) + ":" + String.format("%02d", minutesInt) + ":" + String.format("%02d", secondsInt));
-        }
-    }
 
 
     /**
@@ -315,10 +269,6 @@ public class VideoPlayActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }
+        videoView.stopPlayback();
     }
 }

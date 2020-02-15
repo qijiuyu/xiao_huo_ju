@@ -133,13 +133,10 @@ public class Util extends ClassLoader {
      * @return
      */
     public static int getDeviceWH(Context context,int type){
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         // 获取显示度量，该显示度量描述了显示的大小和密度
-        DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int width=metrics.widthPixels;
         int height=metrics.heightPixels;
-
         if(type==1){
             return width;
         }else{

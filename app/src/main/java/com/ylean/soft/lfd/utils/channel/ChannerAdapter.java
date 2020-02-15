@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
@@ -28,9 +31,14 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
      * false：只能长按拖拽
      */
     private boolean isClick=false;
+    //是否抖动
+    public boolean isJitter=false;
+    //抖动动画
+    private Animation shake;
     public ChannerAdapter(Context context, List<DataBean> list) {
         this.context = context;
         this.list = list;
+        shake = AnimationUtils.loadAnimation(context, R.anim.jitter);
     }
 
     @Override
@@ -44,6 +52,9 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         holder.tv_des.setText(list.get(position).name);
+        if(isJitter){
+            holder.tv_des.setAnimation(shake);
+        }
         holder.tv_des.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
                 Vibrator vibrator = (Vibrator)context.getSystemService(context.VIBRATOR_SERVICE);
@@ -98,9 +109,11 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
 
 class MyViewHolder extends RecyclerView.ViewHolder {
     public TextView tv_des;
+    public ImageView imgTag;
     public MyViewHolder(View itemView) {
         super(itemView);
         tv_des =itemView.findViewById(R.id.text_item);
+        imgTag=itemView.findViewWithTag(R.id.img_tag);
     }
 }
 

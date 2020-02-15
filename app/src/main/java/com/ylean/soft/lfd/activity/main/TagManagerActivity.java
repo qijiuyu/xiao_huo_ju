@@ -42,10 +42,10 @@ public class TagManagerActivity extends BaseActivity {
         DataBean bean1 = new DataBean("体育", 0, "url");
         DataBean bean2 = new DataBean("新闻", 1, "url");
         DataBean bean3 = new DataBean("影视", 2, "url");
-        DataBean bean4 = new DataBean("电视剧", 3, "url");
+        DataBean bean4 = new DataBean("电视", 3, "url");
         DataBean bean5 = new DataBean("热点", 4, "url");
         DataBean bean6 = new DataBean("推荐", 5, "url");
-        DataBean bean7 = new DataBean("屌丝男士", 6, "url");
+        DataBean bean7 = new DataBean("屌丝", 6, "url");
         DataBean bean8 = new DataBean("音乐", 7, "url");
         DataBean bean9 = new DataBean("电影", 8, "url");
 
@@ -78,7 +78,15 @@ public class TagManagerActivity extends BaseActivity {
                 break;
             //编辑/完成
             case R.id.tv_right:
-                channerAdapter.setOnClick(true);
+                 if(tvRight.getText().toString().trim().equals("编辑")){
+                     tvRight.setText("完成");
+                     channerAdapter.setOnClick(true);
+                     //设置控件抖动
+                     channerAdapter.isJitter=true;
+                     channerAdapter.notifyDataSetChanged();
+                 }else{
+                     finish();
+                 }
                 break;
             default:
                 break;

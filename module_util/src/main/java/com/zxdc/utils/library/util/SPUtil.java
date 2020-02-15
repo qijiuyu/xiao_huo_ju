@@ -15,6 +15,8 @@ public class SPUtil {
     private SharedPreferences shar;
     private Editor editor;
     public final static String USERMESSAGE = "xiao_huo_ju";
+    //是否首次打开APP
+    public final static String IS_FIRST_OPEN="IS_FIRST_OPEN";
     //登录的token
     public final static String TOKEN="TOKEN";
     //用户id
