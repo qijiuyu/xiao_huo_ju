@@ -40,7 +40,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     //视频控制器
     private AndroidMediaController controller;
     //实例化MVP对象
-    private VideoPlayPersenter videoPlayPersenter;
+    public VideoPlayPersenter videoPlayPersenter;
     private Handler handler=new Handler();
     public FoundAdapter(RecommendedActivity activity) {
         this.activity=activity;
@@ -134,7 +134,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void onViewRecycled(@NonNull ViewHolder holder) {
         super.onViewRecycled(holder);
-        videoPlayPersenter.removeVideo(holder.videoView,holder.listComm);
+        removeVideo();
     }
 
 
@@ -236,6 +236,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     };
 
 
+    /**
+     * 暂停及开始
+     */
     public void setVideoStatus(){
         if(holder!=null && holder.videoView!=null){
             if(holder.videoView.isPlaying()){
@@ -243,6 +246,21 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             }else{
                 holder.videoView.start();
             }
+        }
+    }
+
+
+    /**
+     * item滑动销毁后
+     */
+    public void removeVideo(){
+        //清除视频资源
+        if(holder.videoView!=null){
+            holder.videoView.stopPlayback();
+        }
+        //关闭弹屏
+        if(holder.listComm!=null){
+            holder.listComm.stop();
         }
     }
 

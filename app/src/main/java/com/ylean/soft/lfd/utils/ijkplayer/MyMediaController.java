@@ -326,30 +326,28 @@ public class MyMediaController extends FrameLayout {
         return position;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        LogUtils.e("++++++++++++++++++++++++1");
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                show(0); // show until hide is called
-                break;
-            case MotionEvent.ACTION_UP:
-                show(sDefaultTimeout); // start timeout
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onTrackballEvent(MotionEvent ev) {
-        LogUtils.e("++++++++++++++++++++++++2");
-        show(sDefaultTimeout);
-        return false;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                show(0); // show until hide is called
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                show(sDefaultTimeout); // start timeout
+//                break;
+//            case MotionEvent.ACTION_CANCEL:
+//                break;
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onTrackballEvent(MotionEvent ev) {
+//        show(sDefaultTimeout);
+//        return false;
+//    }
 
 //    @Override
 //    public boolean dispatchKeyEvent(KeyEvent event) {

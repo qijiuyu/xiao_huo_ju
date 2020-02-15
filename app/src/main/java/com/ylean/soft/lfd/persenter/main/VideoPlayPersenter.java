@@ -5,15 +5,12 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.CommentAdapter;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
@@ -32,8 +28,6 @@ import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import java.util.HashMap;
-import java.util.List;
-
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -41,7 +35,6 @@ import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
-import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
@@ -134,7 +127,6 @@ public class VideoPlayPersenter {
                 danmaku.borderColor = Color.GREEN;
             }
             danmakuView.addDanmaku(danmaku);
-
         }
         startDanmaku(danmakuView);
     }
@@ -272,20 +264,4 @@ public class VideoPlayPersenter {
         });
     }
 
-
-
-    /**
-     * item滑动销毁后
-     */
-    public void removeVideo(IjkVideoView videoView, AutoPollRecyclerView listComm){
-        //清除视频资源
-        videoView.stopPlayback();
-        //关闭弹屏
-        listComm.stop();
-        //释放缩略图内存
-        if(bitmap!=null){
-            bitmap.recycle();
-            bitmap=null;
-        }
-    }
 }
