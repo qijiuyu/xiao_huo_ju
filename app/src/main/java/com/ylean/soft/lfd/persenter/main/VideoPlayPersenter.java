@@ -3,6 +3,7 @@ package com.ylean.soft.lfd.persenter.main;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
@@ -31,6 +32,18 @@ import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import java.util.HashMap;
+import java.util.List;
+
+import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.IDanmakus;
+import master.flame.danmaku.danmaku.model.IDisplayer;
+import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
+import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.ui.widget.DanmakuView;
 
 /**
  * Created by Administrator on 2020/2/8.
@@ -42,6 +55,8 @@ public class VideoPlayPersenter {
     //视频缩略图
     private Bitmap bitmap = null;
 
+    private DanmakuContext danmakuContext;
+
     public VideoPlayPersenter(Activity activity){
         this.activity=activity;
     }
@@ -52,6 +67,78 @@ public class VideoPlayPersenter {
             return false;
         }
     });
+
+
+    /**
+     * 开始弹屏
+     */
+    public void startDanmaku(final DanmakuView danmakuView){
+        danmakuView.enableDanmakuDrawingCache(true);
+        danmakuView.setCallback(new DrawHandler.Callback() {
+            public void prepared() {
+                danmakuView.start();
+                String[] content=new String[]{"高健：视频很不错，我非常喜欢","刘成：我记得我昨天看过了","范文芳：武汉加油，全中国加油，大家一起加油","张三：好饿啊，好几天没有吃饭了","李龙：今年是老鼠年，大家都像过街老鼠一样","何进：我是何进，三国之乱由我开始的","曹操：我是孟德，我才高八斗","张飞：我很勇猛的","赵云：我七进七出，救了阿斗"};
+                addDanmaku(danmakuView,content,false);
+            }
+            public void updateTimer(DanmakuTimer timer) {
+
+            }
+            public void danmakuShown(BaseDanmaku danmaku) {
+
+            }
+            public void drawingFinished() {
+
+            }
+        });
+        danmakuContext = DanmakuContext.create();
+        // 设置弹幕的最大显示行数
+        HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 2);
+        // 设置是否禁止重叠
+        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<Integer, Boolean>();
+        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_LR, true);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_BOTTOM, true);
+
+        danmakuContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3) //设置描边样式
+                .setDuplicateMergingEnabled(false)
+                .setScrollSpeedFactor(1.2f) //是否启用合并重复弹幕
+                .setScaleTextSize(1.2f) //设置弹幕滚动速度系数,只对滚动弹幕有效
+                .setMaximumLines(maxLinesPair) //设置最大显示行数
+                .preventOverlapping(overlappingEnablePair); //设置防弹幕重叠，null为允许重叠
+        danmakuView.prepare(parser, danmakuContext);
+    }
+
+    private BaseDanmakuParser parser = new BaseDanmakuParser() {
+        protected IDanmakus parse() {
+            return new Danmakus();
+        }
+    };
+
+
+    /**
+     * 向弹幕View中添加一条弹幕
+     * @param content
+     *          弹幕的具体内容
+     * @param  withBorder
+     *          弹幕是否有边框
+     */
+    public void addDanmaku(DanmakuView danmakuView, String[] content, boolean withBorder) {
+        for (int i=0,len=content.length;i<len;i++){
+            BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+            danmaku.text = content[i];
+            danmaku.padding = 5;
+            danmaku.textSize = Util.sp2px(activity,17);
+            danmaku.textColor = Color.WHITE;
+            danmaku.setTime(danmakuView.getCurrentTime() + 1200);
+            if (withBorder) {
+                danmaku.borderColor = Color.GREEN;
+            }
+            danmakuView.addDanmaku(danmaku);
+
+        }
+        startDanmaku(danmakuView);
+    }
+
 
     /**
      * 展示分享弹框

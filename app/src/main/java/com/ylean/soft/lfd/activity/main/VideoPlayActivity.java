@@ -27,9 +27,14 @@ import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import master.flame.danmaku.ui.widget.DanmakuView;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
@@ -71,6 +76,8 @@ public class VideoPlayActivity extends BaseActivity {
     SeekBar seekbar;
     @BindView(R.id.list_comm)
     AutoPollRecyclerView listComm;
+    @BindView(R.id.dku_view)
+    DanmakuView danmakuView;
     //视频控制器
     private AndroidMediaController controller;
     private String videoUrl="http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
@@ -104,6 +111,10 @@ public class VideoPlayActivity extends BaseActivity {
         videoView.setHudView(hubView);
         //进度条监听
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
+
+
+        //显示弹屏
+        videoPlayPersenter.startDanmaku(danmakuView);
 
         listComm.setLayoutManager(new LinearLayoutManager(this));
         listComm.setAdapter(new ScreenAdapter(this));
@@ -266,9 +277,41 @@ public class VideoPlayActivity extends BaseActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //继续视频播放
+        if(!videoView.isPlaying()){
+            videoView.start();
+        }
+        //继续弹屏滚动
+        if (danmakuView != null && danmakuView.isPrepared() && danmakuView.isPaused()) {
+            danmakuView.resume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //暂停视频播放
+        if(videoView.isPlaying()){
+            videoView.pause();
+        }
+        //暂停弹屏
+        if (danmakuView != null && danmakuView.isPrepared()) {
+            danmakuView.pause();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        //释放视频资源
         videoView.stopPlayback();
+        //释放弹屏资源
+        if (danmakuView != null) {
+            danmakuView.release();
+            danmakuView = null;
+        }
     }
 }
