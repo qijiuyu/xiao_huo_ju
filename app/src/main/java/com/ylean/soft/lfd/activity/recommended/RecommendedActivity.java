@@ -7,9 +7,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.ylean.soft.lfd.R;
@@ -18,11 +15,8 @@ import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
-import com.zxdc.utils.library.util.LogUtils;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

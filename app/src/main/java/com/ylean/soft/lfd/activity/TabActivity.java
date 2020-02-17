@@ -1,12 +1,13 @@
 package com.ylean.soft.lfd.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import com.ylean.soft.lfd.R;
@@ -16,19 +17,14 @@ import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
+import com.zxdc.utils.library.view.ClickLinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-/**
- * Created by Administrator on 2020/2/5.
- */
-
 public class TabActivity extends android.app.TabActivity {
 
     @BindView(R.id.img_main)
@@ -49,12 +45,19 @@ public class TabActivity extends android.app.TabActivity {
     TextView tvUser;
     @BindView(android.R.id.tabhost)
     TabHost tabhost;
-    private int[] notClick = new int[]{R.mipmap.tab_1_false, R.mipmap.tab_2_false, R.mipmap.tab_3_false, R.mipmap.tab_4_false};
-    private int[] yesClick = new int[]{R.mipmap.tab_1_true, R.mipmap.tab_2_true, R.mipmap.tab_3_true, R.mipmap.tab_4_true};
+    @BindView(R.id.lin_main)
+    ClickLinearLayout linMain;
+    @BindView(R.id.lin_recommend)
+    ClickLinearLayout linRecommend;
+    @BindView(R.id.lin_focus)
+    ClickLinearLayout linFocus;
+    @BindView(R.id.lin_user)
+    ClickLinearLayout linUser;
     // 按两次退出
     protected long exitTime = 0;
     private List<TextView> tvList = new ArrayList<>();
     private List<ImageView> imgList = new ArrayList<>();
+    private List<ClickLinearLayout> relClick = new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
@@ -75,6 +78,10 @@ public class TabActivity extends android.app.TabActivity {
         tvList.add(tvRecommend);
         tvList.add(tvFocus);
         tvList.add(tvUser);
+        relClick.add(linMain);
+        relClick.add(linRecommend);
+        relClick.add(linFocus);
+        relClick.add(linUser);
         tabhost = this.getTabHost();
         TabHost.TabSpec spec;
         spec = tabhost.newTabSpec("首页").setIndicator("首页").setContent(new Intent(this, MainActivity.class));
@@ -95,26 +102,30 @@ public class TabActivity extends android.app.TabActivity {
         });
     }
 
-    @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user})
+    @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user,R.id.lin_main2, R.id.lin_recommend2, R.id.lin_focus2, R.id.lin_user2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //首页
             case R.id.lin_main:
+            case R.id.lin_main2:
                 updateTag(0);
                 tabhost.setCurrentTabByTag("首页");
                 break;
             //推荐
             case R.id.lin_recommend:
+            case R.id.lin_recommend2:
                 updateTag(1);
                 tabhost.setCurrentTabByTag("推荐");
                 break;
             //关注
             case R.id.lin_focus:
+            case R.id.lin_focus2:
                 updateTag(2);
                 tabhost.setCurrentTabByTag("关注");
                 break;
             //我的
             case R.id.lin_user:
+            case R.id.lin_user2:
                 updateTag(3);
                 tabhost.setCurrentTabByTag("我的");
                 break;
@@ -130,10 +141,12 @@ public class TabActivity extends android.app.TabActivity {
     private void updateTag(int type) {
         for (int i = 0; i < 4; i++) {
             if (i == type) {
-                imgList.get(i).setImageDrawable(getResources().getDrawable(yesClick[i]));
+                imgList.get(i).setVisibility(View.INVISIBLE);
+                relClick.get(i).setVisibility(View.VISIBLE);
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
             } else {
-                imgList.get(i).setImageDrawable(getResources().getDrawable(notClick[i]));
+                imgList.get(i).setVisibility(View.VISIBLE);
+                relClick.get(i).setVisibility(View.INVISIBLE);
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_999999));
             }
         }
@@ -159,4 +172,5 @@ public class TabActivity extends android.app.TabActivity {
         }
         return super.dispatchKeyEvent(event);
     }
+
 }
