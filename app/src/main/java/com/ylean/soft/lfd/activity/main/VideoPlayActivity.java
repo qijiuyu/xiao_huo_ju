@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -21,9 +22,11 @@ import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
+import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,8 +79,8 @@ public class VideoPlayActivity extends BaseActivity {
     SeekBar seekbar;
     @BindView(R.id.list_comm)
     AutoPollRecyclerView listComm;
-    @BindView(R.id.dku_view)
-    DanmakuView danmakuView;
+    @BindView(R.id.love)
+    Love love;
     //视频控制器
     private AndroidMediaController controller;
     private String videoUrl="http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
@@ -111,10 +114,9 @@ public class VideoPlayActivity extends BaseActivity {
         videoView.setHudView(hubView);
         //进度条监听
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
+        //双击点赞功能
+        love.setOnTouchListener(ClickPraise);
 
-
-        //显示弹屏
-        videoPlayPersenter.startDanmaku(danmakuView);
 
         listComm.setLayoutManager(new LinearLayoutManager(this));
         listComm.setAdapter(new ScreenAdapter(this));
@@ -260,6 +262,24 @@ public class VideoPlayActivity extends BaseActivity {
 
 
     /**
+     * 双击点赞功能
+     */
+    protected long exitTime = 0;
+    private View.OnTouchListener ClickPraise=new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction()==MotionEvent.ACTION_UP){
+                if ((System.currentTimeMillis() - exitTime) > 1000) {
+                    exitTime = System.currentTimeMillis();
+                }else{
+                    love.addLoveView(event.getX(),event.getY());
+                    love.addLoveView(event.getX(),event.getY());
+                }
+            }
+            return true;
+        }
+    };
+
+    /**
      * EventBus注解
      */
     @Subscribe
@@ -283,10 +303,6 @@ public class VideoPlayActivity extends BaseActivity {
         if(!videoView.isPlaying()){
             videoView.start();
         }
-        //继续弹屏滚动
-        if (danmakuView != null && danmakuView.isPrepared() && danmakuView.isPaused()) {
-            danmakuView.resume();
-        }
     }
 
     @Override
@@ -296,10 +312,6 @@ public class VideoPlayActivity extends BaseActivity {
         if(videoView.isPlaying()){
             videoView.pause();
         }
-        //暂停弹屏
-        if (danmakuView != null && danmakuView.isPrepared()) {
-            danmakuView.pause();
-        }
     }
 
     @Override
@@ -308,10 +320,5 @@ public class VideoPlayActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
         //释放视频资源
         videoView.stopPlayback();
-        //释放弹屏资源
-        if (danmakuView != null) {
-            danmakuView.release();
-            danmakuView = null;
-        }
     }
 }

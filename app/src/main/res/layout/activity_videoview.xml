@@ -24,6 +24,21 @@
             android:background="@android:color/black"
             android:layout_centerInParent="true"/>
 
+        <com.ylean.soft.lfd.view.AutoPollRecyclerView
+            android:id="@+id/list_comm"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="75dp"
+            android:background="@color/transparent">
+        </com.ylean.soft.lfd.view.AutoPollRecyclerView>
+
+        <com.ylean.soft.lfd.view.Love
+            android:id="@+id/love"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.ylean.soft.lfd.view.Love>
+
         <ProgressBar
             android:id="@+id/pb_progressbar"
             android:layout_width="wrap_content"
@@ -56,12 +71,6 @@
 
         </RelativeLayout>
 
-        <master.flame.danmaku.ui.widget.DanmakuView
-            android:id="@+id/dku_view"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="50dp"/>
-
         <LinearLayout
             android:layout_width="70dp"
             android:layout_height="wrap_content"
@@ -69,7 +78,8 @@
             android:gravity="center_horizontal"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="70dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -152,23 +162,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="45dp"
             android:layout_marginLeft="15dp"/>
-
-        <com.ylean.soft.lfd.view.AutoPollRecyclerView
-            android:id="@+id/list_comm"
-            android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="75dp"
-            android:background="@color/transparent">
-        </com.ylean.soft.lfd.view.AutoPollRecyclerView>
-
-        <View
-            android:clickable="true"
-            android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="75dp"
-            android:background="@color/transparent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -23,6 +24,7 @@ import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
+import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
 
@@ -74,6 +76,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private ImageView imgFocus,imgPraise,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
+        private Love love;
         public ViewHolder(View view) {
             super(view);
             videoView=view.findViewById(R.id.videoView);
@@ -94,6 +97,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             seekbar=view.findViewById(R.id.seekbar);
             listComm=view.findViewById(R.id.list_comm);
             imgSelectBlues=view.findViewById(R.id.img_select_blues);
+            love=view.findViewById(R.id.love);
         }
     }
 
@@ -115,6 +119,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             playVideo();
             //显示弹屏
             videoPlayPersenter.showScreen(holder.listComm);
+            //双击点赞功能
+            holder.love.setOnTouchListener(ClickPraise);
             holder.imgHead.setOnClickListener(this);
             holder.imgPraise.setOnClickListener(this);
             holder.imgComm.setOnClickListener(this);
@@ -232,6 +238,25 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.seekbar.setProgress(holder.videoView.getCurrentPosition());
             }
             handler.postDelayed(runnable, 1000);
+        }
+    };
+
+
+    /**
+     * 双击点赞功能
+     */
+    protected long exitTime = 0;
+    private View.OnTouchListener ClickPraise=new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction()==MotionEvent.ACTION_UP){
+                if ((System.currentTimeMillis() - exitTime) > 1000) {
+                    exitTime = System.currentTimeMillis();
+                }else{
+                    holder.love.addLoveView(event.getX(),event.getY());
+                    holder.love.addLoveView(event.getX(),event.getY());
+                }
+            }
+            return true;
         }
     };
 
