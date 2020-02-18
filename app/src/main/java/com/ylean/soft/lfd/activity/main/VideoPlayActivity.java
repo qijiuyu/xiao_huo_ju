@@ -273,6 +273,11 @@ public class VideoPlayActivity extends BaseActivity {
                 }else{
                     love.addLoveView(event.getX(),event.getY());
                     love.addLoveView(event.getX(),event.getY());
+                    if(!isPraise){
+                        isPraise=true;
+                        imgPraise.setImageResource(R.mipmap.yes_praise);
+                        imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                    }
                 }
             }
             return true;

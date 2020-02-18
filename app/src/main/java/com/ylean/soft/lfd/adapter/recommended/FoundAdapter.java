@@ -131,6 +131,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }else{
             holder.videoView.setVisibility(View.GONE);
         }
+        String tag=holder.imgPraise.getTag().toString();
+        if(tag.equals("1")){
+            holder.imgPraise.setImageResource(R.mipmap.no_praise);
+        }else{
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+        }
     }
 
 
@@ -254,6 +260,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 }else{
                     holder.love.addLoveView(event.getX(),event.getY());
                     holder.love.addLoveView(event.getX(),event.getY());
+                    String tag=holder.imgPraise.getTag().toString();
+                    if(tag.equals("0")){
+                        v.setTag("1");
+                        holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+                        holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                    }
                 }
             }
             return true;

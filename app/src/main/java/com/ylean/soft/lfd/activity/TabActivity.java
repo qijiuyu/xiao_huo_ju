@@ -84,9 +84,9 @@ public class TabActivity extends android.app.TabActivity {
         relClick.add(linUser);
         tabhost = this.getTabHost();
         TabHost.TabSpec spec;
-        spec = tabhost.newTabSpec("首页").setIndicator("首页").setContent(new Intent(this, MainActivity.class));
+        spec = tabhost.newTabSpec("推荐").setIndicator("推荐").setContent(new Intent(this, MainActivity.class));
         tabhost.addTab(spec);
-        spec = tabhost.newTabSpec("推荐").setIndicator("推荐").setContent(new Intent(this, RecommendedActivity.class));
+        spec = tabhost.newTabSpec("发现").setIndicator("发现").setContent(new Intent(this, RecommendedActivity.class));
         tabhost.addTab(spec);
         spec = tabhost.newTabSpec("关注").setIndicator("关注").setContent(new Intent(this, FocusActivity.class));
         tabhost.addTab(spec);
@@ -105,17 +105,17 @@ public class TabActivity extends android.app.TabActivity {
     @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user,R.id.lin_main2, R.id.lin_recommend2, R.id.lin_focus2, R.id.lin_user2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            //首页
+            //推荐
             case R.id.lin_main:
             case R.id.lin_main2:
                 updateTag(0);
-                tabhost.setCurrentTabByTag("首页");
+                tabhost.setCurrentTabByTag("推荐");
                 break;
-            //推荐
+            //发现
             case R.id.lin_recommend:
             case R.id.lin_recommend2:
                 updateTag(1);
-                tabhost.setCurrentTabByTag("推荐");
+                tabhost.setCurrentTabByTag("发现");
                 break;
             //关注
             case R.id.lin_focus:
