@@ -1,19 +1,25 @@
 package com.ylean.soft.lfd.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.fragment.user.LookHistoryFragment;
 import com.ylean.soft.lfd.fragment.user.MyFocusFragment;
 import com.ylean.soft.lfd.fragment.user.MyLikeFragment;
+import com.ylean.soft.lfd.persenter.user.UserPersenter;
 import com.ylean.soft.lfd.view.ViewPagerForScrollView;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
 import java.util.ArrayList;
@@ -74,11 +80,15 @@ public class UserActivity extends BaseActivity{
     private MyFocusFragment myFocusFragment=new MyFocusFragment();
     //观看记录
     private LookHistoryFragment lookHistoryFragment=new LookHistoryFragment();
+    private UserPersenter userPersenter;
+    //用户数据对象
+    private UserInfo.UserBean userBean;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         ButterKnife.bind(this);
         initView();
+        userPersenter=new UserPersenter(this);
     }
 
     /**
@@ -106,7 +116,7 @@ public class UserActivity extends BaseActivity{
         });
     }
 
-    @OnClick({R.id.img_setting, R.id.img_news, R.id.tv_edit, R.id.tv_works, R.id.tv_my_focus, R.id.tv_my_look,R.id.tv_cooperation})
+    @OnClick({R.id.img_setting, R.id.img_news, R.id.tv_edit, R.id.tv_works, R.id.tv_my_focus, R.id.tv_my_look})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //设置
@@ -119,7 +129,9 @@ public class UserActivity extends BaseActivity{
                 break;
             //编辑个人资料
             case R.id.tv_edit:
-                setClass(UserInfoActivity.class);
+                Intent intent=new Intent(this,UserInfoActivity.class);
+                intent.putExtra("userBean",userBean);
+                startActivity(intent);
                 break;
             //我的作品
             case R.id.tv_works:
@@ -136,9 +148,6 @@ public class UserActivity extends BaseActivity{
                 pageIndex=2;
                 updateUI();
                 break;
-            //内容合作
-            case R.id.tv_cooperation:
-                 break;
             default:
                 break;
         }
@@ -180,13 +189,99 @@ public class UserActivity extends BaseActivity{
     private void updateUI(){
         for (int i=0;i<3;i++){
               if(i==pageIndex){
-                  tvList.get(i).setTextColor(getResources().getColor(R.color.color_FFBC32));
+                  tvList.get(i).setTextColor(getResources().getColor(android.R.color.black));
                   viewList.get(i).setVisibility(View.VISIBLE);
               }else{
-                  tvList.get(i).setTextColor(getResources().getColor(android.R.color.black));
+                  tvList.get(i).setTextColor(getResources().getColor(R.color.color_666666));
                   viewList.get(i).setVisibility(View.GONE);
               }
         }
         pager.setCurrentItem(pageIndex);
+    }
+
+
+    /**
+     * 显示用户数据
+     * @param userBean
+     */
+    public void showUserInfo(UserInfo.UserBean userBean){
+        this.userBean=userBean;
+        if(userBean==null){
+            return;
+        }
+        Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+        tvId.setText("ID:"+userBean.getCode());
+        if(!TextUtils.isEmpty(userBean.getNickname())){
+            tvName.setText(userBean.getNickname());
+        }else{
+            tvName.setText("无");
+        }
+        if(!TextUtils.isEmpty(userBean.getIntroduction())){
+            tvRemark.setText(userBean.getIntroduction());
+        }else{
+            tvRemark.setText("无");
+        }
+        switch (userBean.getSex()){
+            case 0:
+                 tvSex.setText("无");
+                 break;
+            case 1:
+                tvSex.setText("男");
+                break;
+            case 2:
+                tvSex.setText("女");
+                break;
+            default:
+                break;
+        }
+        tvAge.setText(userBean.getBirthday());
+        switch (userBean.getConstellation()){
+            case 1:
+                tvXz.setText("白羊座");
+                 break;
+            case 2:
+                tvXz.setText("金牛座");
+                break;
+            case 3:
+                tvXz.setText("双子座");
+                break;
+            case 4:
+                tvXz.setText("巨蟹座");
+                break;
+            case 5:
+                tvXz.setText("狮子座");
+                break;
+            case 6:
+                tvXz.setText("处女座");
+                break;
+            case 7:
+                tvXz.setText("天秤座");
+                break;
+            case 8:
+                tvXz.setText("天蝎座");
+                break;
+            case 9:
+                tvXz.setText("射手座");
+                break;
+            case 10:
+                tvXz.setText("摩羯座");
+                break;
+            case 11:
+                tvXz.setText("水瓶座");
+                break;
+            case 12:
+                tvXz.setText("双鱼座");
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //获取用户信息
+        userPersenter.getUser();
     }
 }

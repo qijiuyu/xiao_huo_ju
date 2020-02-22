@@ -2,32 +2,35 @@ package com.ylean.soft.lfd.activity.init;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.umeng.qq.tencent.IUiListener;
-import com.umeng.qq.tencent.Tencent;
-import com.umeng.qq.tencent.UiError;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.persenter.LoginPersenter;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.Constant;
 import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,12 +68,18 @@ public class LoginActivity extends BaseActivity {
     private int loginType=1;
     private IWXAPI api;
     private UMShareAPI umShareAPI;
+    //计数器
+    private Timer mTimer;
+    private int time = 0;
+    private LoginPersenter loginPersenter;
+    private Handler handler=new Handler();
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtils.transparencyBar(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initView();
+        checkTime();
     }
 
 
@@ -78,6 +87,10 @@ public class LoginActivity extends BaseActivity {
      * 初始化控件
      */
     private void initView(){
+        //实例化MVP类
+        loginPersenter=new LoginPersenter(this);
+        //注册eventBus
+        EventBus.getDefault().register(this);
         final String register_des="还没账号，去 <font color=\"#FF6D32\"><u>注册</u></font>";
         tvRegister.setText(Html.fromHtml(register_des));
     }
@@ -104,6 +117,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             //发送验证码
             case R.id.tv_send_code:
+                if(time>0){
+                    return;
+                }
                 if(TextUtils.isEmpty(mobile)){
                     ToastUtil.showLong("请输入您的手机号！");
                     return;
@@ -112,6 +128,7 @@ public class LoginActivity extends BaseActivity {
                     ToastUtil.showLong("请输入正确的手机号！");
                     return;
                 }
+                loginPersenter.getCode(mobile);
                 break;
             //忘记密码
             case R.id.tv_forget_pwd:
@@ -134,6 +151,11 @@ public class LoginActivity extends BaseActivity {
                 if(loginType==2 && TextUtils.isEmpty(pwd)){
                     ToastUtil.showLong("请输入登录密码！");
                     return;
+                }
+                if(loginType==1){
+                    loginPersenter.smsLogin(code,mobile);
+                }else {
+                    loginPersenter.pwdLogin(pwd,mobile);
                 }
                 break;
             //去注册
@@ -166,6 +188,31 @@ public class LoginActivity extends BaseActivity {
 
 
     /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        switch (eventBusType.getStatus()) {
+            //展示验证码
+            case EventStatus.SHOW_SMS_CODE:
+                 startTime();
+                 break;
+            //微信登录
+            case EventStatus.WX_LOGIN:
+                 String msg = (String) eventBusType.getObject();
+                 if (TextUtils.isEmpty(msg)) {
+                     return;
+                 }
+                 String[] str = msg.split(",");
+                 loginPersenter.wxLogin(str[0], str[1], str[2]);
+                 break;
+            default:
+                break;
+        }
+    }
+
+
+    /**
      * 切换登录方式
      */
     private void updateLoginType(){
@@ -185,6 +232,52 @@ public class LoginActivity extends BaseActivity {
             etPwd.setVisibility(View.VISIBLE);
             tvForgetPwd.setVisibility(View.VISIBLE);
             tvRegister.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    /**
+     * 动态改变验证码秒数
+     */
+    private void startTime() {
+        time=60;
+        //保存计时时间
+        SPUtil.getInstance(activity).addString(SPUtil.SEND_CODE, String.valueOf((System.currentTimeMillis() + 60000)));
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                if (time <= 0) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mTimer.cancel();
+                            tvSendCode.setText("获取验证码");
+                            SPUtil.getInstance(activity).removeMessage(SPUtil.SEND_CODE);
+                        }
+                    });
+                } else {
+                    --time;
+                    handler.post(new Runnable() {
+                        public void run() {
+                            tvSendCode.setText(time + "秒");
+                        }
+                    });
+                }
+            }
+        }, 0, 1000);
+    }
+
+
+    /**
+     * 判断验证码秒数是否超过一分钟
+     */
+    private void checkTime() {
+        String stoptime = SPUtil.getInstance(activity).getString(SPUtil.SEND_CODE);
+        if (!TextUtils.isEmpty(stoptime)) {
+            int t = (int) ((Double.parseDouble(stoptime) - System.currentTimeMillis()) / 1000);
+            if (t > 0) {
+                time = t;
+                startTime();
+            }
         }
     }
 
@@ -220,4 +313,15 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mTimer!=null){
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer=null;
+        }
+        EventBus.getDefault().unregister(this);
+    }
 }

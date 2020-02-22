@@ -38,7 +38,7 @@ public class BaseBean implements Serializable{
     }
 
     public boolean isSussess() {
-        if (code == 0) {
+        if (code == 200) {
             return true;
         }
         return false;

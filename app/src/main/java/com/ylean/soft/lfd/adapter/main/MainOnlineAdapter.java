@@ -41,14 +41,14 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
        OvalImageViews imgHead;
         CircleImageView imgPic;
         TextView tvTitle,tvName;
-        RelativeLayout relFocus;
+        RelativeLayout relBespoke;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             imgHead=itemView.findViewById(R.id.img_head);
             imgPic=itemView.findViewById(R.id.img_pic);
             tvTitle=itemView.findViewById(R.id.tv_title);
             tvName=itemView.findViewById(R.id.tv_name);
-            relFocus=itemView.findViewById(R.id.rel_focus);
+            relBespoke=itemView.findViewById(R.id.rel_bespoke);
         }
     }
 

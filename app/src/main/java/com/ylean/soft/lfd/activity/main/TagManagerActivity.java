@@ -1,6 +1,8 @@
 package com.ylean.soft.lfd.activity.main;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,10 @@ import com.ylean.soft.lfd.utils.channel.ChannerAdapter;
 import com.ylean.soft.lfd.utils.channel.DataBean;
 import com.ylean.soft.lfd.utils.channel.MyItemTouchCallBack;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +44,8 @@ public class TagManagerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_manager);
         ButterKnife.bind(this);
+        //获取频道列表
+        channel();
 
         DataBean bean1 = new DataBean("体育", 0, "url");
         DataBean bean2 = new DataBean("新闻", 1, "url");
@@ -91,5 +99,32 @@ public class TagManagerActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+
+    private Handler handler=new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
+            switch (msg.what){
+                //获取频道列表
+                case HandlerConstant.GET_CHANNEL_SUCCESS:
+                      break;
+                case HandlerConstant.REQUST_ERROR:
+                    ToastUtil.showLong(msg.obj.toString());
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
+
+
+    /**
+     * 获取频道列表
+     */
+    private void channel(){
+        DialogUtil.showProgress(this,"数据加载中");
+        HttpMethod.channel(handler);
     }
 }

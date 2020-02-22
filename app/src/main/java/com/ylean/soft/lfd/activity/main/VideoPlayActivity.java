@@ -11,8 +11,11 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import master.flame.danmaku.ui.widget.DanmakuView;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * 播放视频
@@ -69,10 +74,6 @@ public class VideoPlayActivity extends BaseActivity {
     TextView tvComm;
     @BindView(R.id.tv_share)
     TextView tvShare;
-    @BindView(R.id.img_play)
-    ImageView imgPlay;
-    @BindView(R.id.img_screen)
-    ImageView imgScreen;
     @BindView(R.id.tv_time)
     TextView tvTime;
     @BindView(R.id.seekbar)
@@ -81,6 +82,18 @@ public class VideoPlayActivity extends BaseActivity {
     AutoPollRecyclerView listComm;
     @BindView(R.id.love)
     Love love;
+    @BindView(R.id.rel_progress)
+    RelativeLayout relProgress;
+    @BindView(R.id.lin_screen)
+    LinearLayout linScreen;
+    @BindView(R.id.et_screen)
+    EditText etScreen;
+    @BindView(R.id.img_play)
+    ImageView imgPlay;
+    @BindView(R.id.img_screen)
+    ImageView imgScreen;
+    @BindView(R.id.img_coll)
+    ImageView imgColl;
     //视频控制器
     private AndroidMediaController controller;
     private String videoUrl="http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
@@ -90,6 +103,11 @@ public class VideoPlayActivity extends BaseActivity {
      * false：未点赞
      */
     private boolean isPraise=false;
+    /**
+     * 1：显示弹屏布局
+     * 2：显示进度条布局
+     */
+    private int showBottom=1;
     private VideoPlayPersenter videoPlayPersenter;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +164,8 @@ public class VideoPlayActivity extends BaseActivity {
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             public void onCompletion(IMediaPlayer iMediaPlayer) {
                 videoView.seekTo(0);
+                seekbar.setProgress(0);
+                videoView.start();
             }
         });
         //监听视频加载完成
@@ -164,7 +184,7 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.img_play, R.id.img_screen, R.id.img_select_blues})
+    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.img_screen, R.id.img_select_blues,R.id.img_coll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_bank:
@@ -191,6 +211,11 @@ public class VideoPlayActivity extends BaseActivity {
                 }
                 imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                 break;
+            //收藏
+            case R.id.img_coll:
+                 imgColl.setImageResource(R.mipmap.coll_icon_yes);
+                 imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                 break;
             //评论
             case R.id.img_comm:
                 videoPlayPersenter.showComment();
@@ -199,26 +224,19 @@ public class VideoPlayActivity extends BaseActivity {
             case R.id.img_share:
                 videoPlayPersenter.showShareDialog();
                 break;
-            //播放/暂停
-            case R.id.img_play:
-                if(videoView.isPlaying()){
-                    videoView.pause();
-                    imgPlay.setImageResource(R.mipmap.play_icon);
-                }else{
-                    videoView.start();
-                    imgPlay.setImageResource(R.mipmap.start_video);
-                }
-                break;
             //弹屏
             case R.id.img_screen:
                  if(listComm.getVisibility()==View.VISIBLE){
+                     imgScreen.setImageResource(R.mipmap.img_screen_yes);
                      listComm.setVisibility(View.GONE);
                      listComm.stop();
                  }else{
                      listComm.setVisibility(View.VISIBLE);
                      listComm.start();
+                     imgScreen.setImageResource(R.mipmap.img_screen);
                  }
                 break;
+            //选集
             case R.id.img_select_blues:
                 drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
@@ -268,8 +286,10 @@ public class VideoPlayActivity extends BaseActivity {
     private View.OnTouchListener ClickPraise=new View.OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if(event.getAction()==MotionEvent.ACTION_UP){
-                if ((System.currentTimeMillis() - exitTime) > 1000) {
+                if ((System.currentTimeMillis() - exitTime) > 500) {
                     exitTime = System.currentTimeMillis();
+                    //视频单击后
+                    clickVideo(event);
                 }else{
                     love.addLoveView(event.getX(),event.getY());
                     love.addLoveView(event.getX(),event.getY());
@@ -279,10 +299,45 @@ public class VideoPlayActivity extends BaseActivity {
                         imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                     }
                 }
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        exitTime=0;
+                    }
+                },500);
             }
             return true;
         }
     };
+
+
+    /**
+     * 视频点击
+     */
+    private void clickVideo(MotionEvent event){
+        int deviceHeight=Util.getDeviceWH(this,2);
+        int point=deviceHeight/3;
+        if(event.getY()>point && event.getY()<(point*2)){
+            //播放/暂停
+            if(videoView.isPlaying()){
+                videoView.pause();
+                imgPlay.setVisibility(View.VISIBLE);
+            }else{
+                videoView.start();
+                imgPlay.setVisibility(View.GONE);
+            }
+        }else{
+            //底部布局切换
+            if(showBottom==1){
+                showBottom=2;
+                relProgress.setVisibility(View.VISIBLE);
+                linScreen.setVisibility(View.GONE);
+            }else{
+                showBottom=1;
+                relProgress.setVisibility(View.GONE);
+                linScreen.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
     /**
      * EventBus注解
@@ -307,6 +362,7 @@ public class VideoPlayActivity extends BaseActivity {
         //继续视频播放
         if(!videoView.isPlaying()){
             videoView.start();
+            imgPlay.setVisibility(View.GONE);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.ylean.soft.lfd;
 
+import android.text.TextUtils;
+
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.zxdc.utils.library.base.BaseApplication;
@@ -58,5 +60,18 @@ public class MyApplication extends BaseApplication {
         JPushInterface.setDebugMode(true);
         //初始化 JPush
         JPushInterface.init(this);
+    }
+
+
+    /**
+     * 判断是否登录过
+     * @return
+     */
+    public static boolean isLogin(){
+        final String token= SPUtil.getInstance(getContext()).getString(SPUtil.TOKEN);
+        if(!TextUtils.isEmpty(token)){
+            return true;
+        }
+        return false;
     }
 }

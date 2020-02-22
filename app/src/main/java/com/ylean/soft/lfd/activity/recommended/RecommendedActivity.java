@@ -53,6 +53,9 @@ public class RecommendedActivity extends BaseActivity {
         initRecycleView();
         //设置侧边栏
         rightMenu();
+
+        //滑动到指定位置
+//        recyclerView.smoothScrollToPosition(1);
     }
 
 

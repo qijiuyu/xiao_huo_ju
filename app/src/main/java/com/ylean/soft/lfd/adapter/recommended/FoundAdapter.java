@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -25,12 +27,10 @@ import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
-import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> implements View.OnClickListener{
@@ -73,10 +73,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private ProgressBar progressBar;
         private TextView tvBlues,tvPraise,tvComm,tvShare,tvTime;
         private CircleImageView imgHead;
-        private ImageView imgFocus,imgPraise,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
+        private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
         private Love love;
+        private RelativeLayout relProgress;
+        private LinearLayout linScreen;
         public ViewHolder(View view) {
             super(view);
             videoView=view.findViewById(R.id.videoView);
@@ -88,6 +90,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             imgPraise=view.findViewById(R.id.img_praise);
             tvPraise=view.findViewById(R.id.tv_praise);
             imgComm=view.findViewById(R.id.img_comm);
+            imgColl=view.findViewById(R.id.img_coll);
             tvComm=view.findViewById(R.id.tv_comm);
             imgShare=view.findViewById(R.id.img_share);
             tvShare=view.findViewById(R.id.tv_share);
@@ -98,6 +101,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             listComm=view.findViewById(R.id.list_comm);
             imgSelectBlues=view.findViewById(R.id.img_select_blues);
             love=view.findViewById(R.id.love);
+            relProgress=view.findViewById(R.id.rel_progress);
+            linScreen=view.findViewById(R.id.lin_screen);
         }
     }
 
@@ -126,6 +131,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.imgComm.setOnClickListener(this);
             holder.imgShare.setOnClickListener(this);
             holder.imgSelectBlues.setOnClickListener(this);
+            holder.imgColl.setOnClickListener(this);
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.videoView.setVisibility(View.VISIBLE);
         }else{
@@ -171,6 +177,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 }
                 holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                 break;
+            //收藏
+            case R.id.img_coll:
+                 holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
+                 holder.imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                 break;
             //评论
             case R.id.img_comm:
                 videoPlayPersenter.showComment();
@@ -257,6 +268,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             if(event.getAction()==MotionEvent.ACTION_UP){
                 if ((System.currentTimeMillis() - exitTime) > 1000) {
                     exitTime = System.currentTimeMillis();
+                    //视频点击
+                    clickVideo(event);
                 }else{
                     holder.love.addLoveView(event.getX(),event.getY());
                     holder.love.addLoveView(event.getX(),event.getY());
@@ -274,6 +287,34 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
 
     /**
+     * 视频点击
+     */
+    private void clickVideo(MotionEvent event){
+        int deviceHeight= Util.getDeviceWH(activity,2);
+        int point=deviceHeight/3;
+        if(event.getY()>point && event.getY()<(point*2)){
+            //播放/暂停
+            if(holder.videoView.isPlaying()){
+                holder.videoView.pause();
+                holder.imgPlay.setVisibility(View.VISIBLE);
+            }else{
+                holder.videoView.start();
+                holder.imgPlay.setVisibility(View.GONE);
+            }
+        }else{
+            //底部布局切换
+            if(holder.linScreen.getVisibility()==View.VISIBLE){
+                holder.linScreen.setVisibility(View.GONE);
+                holder.relProgress.setVisibility(View.VISIBLE);
+            }else{
+                holder.linScreen.setVisibility(View.VISIBLE);
+                holder.relProgress.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+    /**
      * 暂停及开始
      */
     public void setVideoStatus(){
@@ -282,6 +323,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.videoView.pause();
             }else{
                 holder.videoView.start();
+                holder.imgPlay.setVisibility(View.GONE);
             }
         }
     }

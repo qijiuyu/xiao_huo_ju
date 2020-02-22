@@ -31,4 +31,10 @@ public class EventStatus {
     //关闭播放页面中的侧边栏
     public static final int CLOSE_VIDEO_RIGHT=109;
 
+    //关闭注册页面
+    public static final int CLOSE_PAGE=110;
+
+   //获取短信验证码
+   public static final int SHOW_SMS_CODE=111;
+
 }

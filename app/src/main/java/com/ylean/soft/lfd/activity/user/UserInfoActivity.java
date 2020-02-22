@@ -3,6 +3,8 @@ package com.ylean.soft.lfd.activity.user;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,8 +18,10 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.utils.SelectPhoto;
 import com.ylean.soft.lfd.view.SelectTimeDialog;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 
@@ -25,6 +29,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +59,10 @@ public class UserInfoActivity extends BaseActivity {
     TextView tvBirthday;
     @BindView(R.id.tv_mobile)
     TextView tvMobile;
+    @BindView(R.id.tv_remark)
+    TextView tvRemark;
+    //用户数据对象
+    private UserInfo.UserBean userBean;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
@@ -67,6 +77,9 @@ public class UserInfoActivity extends BaseActivity {
      */
     private void initView(){
         tvTitle.setText("个人信息");
+        userBean= (UserInfo.UserBean) getIntent().getSerializableExtra("userBean");
+        //展示用户数据
+        showUser(userBean);
     }
 
     @OnClick({R.id.img_bank, R.id.img_head, R.id.tv_name, R.id.rel_girl, R.id.rel_boy, R.id.tv_birthday,R.id.rel_remark})
@@ -85,17 +98,11 @@ public class UserInfoActivity extends BaseActivity {
                 break;
             //女孩
             case R.id.rel_girl:
-                relGirl.setBackground(getResources().getDrawable(R.drawable.btn_bg_sex));
-                relBoy.setBackground(getResources().getDrawable(R.drawable.bg_sex_box));
-                tvGirl.setTextColor(getResources().getColor(android.R.color.white));
-                tvBoy.setTextColor(getResources().getColor(R.color.color_999999));
+                setSexBj(2);
                 break;
             //男
             case R.id.rel_boy:
-                relGirl.setBackground(getResources().getDrawable(R.drawable.bg_sex_box));
-                relBoy.setBackground(getResources().getDrawable(R.drawable.btn_bg_sex));
-                tvGirl.setTextColor(getResources().getColor(R.color.color_999999));
-                tvBoy.setTextColor(getResources().getColor(android.R.color.white));
+               setSexBj(1);
                 break;
             //出生年月
             case R.id.tv_birthday:
@@ -108,6 +115,50 @@ public class UserInfoActivity extends BaseActivity {
                  break;
             default:
                 break;
+        }
+    }
+
+
+    private Handler handler=new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
+            return false;
+        }
+    });
+
+
+    /**
+     * 展示用户数据
+     */
+    private void showUser(UserInfo.UserBean userBean){
+        if(userBean==null){
+            return;
+        }
+        Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+        tvName.setText(userBean.getNickname());
+        //设置性别背景
+        setSexBj(userBean.getSex());
+        tvBirthday.setText(userBean.getBirthday());
+        tvMobile.setText(userBean.getMobile());
+        tvRemark.setText(userBean.getIntroduction());
+    }
+
+
+    /**
+     * 设置性别背景
+     * @param type
+     */
+    private void setSexBj(int type){
+        if(type==1){
+            relGirl.setBackground(getResources().getDrawable(R.drawable.bg_sex_box));
+            relBoy.setBackground(getResources().getDrawable(R.drawable.btn_bg_sex));
+            tvGirl.setTextColor(getResources().getColor(R.color.color_999999));
+            tvBoy.setTextColor(getResources().getColor(android.R.color.white));
+        }else{
+            relGirl.setBackground(getResources().getDrawable(R.drawable.btn_bg_sex));
+            relBoy.setBackground(getResources().getDrawable(R.drawable.bg_sex_box));
+            tvGirl.setTextColor(getResources().getColor(android.R.color.white));
+            tvBoy.setTextColor(getResources().getColor(R.color.color_999999));
         }
     }
 
@@ -164,7 +215,8 @@ public class UserInfoActivity extends BaseActivity {
             case SelectPhoto.CODE_RESULT_REQUEST:
                 File imgFile= new File(SelectPhoto.crop);
                 Glide.with(UserInfoActivity.this).load(Uri.fromFile(imgFile)).into(imgHead);
-//                uploadFile(imgFile);
+                //上传图片
+                upload(imgFile);
                 break;
             default:
                 break;
@@ -179,12 +231,25 @@ public class UserInfoActivity extends BaseActivity {
     @Subscribe
     public void onEvent(EventBusType eventBusType) {
         switch (eventBusType.getStatus()) {
+            //回执时间
             case EventStatus.SHOW_SELECT_TIME:
                   tvBirthday.setText(eventBusType.getObject().toString());
                   break;
             default:
                 break;
         }
+    }
+
+
+    /**
+     * 上传图片
+     */
+    private void upload(File file){
+        List<File> files=new ArrayList<>();
+        files.add(file);
+        DialogUtil.showProgress(this,"图片上传中");
+        HttpMethod.upload(files,handler);
+
     }
 
 

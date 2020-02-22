@@ -43,7 +43,7 @@
                         android:textStyle="bold"
                         android:text="热播排行"
                         android:textSize="16sp"
-                        android:textColor="@color/color_FFBC32"/>
+                        android:textColor="@android:color/black"/>
 
                     <View
                         android:id="@+id/view1"
@@ -63,7 +63,7 @@
                         android:textStyle="bold"
                         android:text="精选TOP20"
                         android:textSize="16sp"
-                        android:textColor="@android:color/black"/>
+                        android:textColor="@color/color_666666"/>
 
                     <TextView
                         android:id="@+id/tv_more_hottest"
@@ -89,8 +89,8 @@
                             android:id="@+id/view_hot"
                             android:layout_width="wrap_content"
                             android:layout_height="3dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/textview_color"/>
 
@@ -109,8 +109,8 @@
                             android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="3dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginRight="25dp"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/textview_color"/>
 
@@ -146,7 +146,7 @@
                         android:textStyle="bold"
                         android:text="猜你喜欢"
                         android:textSize="16sp"
-                        android:textColor="@color/color_FFBC32"/>
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/tv_refresh_look"
@@ -188,9 +188,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="热门专题"
+                        android:text="霸道总裁"
                         android:textSize="16sp"
-                        android:textColor="@color/color_FFBC32"/>
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/tv_more_project"
@@ -234,7 +234,7 @@
                         android:textStyle="bold"
                         android:text="即将上线"
                         android:textSize="16sp"
-                        android:textColor="@color/color_FFBC32"/>
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/tv_more_online"
@@ -278,7 +278,7 @@
                         android:textStyle="bold"
                         android:text="热门作者专区"
                         android:textSize="16sp"
-                        android:textColor="@color/color_FFBC32"/>
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/tv_more_author"

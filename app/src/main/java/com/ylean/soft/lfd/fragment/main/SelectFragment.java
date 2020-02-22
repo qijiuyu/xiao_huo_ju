@@ -105,15 +105,15 @@ public class SelectFragment extends BaseFragment {
             case R.id.tv_hottest:
                  viewHot.setVisibility(View.VISIBLE);
                  viewTop.setVisibility(View.GONE);
-                tvHottest.setTextColor(mActivity.getResources().getColor(R.color.color_FFBC32));
-                tvTop.setTextColor(mActivity.getResources().getColor(android.R.color.black));
+                tvHottest.setTextColor(mActivity.getResources().getColor(android.R.color.black));
+                tvTop.setTextColor(mActivity.getResources().getColor(R.color.color_666666));
                 break;
             //top50
             case R.id.tv_top:
                 viewHot.setVisibility(View.GONE);
                 viewTop.setVisibility(View.VISIBLE);
-                tvHottest.setTextColor(mActivity.getResources().getColor(android.R.color.black));
-                tvTop.setTextColor(mActivity.getResources().getColor(R.color.color_FFBC32));
+                tvHottest.setTextColor(mActivity.getResources().getColor(R.color.color_666666));
+                tvTop.setTextColor(mActivity.getResources().getColor(android.R.color.black));
                 break;
             //今日最热和top50查看更多
             case R.id.tv_more_hottest:

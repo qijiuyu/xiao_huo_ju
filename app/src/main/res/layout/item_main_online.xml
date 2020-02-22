@@ -61,7 +61,7 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/rel_focus"
+            android:id="@+id/rel_bespoke"
             android:layout_width="67dp"
             android:layout_height="26dp"
             android:background="@drawable/bg_item_focus"
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="关注"
+                android:text="预约"
                 android:textSize="12sp"
                 android:textColor="@color/color_FFBC32"
                 android:drawableLeft="@mipmap/item_focus"

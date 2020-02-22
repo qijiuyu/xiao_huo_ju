@@ -227,7 +227,6 @@
                     android:id="@+id/tv_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15011009827"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
                     android:layout_alignParentRight="true"
@@ -267,11 +266,11 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="5dp"
                 android:letterSpacing="0.2"
-                android:text="本人有高度的事业心与责任心,良好的职业道德,原则性强,工作认真"
                 android:textColor="@color/color_33333"
                 android:textSize="15sp"
                 android:layout_marginRight="15dp"

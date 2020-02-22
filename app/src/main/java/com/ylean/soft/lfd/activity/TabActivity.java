@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.focus.FocusActivity;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
@@ -104,6 +107,7 @@ public class TabActivity extends android.app.TabActivity {
 
     @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user,R.id.lin_main2, R.id.lin_recommend2, R.id.lin_focus2, R.id.lin_user2})
     public void onViewClicked(View view) {
+        Intent intent=new Intent(this, LoginActivity.class);
         switch (view.getId()) {
             //推荐
             case R.id.lin_main:
@@ -120,14 +124,22 @@ public class TabActivity extends android.app.TabActivity {
             //关注
             case R.id.lin_focus:
             case R.id.lin_focus2:
-                updateTag(2);
-                tabhost.setCurrentTabByTag("关注");
+                if(MyApplication.isLogin()){
+                    updateTag(2);
+                    tabhost.setCurrentTabByTag("关注");
+                }else{
+                    startActivity(intent);
+                }
                 break;
             //我的
             case R.id.lin_user:
             case R.id.lin_user2:
-                updateTag(3);
-                tabhost.setCurrentTabByTag("我的");
+                if(MyApplication.isLogin()){
+                    updateTag(3);
+                    tabhost.setCurrentTabByTag("我的");
+                }else{
+                    startActivity(intent);
+                }
                 break;
             default:
                 break;

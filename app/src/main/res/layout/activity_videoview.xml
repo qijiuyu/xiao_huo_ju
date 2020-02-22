@@ -27,9 +27,9 @@
         <com.ylean.soft.lfd.view.AutoPollRecyclerView
             android:id="@+id/list_comm"
             android:layout_width="250dp"
-            android:layout_height="200dp"
+            android:layout_height="170dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="75dp"
+            android:layout_marginBottom="95dp"
             android:background="@color/transparent">
         </com.ylean.soft.lfd.view.AutoPollRecyclerView>
 
@@ -47,6 +47,14 @@
             android:layout_gravity="center"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
+        
+        <ImageView
+            android:id="@+id/img_play"
+            android:visibility="gone"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:src="@mipmap/play_icon"
+            android:layout_centerInParent="true"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -119,6 +127,22 @@
                 android:layout_marginTop="8.5dp"/>
 
             <ImageView
+                android:id="@+id/img_coll"
+                android:layout_width="30dp"
+                android:layout_height="27.5dp"
+                android:src="@mipmap/coll_icon"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_coll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8877"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:layout_marginTop="8.5dp"/>
+
+            <ImageView
                 android:id="@+id/img_comm"
                 android:layout_width="30dp"
                 android:layout_height="27.5dp"
@@ -161,40 +185,20 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="45dp"
+            android:layout_marginBottom="65dp"
             android:layout_marginLeft="15dp"/>
 
         <RelativeLayout
+            android:id="@+id/rel_progress"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp">
-
-            <ImageView
-                android:id="@+id/img_play"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@mipmap/start_video"
-                android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"/>
-
-            <ImageView
-                android:id="@+id/img_screen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/no_tp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_centerVertical="true"/>
-
-            <ImageView
-                android:id="@+id/img_select_blues"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/select_blues"
-                android:layout_toLeftOf="@id/img_screen"
-                android:layout_marginRight="15dp"
-                android:layout_centerVertical="true"/>
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/tv_time"
@@ -202,20 +206,69 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:layout_toLeftOf="@id/img_select_blues"
-                android:layout_marginRight="15dp"
-                android:layout_centerVertical="true"/>
+                android:layout_alignParentRight="true"/>
 
             <SeekBar
                 android:id="@+id/seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:layout_centerVertical="true"
                 android:thumb="@drawable/seekbar_share"
-                android:layout_toRightOf="@id/img_play"
-                android:layout_toLeftOf="@id/tv_time"/>
+                android:layout_toLeftOf="@id/tv_time"
+                android:layout_marginRight="3dp"/>
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_screen"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/main_search_bg">
+
+            <ImageView
+                android:id="@+id/img_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_screen"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"/>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="13.5dp"
+                android:background="@color/color_c8c8c8"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15.6dp"
+                android:layout_marginRight="15.6dp"/>
+
+            <EditText
+                android:id="@+id/et_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:hint="发个弹幕冒个泡～"
+                android:textColor="@color/color_666666"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_select_blues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/select_blues"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="25dp"
+            android:layout_centerVertical="true"/>
 
     </RelativeLayout>
 

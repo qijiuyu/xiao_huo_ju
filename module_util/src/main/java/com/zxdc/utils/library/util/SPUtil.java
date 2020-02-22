@@ -17,16 +17,10 @@ public class SPUtil {
     public final static String USERMESSAGE = "xiao_huo_ju";
     //是否首次打开APP
     public final static String IS_FIRST_OPEN="IS_FIRST_OPEN";
+    //验证码倒计时
+    public final static String SEND_CODE="SEND_CODE";
     //登录的token
     public final static String TOKEN="TOKEN";
-    //用户id
-    public final static String USER_ID="USER_ID";
-    //微信登录的openid
-    public final static String OPEN_ID="OPEN_ID";
-    //登录账号
-    public final static String ACCOUNT="ACCOUNT";
-    //登录密码
-    public final static String PASSWORD="PASSWORD";
     //搜索的关键字
     public final static String SEARCH_KEY="SEARCH_KEY";
     private static SPUtil sharUtil = null;

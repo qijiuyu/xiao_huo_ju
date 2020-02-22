@@ -45,7 +45,7 @@
                     android:id="@+id/img_head"
                     android:layout_width="97dp"
                     android:layout_height="97dp"
-                    android:src="@mipmap/bb"
+                    android:src="@mipmap/default_head"
                     android:layout_marginTop="40dp"
                     android:layout_marginLeft="15dp"/>
 
@@ -106,7 +106,6 @@
                     android:id="@+id/tv_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ID:00000001"
                     android:textColor="@color/color_666666"
                     android:textSize="13sp"
                     android:layout_below="@id/img_head"
@@ -117,7 +116,6 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="行走的胡萝卜"
                     android:textSize="23sp"
                     android:textColor="@android:color/white"
                     android:layout_below="@id/tv_id"
@@ -127,7 +125,7 @@
 
                 <TextView
                     android:id="@+id/tv_remark"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="这是一个神秘的人"
                     android:textColor="@color/color_999999"
@@ -151,7 +149,6 @@
                         android:layout_width="38dp"
                         android:layout_height="25dp"
                         android:background="@drawable/bg_user_sex"
-                        android:text="女"
                         android:textSize="12sp"
                         android:textColor="@color/color_666666"
                         android:gravity="center"/>
@@ -161,7 +158,6 @@
                         android:layout_width="38dp"
                         android:layout_height="25dp"
                         android:background="@drawable/bg_user_sex"
-                        android:text="24"
                         android:textSize="12sp"
                         android:textColor="@color/color_666666"
                         android:gravity="center"
@@ -172,27 +168,12 @@
                         android:layout_width="60dp"
                         android:layout_height="25dp"
                         android:background="@drawable/bg_user_sex"
-                        android:text="处女座"
                         android:textSize="12sp"
                         android:textColor="@color/color_666666"
                         android:gravity="center"
                         android:layout_marginLeft="15dp"/>
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_cooperation"
-                    android:layout_width="110dp"
-                    android:layout_height="34dp"
-                    android:background="@drawable/btn_login_bg"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:layout_below="@id/tv_id"
-                    android:layout_marginTop="7dp"
-                    android:text="内容合作"
-                    android:textSize="15sp"
-                    android:textColor="@android:color/white"
-                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -208,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:text="TA的作品"
-                    android:textColor="@color/color_FFBC32"
+                    android:textColor="@android:color/black"
                     android:textSize="16sp"/>
 
                 <View
@@ -229,7 +210,7 @@
                     android:textStyle="bold"
                     android:text="我的关注"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@color/color_666666"/>
 
                 <View
                     android:id="@+id/view2"
@@ -249,7 +230,7 @@
                     android:textStyle="bold"
                     android:text="观看记录"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@color/color_666666"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
