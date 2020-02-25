@@ -42,10 +42,11 @@ public class Love extends RelativeLayout {
     private void initView() {
 
         // 图片资源
-        icons[0] = getResources().getDrawable(R.mipmap.heart_red);
-        icons[1] = getResources().getDrawable(R.mipmap.heart_red);
-        icons[2] = getResources().getDrawable(R.mipmap.heart_red);
-        icons[3] = getResources().getDrawable(R.mipmap.heart_red);
+        //R.mipmap.heart_red
+        icons[0] = getResources().getDrawable(R.mipmap.yes_praise);
+        icons[1] = getResources().getDrawable(R.mipmap.yes_praise);
+        icons[2] = getResources().getDrawable(R.mipmap.yes_praise);
+        icons[3] = getResources().getDrawable(R.mipmap.yes_praise);
 
         // 插值器
         interpolators[0] = new AccelerateDecelerateInterpolator(); // 在动画开始与结束的地方速率改变比较慢，在中间的时候加速

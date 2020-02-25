@@ -29,5 +29,7 @@ public class HttpConstant {
 
     public static final String UPLOAD_FILE=IP+"img/upload";
 
+    public static final String REFRESH="api/app/user/delayheartbeat";
+
 
 }

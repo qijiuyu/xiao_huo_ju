@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
+import com.ylean.soft.lfd.utils.MyOnTouchListener;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
@@ -132,8 +133,23 @@ public class VideoPlayActivity extends BaseActivity {
         videoView.setHudView(hubView);
         //进度条监听
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
-        //双击点赞功能
-        love.setOnTouchListener(ClickPraise);
+        //屏幕点击
+        love.setOnTouchListener(new MyOnTouchListener(new MyOnTouchListener.MyClickCallBack() {
+            //单击
+            public void oneClick(MotionEvent event) {
+                clickVideo(event);
+            }
+            //双击
+            public void doubleClick(MotionEvent event) {
+                love.addLoveView(event.getX(),event.getY());
+                love.addLoveView(event.getX(),event.getY());
+                if(!isPraise){
+                    isPraise=true;
+                    imgPraise.setImageResource(R.mipmap.yes_praise);
+                    imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                }
+            }
+        }));
 
 
         listComm.setLayoutManager(new LinearLayoutManager(this));
@@ -184,7 +200,7 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.img_screen, R.id.img_select_blues,R.id.img_coll})
+    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.img_select_blues,R.id.img_coll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_bank:
@@ -225,7 +241,7 @@ public class VideoPlayActivity extends BaseActivity {
                 videoPlayPersenter.showShareDialog();
                 break;
             //弹屏
-            case R.id.img_screen:
+            case R.id.rel_screen:
                  if(listComm.getVisibility()==View.VISIBLE){
                      imgScreen.setImageResource(R.mipmap.img_screen_yes);
                      listComm.setVisibility(View.GONE);
@@ -278,36 +294,6 @@ public class VideoPlayActivity extends BaseActivity {
         }
     };
 
-
-    /**
-     * 双击点赞功能
-     */
-    protected long exitTime = 0;
-    private View.OnTouchListener ClickPraise=new View.OnTouchListener() {
-        public boolean onTouch(View v, MotionEvent event) {
-            if(event.getAction()==MotionEvent.ACTION_UP){
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                    //视频单击后
-                    clickVideo(event);
-                }else{
-                    love.addLoveView(event.getX(),event.getY());
-                    love.addLoveView(event.getX(),event.getY());
-                    if(!isPraise){
-                        isPraise=true;
-                        imgPraise.setImageResource(R.mipmap.yes_praise);
-                        imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                    }
-                }
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        exitTime=0;
-                    }
-                },500);
-            }
-            return true;
-        }
-    };
 
 
     /**

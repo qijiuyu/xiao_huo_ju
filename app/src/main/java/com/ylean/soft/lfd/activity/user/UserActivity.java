@@ -209,7 +209,9 @@ public class UserActivity extends BaseActivity{
         if(userBean==null){
             return;
         }
-        Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+        if(!TextUtils.isEmpty(userBean.getImgurl())){
+            Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+        }
         tvId.setText("ID:"+userBean.getCode());
         if(!TextUtils.isEmpty(userBean.getNickname())){
             tvName.setText(userBean.getNickname());

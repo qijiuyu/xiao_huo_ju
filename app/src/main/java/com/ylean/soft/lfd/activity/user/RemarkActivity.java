@@ -9,7 +9,11 @@ import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +52,8 @@ public class RemarkActivity extends BaseActivity {
                     ToastUtil.showLong("请输入个人介绍");
                     return;
                 }
+                EventBus.getDefault().post(new EventBusType(EventStatus.EDIT_REMARK,name));
+                finish();
                 break;
             default:
                 break;

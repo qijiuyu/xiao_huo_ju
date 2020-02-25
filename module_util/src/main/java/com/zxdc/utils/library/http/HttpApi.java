@@ -57,4 +57,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.EDIT_USER)
     Call<BaseBean> editUser(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.REFRESH)
+    Call<BaseBean> refreshToken(@FieldMap Map<String, String> map);
 }

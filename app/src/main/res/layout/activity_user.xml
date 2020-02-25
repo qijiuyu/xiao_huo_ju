@@ -45,7 +45,7 @@
                     android:id="@+id/img_head"
                     android:layout_width="97dp"
                     android:layout_height="97dp"
-                    android:src="@mipmap/default_head"
+                    android:background="@drawable/bg_shape"
                     android:layout_marginTop="40dp"
                     android:layout_marginLeft="15dp"/>
 

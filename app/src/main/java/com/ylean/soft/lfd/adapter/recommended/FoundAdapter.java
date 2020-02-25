@@ -23,6 +23,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
+import com.ylean.soft.lfd.utils.MyOnTouchListener;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
@@ -77,7 +78,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
         private Love love;
-        private RelativeLayout relProgress;
+        private RelativeLayout relProgress,relScreen;
         private LinearLayout linScreen;
         public ViewHolder(View view) {
             super(view);
@@ -103,6 +104,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             love=view.findViewById(R.id.love);
             relProgress=view.findViewById(R.id.rel_progress);
             linScreen=view.findViewById(R.id.lin_screen);
+            relScreen=view.findViewById(R.id.rel_screen);
         }
     }
 
@@ -124,16 +126,29 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             playVideo();
             //显示弹屏
             videoPlayPersenter.showScreen(holder.listComm);
-            //双击点赞功能
-            holder.love.setOnTouchListener(ClickPraise);
             holder.imgHead.setOnClickListener(this);
             holder.imgPraise.setOnClickListener(this);
             holder.imgComm.setOnClickListener(this);
             holder.imgShare.setOnClickListener(this);
             holder.imgSelectBlues.setOnClickListener(this);
             holder.imgColl.setOnClickListener(this);
+            holder.relScreen.setOnClickListener(this);
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.videoView.setVisibility(View.VISIBLE);
+            //屏幕点击
+            holder.love.setOnTouchListener(new MyOnTouchListener(new MyOnTouchListener.MyClickCallBack() {
+                //单击
+                public void oneClick(MotionEvent event) {
+                    clickVideo(event);
+                }
+                //双击
+                public void doubleClick(MotionEvent event) {
+                    holder.love.addLoveView(event.getX(),event.getY());
+                    holder.love.addLoveView(event.getX(),event.getY());
+                    holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+                    holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                }
+            }));
         }else{
             holder.videoView.setVisibility(View.GONE);
         }
@@ -190,6 +205,19 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             case R.id.img_share:
                 videoPlayPersenter.showShareDialog();
                 break;
+            //弹屏
+            case R.id.rel_screen:
+                if(holder.listComm.getVisibility()==View.VISIBLE){
+                    holder.imgScreen.setImageResource(R.mipmap.img_screen_yes);
+                    holder.listComm.setVisibility(View.GONE);
+                    holder.listComm.stop();
+                }else{
+                    holder.listComm.setVisibility(View.VISIBLE);
+                    holder.listComm.start();
+                    holder.imgScreen.setImageResource(R.mipmap.img_screen);
+                }
+                  break;
+            //选集
             case R.id.img_select_blues:
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
@@ -255,33 +283,6 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.seekbar.setProgress(holder.videoView.getCurrentPosition());
             }
             handler.postDelayed(runnable, 1000);
-        }
-    };
-
-
-    /**
-     * 双击点赞功能
-     */
-    protected long exitTime = 0;
-    private View.OnTouchListener ClickPraise=new View.OnTouchListener() {
-        public boolean onTouch(View v, MotionEvent event) {
-            if(event.getAction()==MotionEvent.ACTION_UP){
-                if ((System.currentTimeMillis() - exitTime) > 1000) {
-                    exitTime = System.currentTimeMillis();
-                    //视频点击
-                    clickVideo(event);
-                }else{
-                    holder.love.addLoveView(event.getX(),event.getY());
-                    holder.love.addLoveView(event.getX(),event.getY());
-                    String tag=holder.imgPraise.getTag().toString();
-                    if(tag.equals("0")){
-                        v.setTag("1");
-                        holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-                        holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                    }
-                }
-            }
-            return true;
         }
     };
 

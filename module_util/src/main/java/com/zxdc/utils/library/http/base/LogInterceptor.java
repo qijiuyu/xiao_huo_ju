@@ -3,6 +3,7 @@ package com.zxdc.utils.library.http.base;
 import android.text.TextUtils;
 
 import com.zxdc.utils.library.base.BaseApplication;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.http.HttpApi;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
@@ -34,6 +35,26 @@ public class LogInterceptor implements Interceptor {
         Response response = chain.proceed(request);
         long t2 = System.nanoTime();
         String body = response.body().string();
+        //如果ACCESS_TOKEN失效，自动重新获取一次
+        final int code = getCode(body);
+        if(code==-401){
+            BaseBean baseBean=refreshToken();
+            if(baseBean!=null && baseBean.isSussess()){
+                response = chain.proceed(request);
+                body = response.body().string();
+            }
+        }
+        try {
+            if(!TextUtils.isEmpty(body)){
+                JSONObject jsonObject=new JSONObject(body);
+                if(!jsonObject.isNull("data") && jsonObject.getString("data").equals("")){
+                    jsonObject.put("data",null);
+                    body=jsonObject.toString();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         LogUtils.e(String.format("response %s in %.1fms%n%s", response.request().url(), (t2 - t1) / 1e6d, body));
         return response.newBuilder().body(ResponseBody.create(response.body().contentType(), body)).build();
     }
@@ -82,6 +103,34 @@ public class LogInterceptor implements Interceptor {
     }
 
 
+    /**
+     * 刷新token
+     * @return
+     */
+    private BaseBean refreshToken(){
+        final String token=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.TOKEN);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        try {
+            BaseBean baseBean = Http.getRetrofitNoInterceptor().create(HttpApi.class).refreshToken(map).execute().body();
+            return baseBean;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public int getCode(String json) {
+        int code = 0;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            code = jsonObject.getInt("code");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
 
 
 }

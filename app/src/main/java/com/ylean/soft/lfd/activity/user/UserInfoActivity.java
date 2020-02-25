@@ -99,10 +99,14 @@ public class UserInfoActivity extends BaseActivity {
             //女孩
             case R.id.rel_girl:
                 setSexBj(2);
+                //修改个人信息
+                editUser();
                 break;
             //男
             case R.id.rel_boy:
                setSexBj(1);
+                //修改个人信息
+                editUser();
                 break;
             //出生年月
             case R.id.tv_birthday:
@@ -134,7 +138,7 @@ public class UserInfoActivity extends BaseActivity {
         if(userBean==null){
             return;
         }
-        Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+        Glide.with(this).load(userBean.getImgurl()).error(R.mipmap.default_head).into(imgHead);
         tvName.setText(userBean.getNickname());
         //设置性别背景
         setSexBj(userBean.getSex());
@@ -149,6 +153,7 @@ public class UserInfoActivity extends BaseActivity {
      * @param type
      */
     private void setSexBj(int type){
+        userBean.setSex(type);
         if(type==1){
             relGirl.setBackground(getResources().getDrawable(R.drawable.bg_sex_box));
             relBoy.setBackground(getResources().getDrawable(R.drawable.btn_bg_sex));
@@ -234,10 +239,38 @@ public class UserInfoActivity extends BaseActivity {
             //回执时间
             case EventStatus.SHOW_SELECT_TIME:
                   tvBirthday.setText(eventBusType.getObject().toString());
+                  userBean.setBirthday(eventBusType.getObject().toString());
+                 //修改个人信息
+                 editUser();
+                  break;
+            //回执昵称
+            case EventStatus.EDIT_NAME:
+                  tvName.setText(eventBusType.getObject().toString());
+                  userBean.setNickname(eventBusType.getObject().toString());
+                 //修改个人信息
+                 editUser();
+                  break;
+            //回执个人简介
+            case EventStatus.EDIT_REMARK:
+                  tvRemark.setText(eventBusType.getObject().toString());
+                  userBean.setIntroduction(eventBusType.getObject().toString());
+                 //修改个人信息
+                 editUser();
                   break;
             default:
                 break;
         }
+    }
+
+
+    /**
+     * 修改个人信息
+     */
+    private void editUser(){
+        if(userBean==null){
+            userBean=new UserInfo.UserBean();
+        }
+        HttpMethod.editUser(userBean.getBirthday(),userBean.getImgurl(),userBean.getIntroduction(),userBean.getNickname(),String.valueOf(userBean.getSex()),handler);
     }
 
 

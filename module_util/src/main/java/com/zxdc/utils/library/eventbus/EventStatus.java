@@ -37,4 +37,10 @@ public class EventStatus {
    //获取短信验证码
    public static final int SHOW_SMS_CODE=111;
 
+    //修改昵称
+    public static final int EDIT_NAME=112;
+
+    //修改个人简介
+    public static final int EDIT_REMARK=113;
+
 }

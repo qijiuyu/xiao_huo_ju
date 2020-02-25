@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -9,7 +10,11 @@ import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +53,8 @@ public class EditNameActivity extends BaseActivity {
                     ToastUtil.showLong("请输入昵称");
                     return;
                 }
+                EventBus.getDefault().post(new EventBusType(EventStatus.EDIT_NAME,name));
+                finish();
                 break;
             default:
                 break;

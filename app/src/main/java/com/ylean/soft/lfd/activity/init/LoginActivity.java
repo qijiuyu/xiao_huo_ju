@@ -291,12 +291,34 @@ public class LoginActivity extends BaseActivity {
         }
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             LogUtils.e("++++++++++++++++++++=111");
-            Set<String> set = map.keySet();
-            for (String string : set) {
-                if (string.equals("screen_name")) {
-                    LogUtils.e(map.get(string)+"+++++++++++++++++++++222");
-                }
-            }
+            String unionid = map.get("unionid");
+            String name = map.get("name");
+            String iconurl = map.get("iconurl");
+            String openid = map.get("openid");
+            umShareAPI.getPlatformInfo(LoginActivity.this, share_media,
+                    new UMAuthListener() {
+                        public void onError(SHARE_MEDIA arg0, int arg1, Throwable arg2) {
+                        }
+                        public void onStart(SHARE_MEDIA share_media) {
+                        }
+                        public void onComplete(SHARE_MEDIA arg0, int arg1, Map<String, String> data) {
+                            Set<String> set = data.keySet();
+                            for (String string : set) {
+                                // 获得头像图片的网络地址
+//                                if (string.equals("profile_image_url")) {
+//                                    image_url = data.get(string);
+//                                }
+//                                // 设置昵称
+//                                if (string.equals("screen_name")) {
+//                                    name = data.get(string);
+//                                }
+                            }
+                        }
+                        @Override
+                        public void onCancel(SHARE_MEDIA arg0, int arg1) {
+
+                        }
+                    });
         }
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
 
@@ -310,7 +332,6 @@ public class LoginActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         umShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
     }
 
 
