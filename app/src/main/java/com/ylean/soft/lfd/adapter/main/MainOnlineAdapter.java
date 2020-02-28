@@ -9,15 +9,21 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import java.util.List;
 
 public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.MyHolder> {
 
     private Activity activity;
-    public MainOnlineAdapter(Activity activity) {
+    private List<HotTop.DataBean> list;
+    public MainOnlineAdapter(Activity activity,List<HotTop.DataBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -27,14 +33,27 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MyHolder holder =myHolder;
-
+    public void onBindViewHolder(@NonNull MyHolder holder, int i) {
+        HotTop.DataBean dataBean=list.get(i);
+        //背景图片
+        String imgUrl=dataBean.getImgurl();
+        holder.imgHead.setTag(R.id.imageid,imgUrl);
+        if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
+            Glide.with(activity).load(imgUrl).into(holder.imgHead);
+        }
+        holder.tvTitle.setText(dataBean.getName());
+        //用户头像
+        String headUrl=dataBean.getUserImg();
+        holder.imgPic.setTag(R.id.imageid2,headUrl);
+        if(holder.imgPic.getTag(R.id.imageid2)!=null && headUrl==holder.imgPic.getTag(R.id.imageid2)){
+            Glide.with(activity).load(headUrl).into(holder.imgPic);
+        }
+        holder.tvName.setText(dataBean.getUserNickName());
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return list==null ? 0 : list.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {

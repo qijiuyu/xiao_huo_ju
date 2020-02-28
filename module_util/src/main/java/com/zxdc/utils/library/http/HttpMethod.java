@@ -4,7 +4,9 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.http.base.BaseRequst;
 import com.zxdc.utils.library.http.base.Http;
@@ -24,8 +26,8 @@ import retrofit2.Response;
 
 public class HttpMethod extends BaseRequst {
 
-    private static String size="10";
-    public static int pageSize=10;
+    public static String pageSize="10";
+    public static int size=10;
 
     /**
      * 获取站点
@@ -170,11 +172,11 @@ public class HttpMethod extends BaseRequst {
      */
     public static void channel(final Handler handler) {
         Map<String,String> map=new HashMap<>();
-        Http.getRetrofit().create(HttpApi.class).channel(map).enqueue(new Callback<ResponseBody>() {
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        Http.getRetrofit().create(HttpApi.class).channel(map).enqueue(new Callback<Tag>() {
+            public void onResponse(Call<Tag> call, Response<Tag> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_CHANNEL_SUCCESS, response.body());
             }
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Tag> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
@@ -250,6 +252,76 @@ public class HttpMethod extends BaseRequst {
             public void onFailure(okhttp3.Call call, IOException e) {
                 LogUtils.e(e.getMessage()+"_________");
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, e.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 设置感兴趣的频道
+     */
+    public static void setChannel(String ids,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("ids",ids);
+        Http.getRetrofit().create(HttpApi.class).setChannel(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.SET_CHANNEL_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取热播和精选TOP剧集列表
+     */
+    public static void getHot_Top(String querytype,int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("querytype",querytype);
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getHot_Top(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 猜你喜欢
+     */
+    public static void guessLike(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        Http.getRetrofit().create(HttpApi.class).guessLike(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_GUESS_LIKE_SUCCESS, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 即将上线
+     */
+    public static void getOnline(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getOnline(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
     }

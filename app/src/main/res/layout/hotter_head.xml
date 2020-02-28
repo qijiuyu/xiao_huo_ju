@@ -14,7 +14,6 @@
             android:id="@+id/img_head"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/dd"
             android:scaleType="centerCrop"/>
 
         <RelativeLayout
@@ -31,9 +30,9 @@
                 android:layout_marginTop="41dp"/>
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="霸道总裁很粘人"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:layout_marginTop="37dp"
@@ -65,7 +64,7 @@
 
                 <TextView
                     android:id="@+id/tv_focus"
-                    android:layout_width="30dp"
+                    android:layout_width="37dp"
                     android:layout_height="15dp"
                     android:background="@drawable/bg_hotter_focus"
                     android:text="关注"

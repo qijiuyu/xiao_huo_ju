@@ -9,18 +9,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SelectTagAdapter extends RecyclerView.Adapter<SelectTagAdapter.MyHolder> {
 
     private Activity activity;
+    private List<Tag.TagBean> list;
     public Map<Integer,Integer> map=new HashMap<>();
-    public SelectTagAdapter(Activity activity) {
+    public SelectTagAdapter(Activity activity,List<Tag.TagBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -32,24 +37,35 @@ public class SelectTagAdapter extends RecyclerView.Adapter<SelectTagAdapter.MyHo
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
         MyHolder holder =myHolder;
+        final Tag.TagBean tagBean=list.get(i);
+        if(tagBean==null){
+            return;
+        }
+        holder.tvName.setHint(tagBean.getName());
+        //背景图片
+        String imgUrl=tagBean.getImgurl();
+        holder.imgHead.setTag(R.id.imageid,imgUrl);
+        if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
+            Glide.with(activity).load(imgUrl).into(holder.imgHead);
+        }
 
-        if(map.get(i)!=null){
+        if(map.get(tagBean.getId())!=null){
             holder.imgCheck.setImageResource(R.mipmap.yes_check);
         }else{
             holder.imgCheck.setImageResource(R.mipmap.no_check);
         }
 
-        holder.imgCheck.setTag(i);
+        holder.imgCheck.setTag(tagBean.getId());
         holder.imgCheck.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(v.getTag()==null){
                     return;
                 }
-                int position= (int) v.getTag();
-                if(map.get(position)!=null){
-                    map.remove(position);
+                int id= (int) v.getTag();
+                if(map.get(id)!=null){
+                    map.remove(id);
                 }else{
-                    map.put(position,position);
+                    map.put(id,id);
                 }
                 notifyDataSetChanged();
             }
@@ -59,11 +75,11 @@ public class SelectTagAdapter extends RecyclerView.Adapter<SelectTagAdapter.MyHo
 
     @Override
     public int getItemCount() {
-        return 35;
+        return list==null ? 0 : list.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
-       OvalImageViews imgHead;
+        OvalImageViews imgHead;
         ImageView imgCheck;
         TextView tvName;
         public MyHolder(@NonNull View itemView) {

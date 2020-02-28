@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.SelectTagActivity;
 import com.ylean.soft.lfd.fragment.user.LookHistoryFragment;
 import com.ylean.soft.lfd.fragment.user.MyFocusFragment;
 import com.ylean.soft.lfd.fragment.user.MyLikeFragment;
@@ -121,7 +122,7 @@ public class UserActivity extends BaseActivity{
         switch (view.getId()) {
             //设置
             case R.id.img_setting:
-                setClass(SettingActivity.class);
+                setClass(SelectTagActivity.class);
                 break;
             //消息
             case R.id.img_news:

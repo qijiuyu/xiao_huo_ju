@@ -40,6 +40,7 @@ public class LogInterceptor implements Interceptor {
         if(code==-401){
             BaseBean baseBean=refreshToken();
             if(baseBean!=null && baseBean.isSussess()){
+                request = addPostParameter(request);
                 response = chain.proceed(request);
                 body = response.body().string();
             }

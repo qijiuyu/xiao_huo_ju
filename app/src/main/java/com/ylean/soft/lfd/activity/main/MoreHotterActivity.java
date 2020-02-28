@@ -36,7 +36,7 @@ public class MoreHotterActivity extends BaseActivity {
     @BindView(R.id.pager)
     ViewPager pager;
     //fragment页码
-    public int pageIndex;
+    public static int pageIndex;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtils.transparencyBar(this);

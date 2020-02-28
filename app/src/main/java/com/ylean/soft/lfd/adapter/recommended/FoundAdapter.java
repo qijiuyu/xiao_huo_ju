@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -80,6 +81,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private Love love;
         private RelativeLayout relProgress,relScreen;
         private LinearLayout linScreen;
+        private EditText etScreen;
         public ViewHolder(View view) {
             super(view);
             videoView=view.findViewById(R.id.videoView);
@@ -105,6 +107,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             relProgress=view.findViewById(R.id.rel_progress);
             linScreen=view.findViewById(R.id.lin_screen);
             relScreen=view.findViewById(R.id.rel_screen);
+            etScreen=view.findViewById(R.id.et_screen);
         }
     }
 
@@ -136,27 +139,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.videoView.setVisibility(View.VISIBLE);
             //屏幕点击
-            holder.love.setOnTouchListener(new MyOnTouchListener(new MyOnTouchListener.MyClickCallBack() {
-                //单击
-                public void oneClick(MotionEvent event) {
-                    clickVideo(event);
-                }
-                //双击
-                public void doubleClick(MotionEvent event) {
-                    holder.love.addLoveView(event.getX(),event.getY());
-                    holder.love.addLoveView(event.getX(),event.getY());
-                    holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-                    holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                }
-            }));
+            holder.love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
         }else{
             holder.videoView.setVisibility(View.GONE);
-        }
-        String tag=holder.imgPraise.getTag().toString();
-        if(tag.equals("1")){
-            holder.imgPraise.setImageResource(R.mipmap.no_praise);
-        }else{
-            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
         }
     }
 
@@ -208,13 +193,20 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             //弹屏
             case R.id.rel_screen:
                 if(holder.listComm.getVisibility()==View.VISIBLE){
-                    holder.imgScreen.setImageResource(R.mipmap.img_screen_yes);
+                    holder.imgScreen.setImageResource(R.mipmap.img_screen);
                     holder.listComm.setVisibility(View.GONE);
                     holder.listComm.stop();
+                    holder.etScreen.setHint("弹屏已关闭");
+                    holder.etScreen.setFocusable(false);
+                    holder. etScreen.setFocusableInTouchMode(false);
                 }else{
                     holder.listComm.setVisibility(View.VISIBLE);
                     holder.listComm.start();
-                    holder.imgScreen.setImageResource(R.mipmap.img_screen);
+                    holder.imgScreen.setImageResource(R.mipmap.img_screen_yes);
+                    holder.etScreen.setHint("发个弹幕冒个泡～");
+                    holder.etScreen.setFocusableInTouchMode(true);
+                    holder.etScreen.setFocusable(true);
+                    holder.etScreen.requestFocus();
                 }
                   break;
             //选集
@@ -283,6 +275,24 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.seekbar.setProgress(holder.videoView.getCurrentPosition());
             }
             handler.postDelayed(runnable, 1000);
+        }
+    };
+
+
+    /**
+     * 监听屏幕点击事件
+     */
+    private MyOnTouchListener.MyClickCallBack myClickCallBack=new MyOnTouchListener.MyClickCallBack() {
+        //单击
+        public void oneClick(MotionEvent event) {
+            clickVideo(event);
+        }
+        //双击
+        public void doubleClick(MotionEvent event) {
+            holder.love.addLoveView(event.getX(),event.getY());
+            holder.love.addLoveView(event.getX(),event.getY());
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+            holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
         }
     };
 

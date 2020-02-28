@@ -3,7 +3,9 @@ package com.zxdc.utils.library.http;
 
 
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
 
 import java.util.Map;
@@ -48,7 +50,7 @@ public interface HttpApi {
 
     @FormUrlEncoded
     @POST(HttpConstant.CHANNEL)
-    Call<ResponseBody> channel(@FieldMap Map<String, String> map);
+    Call<Tag> channel(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(HttpConstant.GET_USER)
@@ -61,4 +63,22 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.REFRESH)
     Call<BaseBean> refreshToken(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.SET_CHANNEL)
+    Call<BaseBean> setChannel(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.HOT_TOP_LIST)
+    Call<HotTop> getHot_Top(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GUESS_LIKE)
+    Call<HotTop> guessLike(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_ONLINE)
+    Call<HotTop> getOnline(@FieldMap Map<String, String> map);
+
+
 }

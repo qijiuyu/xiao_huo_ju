@@ -8,14 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ylean.soft.lfd.R;
+import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.MeasureListView;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import java.util.List;
 
 public class MainHottestAdapter extends RecyclerView.Adapter<MainHottestAdapter.MyHolder> {
 
     private Activity activity;
-    public MainHottestAdapter(Activity activity) {
+    private List<HotTop.DataBean> list;
+    public MainHottestAdapter(Activity activity,List<HotTop.DataBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -26,15 +32,13 @@ public class MainHottestAdapter extends RecyclerView.Adapter<MainHottestAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MyHolder holder =myHolder;
-        MainHottestDataAdapter mainHottestDataAdapter=new MainHottestDataAdapter(activity);
-        holder.listView.setAdapter(mainHottestDataAdapter);
-
+        MainHottestDataAdapter mainHottestDataAdapter=new MainHottestDataAdapter(activity,list,i);
+        myHolder.listView.setAdapter(mainHottestDataAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return list==null ? 0 : getNum();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
@@ -43,6 +47,15 @@ public class MainHottestAdapter extends RecyclerView.Adapter<MainHottestAdapter.
             super(itemView);
             listView=itemView.findViewById(R.id.listView);
         }
+    }
+
+
+    private int getNum(){
+        int num=list.size()/3;
+        if(list.size()%3!=0){
+            num++;
+        }
+        return num;
     }
 
 }

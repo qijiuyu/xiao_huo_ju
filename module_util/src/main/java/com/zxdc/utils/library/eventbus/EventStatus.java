@@ -10,7 +10,7 @@ public class EventStatus {
     //微信登录成功
     public static final int WX_LOGIN=102;
 
-    //首页大家都在看
+    //首页猜你喜欢
     public static final int SHOW_MAIN_LOOK=103;
 
     //首页热门专题

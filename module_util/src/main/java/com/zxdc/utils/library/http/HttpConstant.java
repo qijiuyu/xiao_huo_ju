@@ -31,5 +31,13 @@ public class HttpConstant {
 
     public static final String REFRESH="api/app/user/delayheartbeat";
 
+    public static final String SET_CHANNEL="api/app/channel/interest";
+
+    public static final String HOT_TOP_LIST="api/app/serial/hot";
+
+    public static final String GUESS_LIKE="api/app/serial/like";
+
+    public static final String GET_ONLINE="api/app/serial/coming";
+
 
 }

@@ -134,28 +134,14 @@ public class VideoPlayActivity extends BaseActivity {
         //进度条监听
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
         //屏幕点击
-        love.setOnTouchListener(new MyOnTouchListener(new MyOnTouchListener.MyClickCallBack() {
-            //单击
-            public void oneClick(MotionEvent event) {
-                clickVideo(event);
-            }
-            //双击
-            public void doubleClick(MotionEvent event) {
-                love.addLoveView(event.getX(),event.getY());
-                love.addLoveView(event.getX(),event.getY());
-                if(!isPraise){
-                    isPraise=true;
-                    imgPraise.setImageResource(R.mipmap.yes_praise);
-                    imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                }
-            }
-        }));
+        love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
 
 
         listComm.setLayoutManager(new LinearLayoutManager(this));
         listComm.setAdapter(new ScreenAdapter(this));
         listComm.start();
     }
+
 
 
     /**
@@ -243,13 +229,20 @@ public class VideoPlayActivity extends BaseActivity {
             //弹屏
             case R.id.rel_screen:
                  if(listComm.getVisibility()==View.VISIBLE){
-                     imgScreen.setImageResource(R.mipmap.img_screen_yes);
+                     imgScreen.setImageResource(R.mipmap.img_screen);
                      listComm.setVisibility(View.GONE);
                      listComm.stop();
+                     etScreen.setHint("弹屏已关闭");
+                     etScreen.setFocusable(false);
+                     etScreen.setFocusableInTouchMode(false);
                  }else{
                      listComm.setVisibility(View.VISIBLE);
                      listComm.start();
-                     imgScreen.setImageResource(R.mipmap.img_screen);
+                     imgScreen.setImageResource(R.mipmap.img_screen_yes);
+                     etScreen.setHint("发个弹幕冒个泡～");
+                     etScreen.setFocusableInTouchMode(true);
+                     etScreen.setFocusable(true);
+                     etScreen.requestFocus();
                  }
                 break;
             //选集
@@ -294,6 +287,26 @@ public class VideoPlayActivity extends BaseActivity {
         }
     };
 
+
+    /**
+     * 监听屏幕点击事件
+     */
+    private MyOnTouchListener.MyClickCallBack myClickCallBack=new MyOnTouchListener.MyClickCallBack() {
+        //单击
+        public void oneClick(MotionEvent event) {
+            clickVideo(event);
+        }
+        //双击
+        public void doubleClick(MotionEvent event) {
+            love.addLoveView(event.getX(),event.getY());
+            love.addLoveView(event.getX(),event.getY());
+            if(!isPraise){
+                isPraise=true;
+                imgPraise.setImageResource(R.mipmap.yes_praise);
+                imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+            }
+        }
+    };
 
 
     /**

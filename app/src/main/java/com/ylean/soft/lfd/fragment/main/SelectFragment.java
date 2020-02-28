@@ -33,8 +33,10 @@ import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
 import com.zxdc.utils.library.base.BaseFragment;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.util.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,12 +77,24 @@ public class SelectFragment extends BaseFragment {
     @BindView(R.id.recycle_author)
     RecyclerView recycleAuthor;
     Unbinder unbinder;
+    /**
+     * 0：热播排行
+     * 1：精选top
+     */
+    private int hot_top=0;
     private SelectFragmentPersenter selectFragmentPersenter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //注册eventBus
         EventBus.getDefault().register(this);
+        //实例化MVP
         selectFragmentPersenter=new SelectFragmentPersenter(mActivity);
+        //获取热播和精选TOP剧集列表
+        selectFragmentPersenter.getHot_Top(hot_top);
+        //获取猜你喜欢的数据
+        selectFragmentPersenter.guessLike();
+        //获取即将上线的数据
+        selectFragmentPersenter.getOnline();
     }
 
     View view;
@@ -89,10 +103,7 @@ public class SelectFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
 
         EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_BANNER));
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_HOTTER));
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_LOOK));
         EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_PROJECT));
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_ONLINE));
         EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_AUTHOR));
         return view;
     }
@@ -103,17 +114,23 @@ public class SelectFragment extends BaseFragment {
         switch (view.getId()) {
             //今日最热
             case R.id.tv_hottest:
+                 hot_top=0;
                  viewHot.setVisibility(View.VISIBLE);
                  viewTop.setVisibility(View.GONE);
                 tvHottest.setTextColor(mActivity.getResources().getColor(android.R.color.black));
                 tvTop.setTextColor(mActivity.getResources().getColor(R.color.color_666666));
+                //获取热播和精选TOP剧集列表
+                selectFragmentPersenter.getHot_Top(hot_top);
                 break;
             //top50
             case R.id.tv_top:
+                 hot_top=1;
                 viewHot.setVisibility(View.GONE);
                 viewTop.setVisibility(View.VISIBLE);
                 tvHottest.setTextColor(mActivity.getResources().getColor(R.color.color_666666));
                 tvTop.setTextColor(mActivity.getResources().getColor(android.R.color.black));
+                //获取热播和精选TOP剧集列表
+                selectFragmentPersenter.getHot_Top(hot_top);
                 break;
             //今日最热和top50查看更多
             case R.id.tv_more_hottest:
@@ -147,11 +164,11 @@ public class SelectFragment extends BaseFragment {
                 break;
             //显示今日最热/top50
             case EventStatus.SHOW_MAIN_HOTTER:
-                  showHotter();
+                  showHotter((List<HotTop.DataBean>) eventBusType.getObject());
                   break;
-            //显示大家都在看
+            //显示猜你喜欢
             case EventStatus.SHOW_MAIN_LOOK:
-                 showLook();
+                 showLook((List<HotTop.DataBean>) eventBusType.getObject());
                  break;
             //显示热门专题
             case EventStatus.SHOW_MAIN_PROJECT:
@@ -159,7 +176,7 @@ public class SelectFragment extends BaseFragment {
                   break;
             //显示即将上线
             case EventStatus.SHOW_MAIN_ONLINE:
-                  showOnline();
+                  showOnline((List<HotTop.DataBean>) eventBusType.getObject());
                   break;
             //显示热门作者专区
             case EventStatus.SHOW_MAIN_AUTHOR:
@@ -215,24 +232,22 @@ public class SelectFragment extends BaseFragment {
     /**
      * 显示今日最热/top50
      */
-    private void showHotter(){
-        MainHottestAdapter mainHottestAdapter=new MainHottestAdapter(mActivity);
+    private void showHotter(List<HotTop.DataBean> list){
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleHottest.setLayoutManager(layoutManager);
-        recycleHottest.setAdapter(mainHottestAdapter);
+        recycleHottest.setAdapter(new MainHottestAdapter(mActivity,list));
     }
 
 
     /**
      * 显示大家都在看
      */
-    private void showLook(){
-        MainLookAdapter mainLookAdapter=new MainLookAdapter(mActivity);
+    private void showLook(List<HotTop.DataBean> list){
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleLook.setLayoutManager(layoutManager);
-        recycleLook.setAdapter(mainLookAdapter);
+        recycleLook.setAdapter(new MainLookAdapter(mActivity,list));
     }
 
 
@@ -251,11 +266,11 @@ public class SelectFragment extends BaseFragment {
     /**
      * 显示即将上线
      */
-    private void showOnline(){
+    private void showOnline(List<HotTop.DataBean> list){
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleOnLine.setLayoutManager(layoutManager);
-        recycleOnLine.setAdapter(new MainOnlineAdapter(mActivity));
+        recycleOnLine.setAdapter(new MainOnlineAdapter(mActivity,list));
     }
 
 
