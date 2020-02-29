@@ -75,7 +75,7 @@ public class SelectTagActivity extends BaseActivity {
                 for (Integer key : selectTagAdapter.map.keySet()) {
                      stringBuilder.append(key+",");
                 }
-                String ids=stringBuilder.substring(0,stringBuilder.length()-1);
+                String ids=stringBuilder.substring(0,stringBuilder.length()-1)+"]";
                 //设置感兴趣的频道
                 setChannel(ids);
                  break;

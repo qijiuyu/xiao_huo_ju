@@ -39,5 +39,7 @@ public class HttpConstant {
 
     public static final String GET_ONLINE="api/app/serial/coming";
 
+    public static final String SORT_CHANNEL="api/app/channel/sort";
+
 
 }

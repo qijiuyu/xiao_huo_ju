@@ -80,5 +80,9 @@ public interface HttpApi {
     @POST(HttpConstant.GET_ONLINE)
     Call<HotTop> getOnline(@FieldMap Map<String, String> map);
 
+    @FormUrlEncoded
+    @POST(HttpConstant.SORT_CHANNEL)
+    Call<BaseBean> sortChannel(@FieldMap Map<String, String> map);
+
 
 }

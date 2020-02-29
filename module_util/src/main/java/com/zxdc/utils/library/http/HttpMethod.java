@@ -325,4 +325,21 @@ public class HttpMethod extends BaseRequst {
             }
         });
     }
+
+
+    /**
+     * 频道排序
+     */
+    public static void sortChannel(String json,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("json",json);
+        Http.getRetrofit().create(HttpApi.class).sortChannel(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.SORT_CHANNEL_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
 }

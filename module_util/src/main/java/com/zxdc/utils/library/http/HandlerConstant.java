@@ -20,4 +20,5 @@ public class HandlerConstant {
     public static final int GET_GUESS_LIKE_SUCCESS=10016;
     public static final int GET_ONLINE_SUCCESS1=10017;
     public static final int GET_ONLINE_SUCCESS2=10018;
+    public static final int SORT_CHANNEL_SUCCESS=10019;
 }

@@ -1,6 +1,5 @@
-package com.ylean.soft.lfd.utils.channel;
+package com.ylean.soft.lfd.adapter.main;
 
-import android.content.Context;
 import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -12,20 +11,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
-
+import com.ylean.soft.lfd.activity.main.TagManagerActivity;
+import com.ylean.soft.lfd.utils.channel.DataUtils;
+import com.ylean.soft.lfd.utils.channel.TouchInterface;
+import com.zxdc.utils.library.bean.Tag;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Administrator on 2020/2/10.
- */
 public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implements TouchInterface {
 
-    private Context context;
+    private TagManagerActivity activity;
     private ItemTouchHelper touchHelper;
-    private List<DataBean> list;
+    public List<Tag.TagBean> list;
     /**
      * true：点击直接拖拽
      * false：只能长按拖拽
@@ -35,35 +34,47 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
     public boolean isJitter=false;
     //抖动动画
     private Animation shake;
-    public ChannerAdapter(Context context, List<DataBean> list) {
-        this.context = context;
+    public ChannerAdapter(TagManagerActivity activity, List<Tag.TagBean> list) {
+        this.activity = activity;
         this.list = list;
-        shake = AnimationUtils.loadAnimation(context, R.anim.jitter);
+        shake = AnimationUtils.loadAnimation(activity, R.anim.jitter);
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder viewHolder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_channel, parent, false));
+        MyViewHolder viewHolder = new MyViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_channel, parent, false));
         return viewHolder;
     }
 
-
-    @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
-        holder.tv_des.setText(list.get(position).name);
+        final Tag.TagBean tagBean=list.get(position);
+        //名称
+        holder.tvName.setText(tagBean.getName());
+        //图片
+//        Glide.with(activity).load(tagBean.getImgurl()).into(holder.imgTag);
+        //设置标签抖动动画
         if(isJitter){
-            holder.tv_des.setAnimation(shake);
+            isJitter=false;
+            holder.tvName.setAnimation(shake);
         }
-        holder.tv_des.setOnLongClickListener(new View.OnLongClickListener() {
+
+        /**
+         * 标签长按震动
+         */
+        holder.tvName.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
-                Vibrator vibrator = (Vibrator)context.getSystemService(context.VIBRATOR_SERVICE);
+                Vibrator vibrator = (Vibrator)activity.getSystemService(activity.VIBRATOR_SERVICE);
                 vibrator.vibrate(70);
+                //设置按钮状态
+                activity.editBtn();
                 return true;
             }
         });
 
-        holder.tv_des.setOnTouchListener(new View.OnTouchListener() {
+        /**
+         * 标签点击拖动
+         */
+        holder.tvName.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if(!isClick){
@@ -86,11 +97,11 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
     public void onMove(int currentPosition, int targetPosition) {
         Collections.swap(list, currentPosition, targetPosition);
         if (targetPosition < currentPosition) {
-            List<DataBean> subList = list.subList(targetPosition + 1, currentPosition + 1);
+            List<Tag.TagBean> subList = list.subList(targetPosition + 1, currentPosition + 1);
             //向右移一位
             DataUtils.rightStepList(0, subList);
         } else {
-            List<DataBean> subList = list.subList(currentPosition, targetPosition);
+            List<Tag.TagBean> subList = list.subList(currentPosition, targetPosition);
             //向左移一位
             DataUtils.leftStepList(0, subList);
         }
@@ -108,11 +119,11 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView tv_des;
+    public TextView tvName;
     public ImageView imgTag;
     public MyViewHolder(View itemView) {
         super(itemView);
-        tv_des =itemView.findViewById(R.id.text_item);
+        tvName =itemView.findViewById(R.id.text_item);
         imgTag=itemView.findViewWithTag(R.id.img_tag);
     }
 }
