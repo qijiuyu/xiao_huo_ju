@@ -302,6 +302,13 @@
                     android:layout_marginLeft="15dp">
                 </android.support.v7.widget.RecyclerView>
 
+                <com.zxdc.utils.library.view.MeasureListView
+                    android:id="@+id/list_blues"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null">
+                </com.zxdc.utils.library.view.MeasureListView>
+
             </LinearLayout>
 
         </LinearLayout>

@@ -41,5 +41,7 @@ public class HttpConstant {
 
     public static final String SORT_CHANNEL="api/app/channel/sort";
 
+    public static final String HOT_AUTHOR="api/app/user/hot";
+
 
 }

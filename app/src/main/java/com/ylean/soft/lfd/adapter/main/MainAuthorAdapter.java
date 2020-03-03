@@ -9,16 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
+import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import java.util.List;
 
 public class MainAuthorAdapter extends RecyclerView.Adapter<MainAuthorAdapter.MyHolder> {
 
     private Activity activity;
-    public MainAuthorAdapter(Activity activity) {
+    private List<Author.DataBean> list;
+    public MainAuthorAdapter(Activity activity,List<Author.DataBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -28,9 +34,17 @@ public class MainAuthorAdapter extends RecyclerView.Adapter<MainAuthorAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MyHolder holder =myHolder;
+    public void onBindViewHolder(@NonNull MyHolder holder, int i) {
+        Author.DataBean dataBean=list.get(i);
+        if(dataBean==null){
+            return;
+        }
+        holder.tvName.setText(dataBean.getNickname());
+        Glide.with(activity).load(dataBean.getImgurl()).into(holder.imgHead);
 
+        /**
+         * 进入作者详情
+         */
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent=new Intent(activity, AuthorDetailsActivity.class);
@@ -41,7 +55,7 @@ public class MainAuthorAdapter extends RecyclerView.Adapter<MainAuthorAdapter.My
 
     @Override
     public int getItemCount() {
-        return 8;
+        return list==null ? 0 : list.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {

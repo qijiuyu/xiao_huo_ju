@@ -13,14 +13,20 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.ChannerAdapter;
 import com.ylean.soft.lfd.utils.channel.MyItemTouchCallBack;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.SortChannel;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -109,6 +115,18 @@ public class TagManagerActivity extends BaseActivity {
                          ToastUtil.showLong(tag.getDesc());
                      }
                       break;
+                //排序回执
+                case HandlerConstant.SORT_CHANNEL_SUCCESS:
+                      BaseBean baseBean= (BaseBean) msg.obj;
+                      if(baseBean==null){
+                          break;
+                      }
+                      if(baseBean.isSussess()){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.CHANNEL_SORT_SUCCESS,list));
+                          finish();
+                      }
+                      ToastUtil.showLong(baseBean.getDesc());
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                      ToastUtil.showLong(msg.obj.toString());
                      break;
@@ -136,7 +154,7 @@ public class TagManagerActivity extends BaseActivity {
      */
     private void channel(){
         DialogUtil.showProgress(this,"数据加载中");
-        HttpMethod.channel(handler);
+        HttpMethod.channel("0",handler);
     }
 
     /**

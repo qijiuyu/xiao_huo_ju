@@ -3,6 +3,7 @@ package com.zxdc.utils.library.http;
 import android.os.Handler;
 import android.text.TextUtils;
 
+import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
@@ -170,8 +171,9 @@ public class HttpMethod extends BaseRequst {
     /**
      * 获取频道列表
      */
-    public static void channel(final Handler handler) {
+    public static void channel(String querytype,final Handler handler) {
         Map<String,String> map=new HashMap<>();
+        map.put("querytype",querytype);
         Http.getRetrofit().create(HttpApi.class).channel(map).enqueue(new Callback<Tag>() {
             public void onResponse(Call<Tag> call, Response<Tag> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_CHANNEL_SUCCESS, response.body());
@@ -338,6 +340,24 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, HandlerConstant.SORT_CHANNEL_SUCCESS, response.body());
             }
             public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 热门作者
+     */
+    public static void hotAuthor(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).hotAuthor(map).enqueue(new Callback<Author>() {
+            public void onResponse(Call<Author> call, Response<Author> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<Author> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

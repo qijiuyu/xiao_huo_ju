@@ -14,11 +14,15 @@ import android.view.View;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.fragment.main.OtherFragment;
 import com.ylean.soft.lfd.fragment.main.SelectFragment;
+import com.ylean.soft.lfd.persenter.main.MainPersenter;
 import com.ylean.soft.lfd.view.PagerSlidingTabStrip;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.base.BaseFragment;
-import com.zxdc.utils.library.util.LogUtils;
-
+import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +30,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * 首页
  * Created by Administrator on 2020/2/5.
@@ -39,43 +42,44 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.tabs)
     PagerSlidingTabStrip tabs;
     private DisplayMetrics dm;
-    private String[] title=new String[]{"精选","高甜","玄幻","修真","武侠","历史","穿越","都市","言情","傻逼"};
+    //导航频道列表
+    private List<Tag.TagBean> channelList=new ArrayList<>();
+    //存储导航名称，以及对应的fragment
     private Map<String,BaseFragment> map=new HashMap<>();
+    //生成几个fragment
     private List<Fragment> fragmentList=new ArrayList<>();
     private MyPagerAdapter myPagerAdapter;
+    private MainPersenter mainPersenter;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //初始化
         initView();
-
-        for (int i=0;i<10;i++){
-              if(i==0){
-                  map.put(title[i],new SelectFragment());
-              }else{
-                  map.put(title[i],new OtherFragment());
-              }
-        }
-        updateFragment();
+        //查询导航频道列表
+        mainPersenter.channel();
     }
 
     /**
      * 初始化
      */
     private void initView() {
+        //注册eventBus
+        EventBus.getDefault().register(this);
+        //实例化MVP
+        mainPersenter=new MainPersenter(this);
         dm = getResources().getDisplayMetrics();
-        myPagerAdapter=new MyPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(myPagerAdapter);
-        //设置预加载页面数量的方法
-        pager.setOffscreenPageLimit(10);
-        tabs.setViewPager(pager);
-        setTabsValue();
     }
 
     /**
      * 对PagerSlidingTabStrip的各项属性进行赋值。
      */
     private void setTabsValue() {
+        myPagerAdapter=new MyPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(myPagerAdapter);
+        //设置预加载页面数量的方法
+        pager.setOffscreenPageLimit(channelList.size());
+        tabs.setViewPager(pager);
         // 设置Tab是自动填充满屏幕的
         tabs.setShouldExpand(true);
         // 设置Tab的分割线是透明的
@@ -107,11 +111,11 @@ public class MainActivity extends BaseActivity {
             super(fm);
         }
         public CharSequence getPageTitle(int position) {
-            return title[position];
+            return channelList.get(position).getName();
         }
 
         public int getCount() {
-            return title.length;
+            return channelList.size();
         }
 
         public Fragment getItem(int position) {
@@ -127,12 +131,9 @@ public class MainActivity extends BaseActivity {
             case R.id.rel_search:
                 setClass(SearchActivity.class);
                 break;
+            //频道管理
             case R.id.img_menu:
                 setClass(TagManagerActivity.class);
-//                title=new String[]{"精选","玄幻","高甜","修真","武侠","历史","穿越","都市","言情","傻逼"};
-//                updateFragment();
-//                myPagerAdapter.notifyDataSetChanged();
-//                tabs.setViewPager(pager);
                 break;
             default:
                 break;
@@ -140,11 +141,56 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void updateFragment(){
-        fragmentList.clear();
-        for (int i=0;i<title.length;i++){
-            fragmentList.add(map.get(title[i]));
+    /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        Tag.TagBean tagBean=null;
+        switch (eventBusType.getStatus()) {
+            //显示频道列表
+            case EventStatus.SHOW_MAIN_CHANNEL:
+                 channelList= (List<Tag.TagBean>) eventBusType.getObject();
+                 tagBean=new Tag.TagBean("精选");
+                 channelList.add(0,tagBean);
+
+                 for (int i=0;i<channelList.size();i++){
+                      if(i==0){
+                          map.put(channelList.get(i).getName(),new SelectFragment());
+                      }else{
+                          map.put(channelList.get(i).getName(),new OtherFragment());
+                      }
+                 }
+                 //添加对应的fragment到集合中
+                 for (int i=0;i<channelList.size();i++){
+                      fragmentList.add(map.get(channelList.get(i).getName()));
+                 }
+                 //对PagerSlidingTabStrip的各项属性进行赋值
+                 setTabsValue();
+                  break;
+            //频道排序完成
+            case EventStatus.CHANNEL_SORT_SUCCESS:
+                  channelList= (List<Tag.TagBean>) eventBusType.getObject();
+                  tagBean=new Tag.TagBean("精选");
+                  channelList.add(0,tagBean);
+                  //清空fragment集合
+                  fragmentList.clear();
+                  //添加对应的fragment到集合中
+                  for (int i=0;i<channelList.size();i++){
+                      fragmentList.add(map.get(channelList.get(i).getName()));
+                  }
+                  myPagerAdapter.notifyDataSetChanged();
+                  tabs.setViewPager(pager);
+                  break;
+            default:
+                break;
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

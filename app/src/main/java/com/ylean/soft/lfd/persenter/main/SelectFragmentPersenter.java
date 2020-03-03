@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
@@ -67,6 +69,30 @@ public class SelectFragmentPersenter {
                         ToastUtil.showLong(hotTop.getDesc());
                     }
                     break;
+                //获取热门作者
+                case HandlerConstant.HOT_AUTHOR_SUCCESS1:
+                      Author author= (Author) msg.obj;
+                      if(author==null){
+                          break;
+                      }
+                      if(author.isSussess()){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_AUTHOR,author.getData()));
+                      }else{
+                          ToastUtil.showLong(author.getDesc());
+                      }
+                      break;
+                //获取各个频道的剧集
+                case HandlerConstant.GET_CHANNEL_SUCCESS:
+                      Tag tag= (Tag) msg.obj;
+                      if(tag==null){
+                          break;
+                      }
+                      if(tag.isSussess()){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_BLUES,tag.getData()));
+                      }else{
+                          ToastUtil.showLong(tag.getDesc());
+                      }
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -99,5 +125,20 @@ public class SelectFragmentPersenter {
      */
     public void getOnline(){
         HttpMethod.getOnline(1,HandlerConstant.GET_ONLINE_SUCCESS1,handler);
+    }
+
+
+    /**
+     * 热门作者
+     */
+    public void hotAuthor(){
+        HttpMethod.hotAuthor(1,HandlerConstant.HOT_AUTHOR_SUCCESS1,handler);
+    }
+
+    /**
+     * 获取频道剧集列表
+     */
+    public void channel(){
+        HttpMethod.channel("1",handler);
     }
 }

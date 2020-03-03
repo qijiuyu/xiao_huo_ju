@@ -2,6 +2,7 @@ package com.zxdc.utils.library.http;
 
 
 
+import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
@@ -83,6 +84,10 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.SORT_CHANNEL)
     Call<BaseBean> sortChannel(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.HOT_AUTHOR)
+    Call<Author> hotAuthor(@FieldMap Map<String, String> map);
 
 
 }

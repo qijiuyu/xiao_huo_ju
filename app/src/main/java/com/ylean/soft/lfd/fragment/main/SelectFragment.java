@@ -22,6 +22,7 @@ import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
 import com.ylean.soft.lfd.activity.main.OnlineListActivity;
 import com.ylean.soft.lfd.activity.main.ProjectListActivity;
 import com.ylean.soft.lfd.adapter.main.MainAuthorAdapter;
+import com.ylean.soft.lfd.adapter.main.MainBluesAdapter;
 import com.ylean.soft.lfd.adapter.main.MainHottestAdapter;
 import com.ylean.soft.lfd.adapter.main.MainLookAdapter;
 import com.ylean.soft.lfd.adapter.main.MainOnlineAdapter;
@@ -33,10 +34,13 @@ import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
 import com.zxdc.utils.library.base.BaseFragment;
+import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.view.MeasureListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,6 +80,8 @@ public class SelectFragment extends BaseFragment {
     RecyclerView recycleOnLine;
     @BindView(R.id.recycle_author)
     RecyclerView recycleAuthor;
+    @BindView(R.id.list_blues)
+    MeasureListView listBlues;
     Unbinder unbinder;
     /**
      * 0：热播排行
@@ -95,6 +101,10 @@ public class SelectFragment extends BaseFragment {
         selectFragmentPersenter.guessLike();
         //获取即将上线的数据
         selectFragmentPersenter.getOnline();
+        //获取热门作者
+        selectFragmentPersenter.hotAuthor();
+        //获取频道剧集列表
+        selectFragmentPersenter.channel();
     }
 
     View view;
@@ -104,7 +114,6 @@ public class SelectFragment extends BaseFragment {
 
         EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_BANNER));
         EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_PROJECT));
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_AUTHOR));
         return view;
     }
 
@@ -180,7 +189,11 @@ public class SelectFragment extends BaseFragment {
                   break;
             //显示热门作者专区
             case EventStatus.SHOW_MAIN_AUTHOR:
-                  showAuthor();
+                  showAuthor((List<Author.DataBean>) eventBusType.getObject());
+                  break;
+            //显示各个频道的剧集
+            case EventStatus.SHOW_MAIN_BLUES:
+                  showBlues((List<Tag.TagBean>) eventBusType.getObject());
                   break;
             default:
                 break;
@@ -277,9 +290,17 @@ public class SelectFragment extends BaseFragment {
     /**
      * 展示热门作者专区
      */
-    private void showAuthor(){
+    private void showAuthor(List<Author.DataBean> list){
         recycleAuthor.setLayoutManager(new GridLayoutManager(mActivity, 4));
-        recycleAuthor.setAdapter(new MainAuthorAdapter(mActivity));
+        recycleAuthor.setAdapter(new MainAuthorAdapter(mActivity,list));
+    }
+
+
+    /**
+     * 显示各个频道的剧集
+     */
+    private void showBlues(List<Tag.TagBean> list){
+        listBlues.setAdapter(new MainBluesAdapter(mActivity,list));
     }
 
 

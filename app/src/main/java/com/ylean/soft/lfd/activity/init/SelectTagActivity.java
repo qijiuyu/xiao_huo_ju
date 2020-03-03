@@ -129,7 +129,7 @@ public class SelectTagActivity extends BaseActivity {
      */
     private void channel(){
         DialogUtil.showProgress(this,"数据加载中");
-        HttpMethod.channel(handler);
+        HttpMethod.channel("0",handler);
     }
 
 

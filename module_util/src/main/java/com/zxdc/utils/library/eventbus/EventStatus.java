@@ -43,4 +43,13 @@ public class EventStatus {
     //修改个人简介
     public static final int EDIT_REMARK=113;
 
+    //显示首页频道
+    public static final int SHOW_MAIN_CHANNEL=114;
+
+    //频道管理排序完成
+    public static final int CHANNEL_SORT_SUCCESS=115;
+
+    //显示各个频道的剧集
+    public static final int SHOW_MAIN_BLUES=116;
+
 }
