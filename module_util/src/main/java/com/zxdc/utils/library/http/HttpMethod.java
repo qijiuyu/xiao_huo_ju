@@ -529,4 +529,26 @@ public class HttpMethod extends BaseRequst {
             }
         });
     }
+
+
+    /**
+     * 剧集列表
+     */
+    public static void serialList(int channelid,String name,int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("channelid",String.valueOf(channelid));
+        if(!TextUtils.isEmpty(name)){
+            map.put("name",name);
+        }
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).serialList(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
 }

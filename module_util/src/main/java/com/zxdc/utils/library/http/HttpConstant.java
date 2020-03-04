@@ -61,5 +61,7 @@ public class HttpConstant {
 
     public static final String TOPIC_LIST="api/app/serial/topicserial";
 
+    public static final String SERIAL_LIST="api/app/serial/list";
+
 
 }

@@ -176,7 +176,6 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
             public void run() {
                 if(isVisibleToUser && view!=null && listAll.size()==0){
                     reList.startRefresh();
-                    HttpMethod.getHot_Top(String.valueOf(MoreHotterActivity.pageIndex),page, HandlerConstant.GET_HOT_TOP_SUCCESS1,handler);
                 }
             }
         },200);

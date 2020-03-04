@@ -127,4 +127,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.TOPIC_LIST)
     Call<HotTop> getProjectList(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.SERIAL_LIST)
+    Call<HotTop> serialList(@FieldMap Map<String, String> map);
 }

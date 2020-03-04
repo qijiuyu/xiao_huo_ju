@@ -44,13 +44,15 @@ public class MainActivity extends BaseActivity {
     PagerSlidingTabStrip tabs;
     private DisplayMetrics dm;
     //导航频道列表
-    private List<Tag.TagBean> channelList=new ArrayList<>();
+    public List<Tag.TagBean> channelList=new ArrayList<>();
     //存储导航名称，以及对应的fragment
     private Map<String,BaseFragment> map=new HashMap<>();
     //生成几个fragment
     private List<Fragment> fragmentList=new ArrayList<>();
     private MyPagerAdapter myPagerAdapter;
     private MainPersenter mainPersenter;
+    //fragment页码
+    public int pageIndex;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -80,6 +82,15 @@ public class MainActivity extends BaseActivity {
         pager.setAdapter(myPagerAdapter);
         //设置预加载页面数量的方法
         pager.setOffscreenPageLimit(channelList.size());
+        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+          public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+          }
+          public void onPageSelected(int position) {
+              pageIndex=position;
+          }
+          public void onPageScrollStateChanged(int state) {
+          }
+        });
         tabs.setViewPager(pager);
         // 设置Tab是自动填充满屏幕的
         tabs.setShouldExpand(true);

@@ -32,4 +32,6 @@ public class HandlerConstant {
     public static final int GET_MAIN_BANNER=10028;
     public static final int GET_PROJECT_SUCCESS1=10029;
     public static final int GET_PROJECT_SUCCESS2=10030;
+    public static final int GET_SERIAL_LIST_SUCCESS1=10031;
+    public static final int GET_SERIAL_LIST_SUCCESS2=10032;
 }
