@@ -6,8 +6,11 @@ import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
+import com.zxdc.utils.library.bean.VideoInfo;
 
 import java.util.Map;
 
@@ -89,5 +92,39 @@ public interface HttpApi {
     @POST(HttpConstant.HOT_AUTHOR)
     Call<Author> hotAuthor(@FieldMap Map<String, String> map);
 
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_VIDEO_INFO)
+    Call<VideoInfo> videoInfo(@FieldMap Map<String, String> map);
 
+    @FormUrlEncoded
+    @POST(HttpConstant.FOLLOW)
+    Call<BaseBean> follow(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.THUMP)
+    Call<BaseBean> thump(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.SEND_SCREEN)
+    Call<BaseBean> sendScreen(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_SCREEN)
+    Call<Screen> getScreen(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.SEND_COMMENT)
+    Call<BaseBean> sendComment(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.MAIN_BANNER)
+    Call<HotTop> mainBanner(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_PROJECT)
+    Call<Project> getProject(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.TOPIC_LIST)
+    Call<HotTop> getProjectList(@FieldMap Map<String, String> map);
 }

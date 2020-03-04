@@ -52,4 +52,23 @@ public class EventStatus {
     //显示各个频道的剧集
     public static final int SHOW_MAIN_BLUES=116;
 
+   //首页切换各个频道
+    public static final int LOOK_MORE_MAIN_BLUES=117;
+
+    //显示视频详情
+    public static final int SHOW_VIDEO_INFO=118;
+
+    //关注，取消关注
+    public static final int IS_FOLLOW=119;
+
+   //点赞、取消点赞
+   public static final int IS_THUMP=200;
+
+    //发送弹屏
+    public static final int SEND_SCREEN=201;
+
+    //显示弹屏
+    public static final int GET_SCREEEN=202;
+
+
 }

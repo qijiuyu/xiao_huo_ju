@@ -128,7 +128,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             //播放视频
             playVideo();
             //显示弹屏
-            videoPlayPersenter.showScreen(holder.listComm);
+//            videoPlayPersenter.showScreen(holder.listComm);
             holder.imgHead.setOnClickListener(this);
             holder.imgPraise.setOnClickListener(this);
             holder.imgComm.setOnClickListener(this);

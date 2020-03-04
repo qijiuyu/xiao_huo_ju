@@ -7,16 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.ylean.soft.lfd.R;
-import com.zxdc.utils.library.view.OvalImageViews;
+import com.zxdc.utils.library.bean.Screen;
+import java.util.List;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> {
 
     private Activity activity;
-    private String[] str=new String[]{"高健：视频很不错，我非常喜欢","刘成：我记得我昨天看过了","范文芳：武汉加油，全中国加油，大家一起加油","张三：好饿啊，好几天没有吃饭了","李龙：今年是老鼠年，大家都像过街老鼠一样","何进：我是何进，三国之乱由我开始的","曹操：我是孟德，我才高八斗","张飞：我很勇猛的","赵云：我七进七出，救了阿斗"};
-    public ScreenAdapter(Activity activity) {
+    private List<Screen.ScreenBean> list;
+    public ScreenAdapter(Activity activity,List<Screen.ScreenBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -26,11 +27,9 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MyHolder holder =myHolder;
-
-        String content=str[i%str.length];
-        holder.tvContent.setText(content);
+    public void onBindViewHolder(@NonNull MyHolder holder, int i) {
+        Screen.ScreenBean screenBean=list.get(i%list.size());
+        holder.tvContent.setText(screenBean.getNickname()+"："+screenBean.getContent());
     }
 
     @Override
@@ -45,6 +44,15 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> 
             tvContent=itemView.findViewById(R.id.tv_content);
         }
     }
+
+//    /**
+//     * 添加新的弹屏内容
+//     * @param screenBean
+//     */
+//    public void addScreen(Screen.ScreenBean screenBean){
+//        this.list.add(screenBean);
+//        notifyDataSetChanged();
+//    }
 
 }
 

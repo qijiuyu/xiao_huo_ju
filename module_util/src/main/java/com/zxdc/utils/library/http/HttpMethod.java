@@ -7,8 +7,11 @@ import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
+import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.http.base.BaseRequst;
 import com.zxdc.utils.library.http.base.Http;
 import com.zxdc.utils.library.util.LogUtils;
@@ -358,6 +361,170 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, index, response.body());
             }
             public void onFailure(Call<Author> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取视频详情
+     */
+    public static void videoInfo(int episodeid,int serialid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        if(episodeid!=0){
+            map.put("episodeid",String.valueOf(episodeid));
+        }
+        if(serialid!=0){
+            map.put("serialid",String.valueOf(serialid));
+        }
+        Http.getRetrofit().create(HttpApi.class).videoInfo(map).enqueue(new Callback<VideoInfo>() {
+            public void onResponse(Call<VideoInfo> call, Response<VideoInfo> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_VIDEO_INFO_SUCCESS, response.body());
+            }
+            public void onFailure(Call<VideoInfo> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 关注、取消关注
+     */
+    public static void follow(int relateid,String type,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("relateid",String.valueOf(relateid));
+        map.put("type",type);
+        Http.getRetrofit().create(HttpApi.class).follow(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.FOLLOW_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 点赞、取消点赞
+     */
+    public static void thump(int episodeid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("episodeid",String.valueOf(episodeid));
+        Http.getRetrofit().create(HttpApi.class).thump(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.THUMP_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 发送弹屏
+     */
+    public static void sendScreen(String content,int episodeid,int seconds,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("content",content);
+        map.put("episodeid",String.valueOf(episodeid));
+        map.put("seconds",String.valueOf(seconds));
+        Http.getRetrofit().create(HttpApi.class).sendScreen(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.SEND_SCREEN_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取弹屏列表
+     */
+    public static void getScreen(int episodeid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("episodeid",String.valueOf(episodeid));
+        Http.getRetrofit().create(HttpApi.class).getScreen(map).enqueue(new Callback<Screen>() {
+            public void onResponse(Call<Screen> call, Response<Screen> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_SCREEN_SUCCESS, response.body());
+            }
+            public void onFailure(Call<Screen> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 发送评论
+     */
+    public static void sendComment(String content,int episodeid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("content",content);
+        map.put("episodeid",String.valueOf(episodeid));
+        Http.getRetrofit().create(HttpApi.class).sendComment(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.SEND_COMMENT_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取首页banner
+     */
+    public static void mainBanner(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        Http.getRetrofit().create(HttpApi.class).mainBanner(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_MAIN_BANNER, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取专题列表
+     */
+    public static void getProject(int pageindex,int pagesize,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",String.valueOf(pagesize));
+        Http.getRetrofit().create(HttpApi.class).getProject(map).enqueue(new Callback<Project>() {
+            public void onResponse(Call<Project> call, Response<Project> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<Project> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取专题列表
+     */
+    public static void getProjectList(int topicid,int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("topicid",String.valueOf(topicid));
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getProjectList(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

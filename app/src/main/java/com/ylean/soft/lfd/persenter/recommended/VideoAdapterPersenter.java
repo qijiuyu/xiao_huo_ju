@@ -67,9 +67,9 @@ public class VideoAdapterPersenter {
      * 显示弹屏
      */
     public void showScreen(AutoPollRecyclerView listComm){
-        listComm.setLayoutManager(new LinearLayoutManager(activity));
-        listComm.setAdapter(new ScreenAdapter(activity));
-        listComm.start();
+//        listComm.setLayoutManager(new LinearLayoutManager(activity));
+//        listComm.setAdapter(new ScreenAdapter(activity));
+//        listComm.start();
     }
 
 

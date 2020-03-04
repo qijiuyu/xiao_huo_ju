@@ -43,5 +43,23 @@ public class HttpConstant {
 
     public static final String HOT_AUTHOR="api/app/user/hot";
 
+    public static final String GET_VIDEO_INFO="api/app/serial/info";
+
+    public static final String FOLLOW="api/app/follow";
+
+    public static final String THUMP="api/app/thumb";
+
+    public static final String SEND_SCREEN="api/app/barrage";
+
+    public static final String GET_SCREEN="api/app/barrage/list";
+
+    public static final String SEND_COMMENT="api/app/comment";
+
+    public static final String MAIN_BANNER="api/app/serial/recommend";
+
+    public static final String GET_PROJECT="api/app/serial/topic";
+
+    public static final String TOPIC_LIST="api/app/serial/topicserial";
+
 
 }

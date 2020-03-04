@@ -12,8 +12,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +61,6 @@ public class MainBluesAdapter extends BaseAdapter {
         final Tag.TagBean tagBean=list.get(position);
         holder.tvName.setText(tagBean.getName());
 
-
         if(tagBean.getSerialList()!=null && tagBean.getSerialList().size()>0){
             holder.imgHead.setVisibility(View.VISIBLE);
             holder.listView.setVisibility(View.VISIBLE);
@@ -77,6 +81,18 @@ public class MainBluesAdapter extends BaseAdapter {
             holder.imgHead.setVisibility(View.GONE);
             holder.listView.setVisibility(View.GONE);
         }
+
+
+        /**
+         * 查看更多
+         */
+        holder.tvMore.setTag(tagBean.getId());
+        holder.tvMore.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int channelId= (int) v.getTag();
+                EventBus.getDefault().post(new EventBusType(EventStatus.LOOK_MORE_MAIN_BLUES,channelId));
+            }
+        });
         return view;
     }
 

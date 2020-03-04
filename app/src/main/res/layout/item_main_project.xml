@@ -20,7 +20,6 @@
                 android:id="@+id/img_head"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@mipmap/aa"
                 android:scaleType="centerCrop"/>
 
             <TextView
@@ -29,7 +28,6 @@
                 android:layout_height="18dp"
                 android:background="@drawable/bg_main_blues"
                 android:layout_alignParentRight="true"
-                android:text="全30集"
                 android:textColor="@android:color/white"
                 android:textSize="11sp"
                 android:gravity="center"/>
@@ -38,7 +36,6 @@
                 android:id="@+id/img_author"
                 android:layout_width="25.5dp"
                 android:layout_height="25.5dp"
-                android:src="@mipmap/bb"
                 android:scaleType="centerCrop"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="5dp"
@@ -64,7 +61,6 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="虎门销烟"
             android:textSize="15sp"
             android:textColor="@android:color/black"
             android:layout_marginTop="10dp"/>
@@ -85,7 +81,6 @@
                 android:id="@+id/tv_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="更新至"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 android:layout_marginLeft="5dp"/>

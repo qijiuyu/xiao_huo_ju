@@ -1,32 +1,39 @@
 package com.ylean.soft.lfd.persenter.main;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.CommentAdapter;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
-import com.ylean.soft.lfd.utils.ThreadPoolUtil;
+
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
+import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.VideoInfo;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.MyRefreshLayout;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -38,13 +45,12 @@ import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
-/**
- * Created by Administrator on 2020/2/8.
- */
-
 public class VideoPlayPersenter {
 
     private Activity activity;
+
+    //评论控件
+    private ListView commList;
     //视频缩略图
     private Bitmap bitmap = null;
 
@@ -57,6 +63,72 @@ public class VideoPlayPersenter {
 
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
+            BaseBean baseBean=null;
+            switch (msg.what){
+                //视频详情回执
+                case HandlerConstant.GET_VIDEO_INFO_SUCCESS:
+                      final VideoInfo videoInfo= (VideoInfo) msg.obj;
+                      if(videoInfo==null){
+                          break;
+                      }
+                      if(videoInfo.isSussess()){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_VIDEO_INFO,videoInfo.getData()));
+                      }else{
+                          ToastUtil.showLong(videoInfo.getDesc());
+                      }
+                      break;
+                //关注、取消关注
+                case HandlerConstant.FOLLOW_SUCCESS:
+                      baseBean= (BaseBean) msg.obj;
+                      if(baseBean==null){
+                          break;
+                      }
+                      if(baseBean.isSussess()){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.IS_FOLLOW));
+                      }
+                      ToastUtil.showLong(baseBean.getDesc());
+                      break;
+                //点赞、取消点赞
+                case HandlerConstant.THUMP_SUCCESS:
+                     baseBean= (BaseBean) msg.obj;
+                     if(baseBean==null){
+                         break;
+                     }
+                     if(baseBean.isSussess()){
+                         EventBus.getDefault().post(new EventBusType(EventStatus.IS_THUMP));
+                     }
+                     ToastUtil.showLong(baseBean.getDesc());
+                      break;
+                //发送弹屏
+                case HandlerConstant.SEND_SCREEN_SUCCESS:
+                     baseBean= (BaseBean) msg.obj;
+                     if(baseBean==null){
+                         break;
+                     }
+                     if(baseBean.isSussess()){
+                         EventBus.getDefault().post(new EventBusType(EventStatus.SEND_SCREEN));
+                     }
+                     ToastUtil.showLong(baseBean.getDesc());
+                      break;
+                //获取弹屏列表
+                case HandlerConstant.GET_SCREEN_SUCCESS:
+                      Screen screen= (Screen) msg.obj;
+                      if(screen==null){
+                          break;
+                      }
+                      if(screen.isSussess() && screen.getData()!=null){
+                          EventBus.getDefault().post(new EventBusType(EventStatus.GET_SCREEEN,screen.getData()));
+                      }else{
+                          ToastUtil.showLong(baseBean.getDesc());
+                      }
+                      break;
+                case HandlerConstant.REQUST_ERROR:
+                    ToastUtil.showLong(msg.obj.toString());
+                    break;
+                default:
+                    break;
+            }
             return false;
         }
     });
@@ -180,6 +252,14 @@ public class VideoPlayPersenter {
         final PopupWindow popupWindow = DialogUtil.showPopWindow(view);
         popupWindow.setAnimationStyle(R.style.take_photo_anim);
         popupWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        TextView tvTotal=view.findViewById(R.id.tv_total);
+        MyRefreshLayout myRefreshLayout=view.findViewById(R.id.re_list);
+        myRefreshLayout.setPullDownRefreshEnable(false);
+        //显示评论列表
+        ListView listView=view.findViewById(R.id.listView);
+        CommentAdapter commentAdapter=new CommentAdapter(activity);
+        listView.setAdapter(commentAdapter);
+        listView.setDivider(null);
         //点击空白处关闭
         view.findViewById(R.id.rel).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -191,14 +271,6 @@ public class VideoPlayPersenter {
                 popupWindow.dismiss();
             }
         });
-        TextView tvTotal=view.findViewById(R.id.tv_total);
-        MyRefreshLayout myRefreshLayout=view.findViewById(R.id.re_list);
-        myRefreshLayout.setPullDownRefreshEnable(false);
-        //显示评论列表
-        ListView listView=view.findViewById(R.id.listView);
-        CommentAdapter commentAdapter=new CommentAdapter(activity);
-        listView.setAdapter(commentAdapter);
-        listView.setDivider(null);
     }
 
     /**
@@ -217,51 +289,62 @@ public class VideoPlayPersenter {
     }
 
 
+    private TextView.OnEditorActionListener commListener=new TextView.OnEditorActionListener() {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            return false;
+        }
+    };
+
+
+
     /**
-     * 显示弹屏
+     * 获取视频详情
      */
-    public void showScreen(AutoPollRecyclerView listComm){
-        listComm.setLayoutManager(new LinearLayoutManager(activity));
-        listComm.setAdapter(new ScreenAdapter(activity));
-        listComm.start();
+    public void videoInfo(HotTop.DataBean dataBean){
+        DialogUtil.showProgress(activity,"视频加载中");
+        HttpMethod.videoInfo(0,dataBean.getId(),handler);
     }
 
 
     /**
-     * 获取视频文件截图
-     * @return Bitmap 返回获取的Bitmap
+     * 关注、取消关注
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public void createVideoThumbnail(final String url, final ImageView imageView) {
-        ThreadPoolUtil.execute(new Runnable() {
-            public void run() {
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                int kind = MediaStore.Video.Thumbnails.MINI_KIND;
-                try {
-                    if (Build.VERSION.SDK_INT >= 14) {
-                        retriever.setDataSource(url, new HashMap<String, String>());
-                    } else {
-                        retriever.setDataSource(url);
-                    }
-                    bitmap = retriever.getFrameAtTime();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        retriever.release();
-                    } catch (RuntimeException ex) {
-                    }
-                }
-                if (kind == MediaStore.Images.Thumbnails.MICRO_KIND && bitmap != null) {
-                    bitmap = ThumbnailUtils.extractThumbnail(bitmap, Util.getDeviceWH(activity,1), Util.getDeviceWH(activity,2),ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-                }
-               handler.post(new Runnable() {
-                   public void run() {
-                       imageView.setImageBitmap(bitmap);
-                   }
-               });
-            }
-        });
+    public void follow(int relateid){
+        HttpMethod.follow(relateid,"0",handler);
+    }
+
+
+    /**
+     * 点赞、取消点赞
+     */
+    public void thump(int serialId){
+        HttpMethod.thump(serialId,handler);
+    }
+
+
+    /**
+     * 发送弹屏
+     */
+    public void sendScreen(String content,VideoInfo.VideoBean videoBean){
+        DialogUtil.showProgress(activity,"发送中");
+        HttpMethod.sendScreen(content,videoBean.getId(),videoBean.getSeconds(),handler);
+    }
+
+
+    /**
+     * 获取弹屏列表
+     */
+    public void getScreen(int id){
+        HttpMethod.getScreen(id,handler);
+    }
+
+
+    /**
+     * 发送评论
+     */
+    public void sendComment(String content,VideoInfo.VideoBean videoBean){
+        DialogUtil.showProgress(activity,"发送中");
+        HttpMethod.sendComment(content,videoBean.getId(),handler);
     }
 
 }

@@ -185,10 +185,10 @@
                     android:layout_marginRight="15dp">
 
                     <TextView
+                        android:id="@+id/tv_project"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="霸道总裁"
                         android:textSize="16sp"
                         android:textColor="@android:color/black"/>
 

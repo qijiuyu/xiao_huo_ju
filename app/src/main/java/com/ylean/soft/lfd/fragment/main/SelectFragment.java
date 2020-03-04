@@ -36,6 +36,7 @@ import com.youth.banner.loader.ImageLoader;
 import com.zxdc.utils.library.base.BaseFragment;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
@@ -82,12 +83,16 @@ public class SelectFragment extends BaseFragment {
     RecyclerView recycleAuthor;
     @BindView(R.id.list_blues)
     MeasureListView listBlues;
+    @BindView(R.id.tv_project)
+    TextView tvProject;
     Unbinder unbinder;
     /**
      * 0：热播排行
      * 1：精选top
      */
     private int hot_top=0;
+    //专题对象
+    private Project.ProjectBean projectBean;
     private SelectFragmentPersenter selectFragmentPersenter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +100,14 @@ public class SelectFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         //实例化MVP
         selectFragmentPersenter=new SelectFragmentPersenter(mActivity);
+        //获取banner
+        selectFragmentPersenter.mainBanner();
         //获取热播和精选TOP剧集列表
         selectFragmentPersenter.getHot_Top(hot_top);
         //获取猜你喜欢的数据
         selectFragmentPersenter.guessLike();
+        //获取专题列表
+        selectFragmentPersenter.getProject();
         //获取即将上线的数据
         selectFragmentPersenter.getOnline();
         //获取热门作者
@@ -111,9 +120,6 @@ public class SelectFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_select, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_BANNER));
-        EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_MAIN_PROJECT));
         return view;
     }
 
@@ -150,7 +156,12 @@ public class SelectFragment extends BaseFragment {
                 break;
             //热门专题查看更多
             case R.id.tv_more_project:
-                  setClass(ProjectListActivity.class);
+                  if(projectBean==null){
+                      return;
+                  }
+                  Intent intent=new Intent(mActivity,ProjectListActivity.class);
+                  intent.putExtra("projectBean",projectBean);
+                  startActivity(intent);
                   break;
             //即将上线查看更多
             case R.id.tv_more_online:
@@ -169,7 +180,7 @@ public class SelectFragment extends BaseFragment {
         switch (eventBusType.getStatus()) {
             //显示banner
             case EventStatus.SHOW_MAIN_BANNER:
-                showBanner();
+                showBanner((List<HotTop.DataBean>) eventBusType.getObject());
                 break;
             //显示今日最热/top50
             case EventStatus.SHOW_MAIN_HOTTER:
@@ -181,7 +192,7 @@ public class SelectFragment extends BaseFragment {
                  break;
             //显示热门专题
             case EventStatus.SHOW_MAIN_PROJECT:
-                  showProject();
+                  showProject((List<Project.ProjectBean>) eventBusType.getObject());
                   break;
             //显示即将上线
             case EventStatus.SHOW_MAIN_ONLINE:
@@ -205,10 +216,12 @@ public class SelectFragment extends BaseFragment {
     /**
      * 显示banner图片
      */
-    private void showBanner(){
-        List<String> list=new ArrayList<>();
-        list.add("http://dyrs.yl-mall.cn/upload/image/20200115/1bd5569b-b960-409f-922e-b1204f4be959.png");
-        banner.setVisibility(View.VISIBLE);
+    private void showBanner(List<HotTop.DataBean> list){
+        if(list==null || list.size()==0){
+            list=new ArrayList<>();
+            banner.update(list);
+            return;
+        }
         //设置样式，里面有很多种样式可以自己都看看效果
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置轮播的动画效果,里面有很多种特效,可以都看看效果。
@@ -230,14 +243,12 @@ public class SelectFragment extends BaseFragment {
 
     public class ABImageLoader extends ImageLoader {
         public void displayImage(Context context, Object path, ImageView imageView) {
-            if(path==null){
-                return;
-            }
+            HotTop.DataBean dataBean= (HotTop.DataBean) path;
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .priority(Priority.HIGH) //优先级
                     .transform(new CornerTransform(10)); //圆角
-            Glide.with(context).load(path.toString()).apply(options).into(imageView);
+            Glide.with(context).load(dataBean.getImgurl()).apply(options).into(imageView);
         }
     }
 
@@ -267,12 +278,16 @@ public class SelectFragment extends BaseFragment {
     /**
      * 显示热门专题
      */
-    private void showProject(){
-        MainProjectAdapter mainProjectAdapter=new MainProjectAdapter(mActivity);
+    private void showProject(List<Project.ProjectBean> list){
+        if(list==null || list.size()==0){
+            return;
+        }
+        projectBean=list.get(0);
+        tvProject.setText(projectBean.getName());
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleProject.setLayoutManager(layoutManager);
-        recycleProject.setAdapter(mainProjectAdapter);
+        recycleProject.setAdapter(new MainProjectAdapter(mActivity,projectBean.getSerialList()));
     }
 
 

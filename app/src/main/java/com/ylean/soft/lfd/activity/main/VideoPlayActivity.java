@@ -7,10 +7,13 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
@@ -28,23 +33,24 @@ import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import master.flame.danmaku.ui.widget.DanmakuView;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * 播放视频
@@ -53,6 +59,8 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class VideoPlayActivity extends BaseActivity {
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.hud_view)
@@ -73,8 +81,6 @@ public class VideoPlayActivity extends BaseActivity {
     TextView tvPraise;
     @BindView(R.id.tv_comm)
     TextView tvComm;
-    @BindView(R.id.tv_share)
-    TextView tvShare;
     @BindView(R.id.tv_time)
     TextView tvTime;
     @BindView(R.id.seekbar)
@@ -97,7 +103,6 @@ public class VideoPlayActivity extends BaseActivity {
     ImageView imgColl;
     //视频控制器
     private AndroidMediaController controller;
-    private String videoUrl="http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
     private Handler handler=new Handler();
     /**
      * true:已点赞
@@ -110,6 +115,14 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private int showBottom=1;
     private VideoPlayPersenter videoPlayPersenter;
+    //视频列表对象
+    private HotTop.DataBean dataBean;
+    //视频详情对象
+    private VideoInfo.VideoBean videoBean;
+    //弹屏adapter
+    private ScreenAdapter screenAdapter;
+    //弹屏列表数据
+    private List<Screen.ScreenBean> screenList;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoview);
@@ -118,14 +131,16 @@ public class VideoPlayActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         initView();
         rightMenu();
-        //播放视频
-        startPlay();
+        //获取视频详情
+        videoPlayPersenter.videoInfo(dataBean);
     }
+
 
     /**
      * 初始化
      */
     private void initView(){
+        dataBean= (HotTop.DataBean) getIntent().getSerializableExtra("dataBean");
         //实例化MVP对象
         videoPlayPersenter=new VideoPlayPersenter(this);
         //实例化视频控制器
@@ -135,11 +150,8 @@ public class VideoPlayActivity extends BaseActivity {
         seekbar.setOnSeekBarChangeListener(mSeekBarListener);
         //屏幕点击
         love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
-
-
-        listComm.setLayoutManager(new LinearLayoutManager(this));
-        listComm.setAdapter(new ScreenAdapter(this));
-        listComm.start();
+        //监听弹屏输入框
+        etScreen.setOnEditorActionListener(screenListener);
     }
 
 
@@ -160,7 +172,7 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private void startPlay(){
         videoView.setMediaController(controller);
-        videoView.setVideoURI(Uri.parse(videoUrl));
+        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         videoView.start();
         //监听视频播放完毕
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -201,17 +213,11 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //关注
             case R.id.img_focus:
+                videoPlayPersenter.follow(dataBean.getUserId());
                 break;
             //点赞
             case R.id.img_praise:
-                if(isPraise){
-                    isPraise=false;
-                    imgPraise.setImageResource(R.mipmap.no_praise);
-                }else{
-                    isPraise=true;
-                    imgPraise.setImageResource(R.mipmap.yes_praise);
-                }
-                imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
             //收藏
             case R.id.img_coll:
@@ -344,6 +350,52 @@ public class VideoPlayActivity extends BaseActivity {
     @Subscribe
     public void onEvent(EventBusType eventBusType) {
         switch (eventBusType.getStatus()) {
+            //显示视频详情
+            case EventStatus.SHOW_VIDEO_INFO:
+                  videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
+                  //显示视频详情数据
+                  showVideoInfo();
+                  //播放视频
+                  startPlay();
+                  //获取弹屏列表
+                  videoPlayPersenter.getScreen(videoBean.getId());
+                  break;
+            //关注、取消关注
+            case EventStatus.IS_FOLLOW:
+                  if(imgFocus.getVisibility()==View.VISIBLE){
+                      imgFocus.setVisibility(View.GONE);
+                  }else{
+                      imgFocus.setVisibility(View.VISIBLE);
+                  }
+                  break;
+            //点赞、取消点赞
+            case EventStatus.IS_THUMP:
+                  if(videoBean.isThumbEpisode()){
+                      videoBean.setThumbEpisode(false);
+                      imgPraise.setImageResource(R.mipmap.no_praise);
+                  }else{
+                      videoBean.setThumbEpisode(true);
+                      imgPraise.setImageResource(R.mipmap.yes_praise);
+                      imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                  }
+                  break;
+            //发送弹屏成功
+            case EventStatus.SEND_SCREEN:
+                  videoPlayPersenter.getScreen(videoBean.getId());
+                  break;
+            //获取弹屏成功
+            case EventStatus.GET_SCREEEN:
+                 screenList= (List<Screen.ScreenBean>) eventBusType.getObject();
+                  if(screenAdapter==null){
+                      screenAdapter=new ScreenAdapter(this,screenList);
+                      listComm.setLayoutManager(new LinearLayoutManager(this));
+                      listComm.setAdapter(screenAdapter);
+                      listComm.start();
+                  }else{
+                      screenAdapter.notifyDataSetChanged();
+                      listComm.start();
+                  }
+                  break;
             //关闭侧边栏
             case EventStatus.CLOSE_VIDEO_RIGHT:
                   drawerLayout.closeDrawer(Gravity.RIGHT);
@@ -353,6 +405,50 @@ public class VideoPlayActivity extends BaseActivity {
 
         }
     }
+
+
+    /**
+     * 显示视频详情数据
+     */
+    private void showVideoInfo(){
+        if(videoBean==null){
+            return;
+        }
+        tvTitle.setText(dataBean.getName());
+        Glide.with(activity).load(dataBean.getUserImg()).into(imgHead);
+        tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+        if(videoBean.isFollowUser()){
+            imgFocus.setVisibility(View.GONE);
+        }else{
+            imgFocus.setVisibility(View.VISIBLE);
+        }
+        if(videoBean.isThumbEpisode()){
+            imgPraise.setImageResource(R.mipmap.yes_praise);
+        }else{
+            imgPraise.setImageResource(R.mipmap.no_praise);
+        }
+    }
+
+
+    /**
+     * 监听弹屏输入框
+     */
+    private TextView.OnEditorActionListener screenListener=new TextView.OnEditorActionListener() {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                String content=etScreen.getText().toString().trim();
+                if(TextUtils.isEmpty(content)){
+                    ToastUtil.showLong("请输入弹屏内容");
+                }else{
+                    videoPlayPersenter.sendScreen(content,videoBean);
+                    //隐藏软键盘
+                    lockKey(etScreen);
+                    etScreen.setText(null);
+                }
+            }
+            return false;
+        }
+    };
 
 
     @Override

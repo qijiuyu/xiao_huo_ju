@@ -23,4 +23,13 @@ public class HandlerConstant {
     public static final int SORT_CHANNEL_SUCCESS=10019;
     public static final int HOT_AUTHOR_SUCCESS1=10020;
     public static final int HOT_AUTHOR_SUCCESS2=10021;
+    public static final int GET_VIDEO_INFO_SUCCESS=10022;
+    public static final int FOLLOW_SUCCESS=10023;
+    public static final int THUMP_SUCCESS=10024;
+    public static final int SEND_SCREEN_SUCCESS=10025;
+    public static final int GET_SCREEN_SUCCESS=10026;
+    public static final int SEND_COMMENT_SUCCESS=10027;
+    public static final int GET_MAIN_BANNER=10028;
+    public static final int GET_PROJECT_SUCCESS1=10029;
+    public static final int GET_PROJECT_SUCCESS2=10030;
 }

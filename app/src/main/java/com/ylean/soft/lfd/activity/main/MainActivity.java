@@ -33,6 +33,7 @@ import butterknife.OnClick;
 /**
  * 首页
  * Created by Administrator on 2020/2/5.
+ * 76c14f983e646792e2fee85d90e8c4e9
  */
 
 public class MainActivity extends BaseActivity {
@@ -181,6 +182,16 @@ public class MainActivity extends BaseActivity {
                   }
                   myPagerAdapter.notifyDataSetChanged();
                   tabs.setViewPager(pager);
+                  break;
+            //查看更多---切换各个频道
+            case EventStatus.LOOK_MORE_MAIN_BLUES:
+                  final int channelId= (int) eventBusType.getObject();
+                  for (int i=0;i<channelList.size();i++){
+                       if(channelId==channelList.get(i).getId()){
+                           pager.setCurrentItem(i);
+                           break;
+                       }
+                  }
                   break;
             default:
                 break;

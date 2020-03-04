@@ -41,6 +41,14 @@ import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.utils.ijkplayer.Settings;
+import com.ylean.soft.lfd.utils.ijkplayer.media.FileMediaDataSource;
+import com.ylean.soft.lfd.utils.ijkplayer.media.IMediaController;
+import com.ylean.soft.lfd.utils.ijkplayer.media.IRenderView;
+import com.ylean.soft.lfd.utils.ijkplayer.media.InfoHudViewHolder;
+import com.ylean.soft.lfd.utils.ijkplayer.media.MediaPlayerCompat;
+import com.ylean.soft.lfd.utils.ijkplayer.media.SurfaceRenderView;
+import com.ylean.soft.lfd.utils.ijkplayer.media.TableLayoutBinder;
+import com.ylean.soft.lfd.utils.ijkplayer.media.TextureRenderView;
 import com.ylean.soft.lfd.utils.ijkplayer.services.MediaPlayerService;
 import com.zxdc.utils.library.util.LogUtils;
 

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -79,6 +80,7 @@ public class MainHottestDataAdapter extends BaseAdapter {
         //背景图片
         String imgUrl=dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
+        holder.imgHead.setTag(R.id.tag1,dataBean);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
@@ -92,6 +94,19 @@ public class MainHottestDataAdapter extends BaseAdapter {
         holder.tvName.setText(dataBean.getUserNickName());
         holder.tvSize.setText(dataBean.getPlayCount()+"w");
         holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
+
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("dataBean",dataBean);
+                activity.startActivity(intent);
+            }
+        });
         return view;
     }
 

@@ -4,22 +4,52 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Administrator on 2020/2/28.
+ * Created by Administrator on 2020/3/4.
  */
 
-public class HotTop extends BaseBean {
+public class Project  extends BaseBean {
 
-    private List<DataBean> data;
+    private List<ProjectBean> data;
 
-    public List<DataBean> getData() {
+    public List<ProjectBean> getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(List<ProjectBean> data) {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable{
+    public static class ProjectBean implements Serializable{
+        private String name;
+        private int id;
+        private List<ListData> serialList;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public List<ListData> getSerialList() {
+            return serialList;
+        }
+
+        public void setSerialList(List<ListData> serialList) {
+            this.serialList = serialList;
+        }
+    }
+
+    public static class ListData implements Serializable{
         private int id;//剧集id
         private String imgurl;//剧集图片
         private int playCount;//总播放量
