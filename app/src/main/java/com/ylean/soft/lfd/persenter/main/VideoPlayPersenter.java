@@ -88,8 +88,6 @@ public class VideoPlayPersenter {
                       }
                       if(screen.isSussess() && screen.getData()!=null){
                           EventBus.getDefault().post(new EventBusType(EventStatus.GET_SCREEEN,screen.getData()));
-                      }else{
-                          ToastUtil.showLong(baseBean.getDesc());
                       }
                       break;
                 case HandlerConstant.REQUST_ERROR:

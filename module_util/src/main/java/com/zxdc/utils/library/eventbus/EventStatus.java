@@ -73,5 +73,8 @@ public class EventStatus {
     //回复
     public static final int START_REPLY=203;
 
+    //发现页面，获取视频详情
+    public static final int FOUND_VIDEO_INFO=204;
+
 
 }

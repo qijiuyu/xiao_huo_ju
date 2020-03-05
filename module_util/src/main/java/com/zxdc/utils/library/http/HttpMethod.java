@@ -562,7 +562,9 @@ public class HttpMethod extends BaseRequst {
      */
     public static void foundVideo(String clientid,int episodeid,final Handler handler) {
         Map<String,String> map=new HashMap<>();
-        map.put("clientid",clientid);
+        if(!TextUtils.isEmpty(clientid)){
+            map.put("clientid",clientid);
+        }
         if(episodeid!=0){
             map.put("episodeid",String.valueOf(episodeid));
         }

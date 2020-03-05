@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,45 +23,45 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
+import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
+import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.VideoInfo;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
-import java.util.ArrayList;
+
 import java.util.List;
+
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> implements View.OnClickListener{
     private RecommendedActivity activity;
-    private ViewHolder holder;
+    public ViewHolder holder;
     //当前的页码
     private int currentPosition = 0;
-    private List<String> list=new ArrayList<>();
     //视频控制器
     private AndroidMediaController controller;
     //实例化MVP对象
     public VideoPlayPersenter videoPlayPersenter;
     private Handler handler=new Handler();
-    public FoundAdapter(RecommendedActivity activity) {
+    //视频详情对象
+    private VideoInfo.VideoBean videoBean;
+    public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean) {
         this.activity=activity;
+        this.videoBean=videoBean;
         //实例化视频控制器
         controller=new AndroidMediaController(activity, false);
         //实例化MVP控制器
         videoPlayPersenter=new VideoPlayPersenter(activity);
-
-        list.add("http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4");
-        list.add("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4");
-        list.add("http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4");
-        list.add("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4");
-        list.add("http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4");
     }
 
     /**
@@ -73,7 +77,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private IjkVideoView videoView;
         private TableLayout tableLayout;
         private ProgressBar progressBar;
-        private TextView tvBlues,tvPraise,tvComm,tvShare,tvTime;
+        private TextView tvTitle,tvBlues,tvPraise,tvComm,tvShare,tvTime;
         private CircleImageView imgHead;
         private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
         private SeekBar seekbar;
@@ -87,6 +91,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             videoView=view.findViewById(R.id.videoView);
             tableLayout=view.findViewById(R.id.hud_view);
             progressBar=view.findViewById(R.id.pb_progressbar);
+            tvTitle=view.findViewById(R.id.tv_title);
             tvBlues=view.findViewById(R.id.tv_blues);
             imgHead=view.findViewById(R.id.img_head);
             imgFocus=view.findViewById(R.id.img_focus);
@@ -112,7 +117,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     }
 
     public int getItemCount() {
-        return list.size();
+        return Integer.MAX_VALUE;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -123,12 +128,30 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        if(videoBean==null){
+            return;
+        }
         this.holder=holder;
         if(holder.getPosition()==currentPosition){
             //播放视频
             playVideo();
-            //显示弹屏
-//            videoPlayPersenter.showScreen(holder.listComm);
+            holder.tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+            if(videoBean.isFollowUser()){
+                holder.imgFocus.setVisibility(View.GONE);
+            }else{
+                holder.imgFocus.setVisibility(View.VISIBLE);
+            }
+            holder.tvTitle.setText("剧情："+videoBean.getIntroduction());
+            if(videoBean.isThumbEpisode()){
+                holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+            }else{
+                holder.imgPraise.setImageResource(R.mipmap.no_praise);
+            }
+            //获取弹屏列表
+            videoPlayPersenter.getScreen(videoBean.getId());
+
+            //监听弹屏输入框
+            holder.etScreen.setOnEditorActionListener(screenListener);
             holder.imgHead.setOnClickListener(this);
             holder.imgPraise.setOnClickListener(this);
             holder.imgComm.setOnClickListener(this);
@@ -151,8 +174,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * @param holder
      */
     public void onViewRecycled(@NonNull ViewHolder holder) {
-        super.onViewRecycled(holder);
+        this.holder=holder;
         removeVideo();
+        super.onViewRecycled(holder);
     }
 
 
@@ -167,15 +191,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 break;
             //点赞
             case R.id.img_praise:
-                String tag=v.getTag().toString();
-                if(tag.equals("1")){
-                    v.setTag("0");
-                    holder.imgPraise.setImageResource(R.mipmap.no_praise);
-                }else{
-                    v.setTag("1");
-                    holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-                }
-                holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                 videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
             //收藏
             case R.id.img_coll:
@@ -184,6 +200,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                  break;
             //评论
             case R.id.img_comm:
+                removeVideo();
                 break;
             //转发
             case R.id.img_share:
@@ -224,7 +241,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     private void playVideo(){
         holder.videoView.setHudView(holder.tableLayout);
         holder.videoView.setMediaController(controller);
-        holder.videoView.setVideoURI(Uri.parse(list.get(currentPosition)));
+        holder.videoView.setVideoURI(Uri.parse("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4"));
         holder.videoView.start();
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -344,13 +361,60 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void removeVideo(){
         //清除视频资源
-        if(holder.videoView!=null){
-            holder.videoView.stopPlayback();
-        }
+        holder.videoView.stopPlayback();
         //关闭弹屏
         if(holder.listComm!=null){
             holder.listComm.stop();
         }
     }
 
+
+    /**
+     * true：点赞成功
+     * false：取消点赞
+     * @param status
+     */
+    public void praiseEnd(boolean status){
+        if(status){
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+            holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+        }else{
+            holder.imgPraise.setImageResource(R.mipmap.no_praise);
+        }
+    }
+
+    /**
+     * 展示弹屏列表
+     * @param screenList
+     */
+    public void showScreen(List<Screen.ScreenBean> screenList){
+        ScreenAdapter screenAdapter=new ScreenAdapter(activity,screenList);
+        holder.listComm.setLayoutManager(new LinearLayoutManager(activity));
+        holder.listComm.setAdapter(screenAdapter);
+        holder.listComm.start();
+        holder.listComm.setVisibility(View.VISIBLE);
+    }
+
+
+    /**
+     * 监听弹屏输入框
+     */
+    private TextView.OnEditorActionListener screenListener=new TextView.OnEditorActionListener() {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                String content=v.getText().toString().trim();
+                if(TextUtils.isEmpty(content)){
+                    ToastUtil.showLong("请输入弹屏内容");
+                }else{
+                    videoPlayPersenter.sendScreen(content,videoBean);
+                    holder.etScreen.setText(null);
+                }
+            }
+            return false;
+        }
+    };
+
+    public void setVideoBean(VideoInfo.VideoBean videoBean){
+        this.videoBean=videoBean;
+    }
 }

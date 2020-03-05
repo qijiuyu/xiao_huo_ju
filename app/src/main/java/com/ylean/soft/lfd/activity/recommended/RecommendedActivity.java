@@ -7,20 +7,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.recommended.FoundAdapter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
-import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -39,7 +43,10 @@ public class RecommendedActivity extends BaseActivity {
     private int currentPosition = -1;
     //滑动停止后为true
     private boolean isStopScroll = true;
+    //视频列表适配器
     private FoundAdapter foundAdapter;
+    //视频对象
+    private VideoInfo.VideoBean videoBean;
     private RecommendedPersenter recommendedPersenter;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +60,8 @@ public class RecommendedActivity extends BaseActivity {
         initRecycleView();
         //设置侧边栏
         rightMenu();
+        //获取视频数据
+        recommendedPersenter.foundVideo(0);
 
         //滑动到指定位置
 //        recyclerView.smoothScrollToPosition(1);
@@ -64,17 +73,18 @@ public class RecommendedActivity extends BaseActivity {
      */
     private void initRecycleView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        foundAdapter=new FoundAdapter(this);
-        recyclerView.setAdapter(foundAdapter);
         //向下滑动,可监听到最后一个
         new GravityPagerSnapHelper(Gravity.BOTTOM, false, new GravitySnapHelper.SnapListener() {
             public void onSnap(final int positions) {
                 //切换Item之后的操作
                 if (isStopScroll == true) {
-                    if (positions == 4) {
+                    if (positions == (Integer.MAX_VALUE-1)) {
                         if (currentPosition != positions) {
-                            foundAdapter.selectPosition(positions);
                             currentPosition = positions;
+                            if(videoBean!=null){
+                                //获取视频数据
+                                recommendedPersenter.foundVideo(videoBean.getNextEpisodeId());
+                            }
                         }
                     }
                 }
@@ -87,8 +97,11 @@ public class RecommendedActivity extends BaseActivity {
             public void onSnap(final int positions) {
                 if (isStopScroll == true) {
                     if (currentPosition != positions) {
-                        foundAdapter.selectPosition(positions);
                         currentPosition = positions;
+                        if(videoBean!=null){
+                            //获取视频数据
+                            recommendedPersenter.foundVideo(videoBean.getPrevEpisodeId());
+                        }
                     }
                 }
             }
@@ -130,13 +143,41 @@ public class RecommendedActivity extends BaseActivity {
     }
 
 
-
     /**
      * EventBus注解
      */
     @Subscribe
     public void onEvent(EventBusType eventBusType) {
         switch (eventBusType.getStatus()) {
+            //获取视频详情
+            case EventStatus.FOUND_VIDEO_INFO:
+                  videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
+                  if(videoBean==null){
+                      ToastUtil.showLong("无法播放该视频");
+                      return;
+                  }
+                  if(foundAdapter==null){
+                      foundAdapter=new FoundAdapter(this,videoBean);
+                      recyclerView.setAdapter(foundAdapter);
+                  }else{
+                      foundAdapter.setVideoBean(videoBean);
+                      foundAdapter.selectPosition(currentPosition);
+                  }
+                  break;
+            //点赞、取消点赞
+            case EventStatus.IS_THUMP:
+                 if(videoBean.isThumbEpisode()){
+                     videoBean.setThumbEpisode(false);
+                 }else{
+                     videoBean.setThumbEpisode(true);
+                 }
+                  foundAdapter.praiseEnd(videoBean.isThumbEpisode());
+                  break;
+            //获取弹屏成功
+            case EventStatus.GET_SCREEEN:
+                  List<Screen.ScreenBean> screenList= (List<Screen.ScreenBean>) eventBusType.getObject();
+                  foundAdapter.showScreen(screenList);
+                  break;
             //关闭侧边栏
             case EventStatus.CLOSE_VIDEO_RIGHT:
                 drawerLayout.closeDrawer(Gravity.RIGHT);
@@ -150,13 +191,17 @@ public class RecommendedActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        foundAdapter.setVideoStatus();
+        if(foundAdapter!=null){
+            foundAdapter.setVideoStatus();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        foundAdapter.setVideoStatus();
+        if(foundAdapter!=null){
+            foundAdapter.setVideoStatus();
+        }
     }
 
     @Override
@@ -168,6 +213,8 @@ public class RecommendedActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        foundAdapter.removeVideo();
+        if(foundAdapter!=null){
+            foundAdapter.removeVideo();
+        }
     }
 }

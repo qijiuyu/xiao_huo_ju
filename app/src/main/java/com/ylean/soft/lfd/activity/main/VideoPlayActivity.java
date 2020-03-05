@@ -445,8 +445,6 @@ public class VideoPlayActivity extends BaseActivity {
                     ToastUtil.showLong("请输入弹屏内容");
                 }else{
                     videoPlayPersenter.sendScreen(content,videoBean);
-                    //隐藏软键盘
-                    lockKey(etScreen);
                     etScreen.setText(null);
                 }
             }
