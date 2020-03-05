@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.main;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -226,7 +227,10 @@ public class VideoPlayActivity extends BaseActivity {
                  break;
             //评论
             case R.id.img_comm:
-                videoPlayPersenter.showComment();
+                Intent intent=new Intent(this,CommentActivity.class);
+                intent.putExtra("videoBean",videoBean);
+                startActivity(intent);
+                overridePendingTransition(R.anim.activity_open,0);
                 break;
             //转发
             case R.id.img_share:

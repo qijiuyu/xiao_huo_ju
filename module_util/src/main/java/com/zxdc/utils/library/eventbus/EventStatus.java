@@ -70,5 +70,8 @@ public class EventStatus {
     //显示弹屏
     public static final int GET_SCREEEN=202;
 
+    //回复
+    public static final int START_REPLY=203;
+
 
 }

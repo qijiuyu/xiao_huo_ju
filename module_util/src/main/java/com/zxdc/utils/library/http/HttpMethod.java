@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.Project;
@@ -534,7 +535,7 @@ public class HttpMethod extends BaseRequst {
     /**
      * 剧集列表
      */
-    public static void serialList(int channelid,String name,int pageindex,final int index,final Handler handler) {
+    public static void serialList(int channelid,String name,int pageindex,int userid,final int index,final Handler handler) {
         Map<String,String> map=new HashMap<>();
         map.put("channelid",String.valueOf(channelid));
         if(!TextUtils.isEmpty(name)){
@@ -542,11 +543,71 @@ public class HttpMethod extends BaseRequst {
         }
         map.put("pageindex",String.valueOf(pageindex));
         map.put("pagesize",pageSize);
+        if(userid!=0){
+            map.put("userid",String.valueOf(userid));
+        }
         Http.getRetrofit().create(HttpApi.class).serialList(map).enqueue(new Callback<HotTop>() {
             public void onResponse(Call<HotTop> call, Response<HotTop> response) {
                 BaseRequst.sendMessage(handler, index, response.body());
             }
             public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 发现视频
+     */
+    public static void foundVideo(String clientid,int episodeid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("clientid",clientid);
+        if(episodeid!=0){
+            map.put("episodeid",String.valueOf(episodeid));
+        }
+        Http.getRetrofit().create(HttpApi.class).foundVideo(map).enqueue(new Callback<VideoInfo>() {
+            public void onResponse(Call<VideoInfo> call, Response<VideoInfo> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.FOUND_VIDEO_SUCCESS, response.body());
+            }
+            public void onFailure(Call<VideoInfo> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取评论列表
+     */
+    public static void getComment(int episodeid,int pageindex,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("episodeid",String.valueOf(episodeid));
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize","20");
+        Http.getRetrofit().create(HttpApi.class).getComment(map).enqueue(new Callback<Comment>() {
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_COMMENT_SUCCESS, response.body());
+            }
+            public void onFailure(Call<Comment> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 回复评论
+     */
+    public static void reply(String content,int pid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("content",content);
+        map.put("pid",String.valueOf(pid));
+        Http.getRetrofit().create(HttpApi.class).reply(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REPLY_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

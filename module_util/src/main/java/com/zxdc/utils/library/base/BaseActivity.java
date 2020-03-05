@@ -55,6 +55,19 @@ public class BaseActivity extends FragmentActivity {
         return res;
     }
 
+
+    /**
+     * 显示键盘
+     *
+     * @param et 输入焦点
+     */
+    public void showInput(final EditText et) {
+        et.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+
     /**
      * 隐藏键盘
      */

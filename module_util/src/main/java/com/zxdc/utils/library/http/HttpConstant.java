@@ -63,5 +63,11 @@ public class HttpConstant {
 
     public static final String SERIAL_LIST="api/app/serial/list";
 
+    public static final String FOUND_VIDEO="api/app/serial/find";
+
+    public static final String GET_COMMENT="api/app/comment/list";
+
+    public static final String REPLY="api/app/reply";
+
 
 }

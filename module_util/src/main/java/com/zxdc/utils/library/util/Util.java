@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -273,4 +276,21 @@ public class Util extends ClassLoader {
         }
         return 0;
     }
+
+
+    public static SpannableStringBuilder getSpanString(Context context, String src1, String src2, int style1, int style2){
+        SpannableStringBuilder spanStr = null;
+        String src =src1 + src2 ;
+        int length1 = src1.length();
+        int lengthAll =src.length();
+        spanStr=new SpannableStringBuilder(src);
+        if(0!=length1){
+            spanStr.setSpan(new TextAppearanceSpan(context,style1),0,length1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if(lengthAll !=length1){
+            spanStr.setSpan(new TextAppearanceSpan(context,style2),length1,lengthAll,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spanStr;
+    }
+
 }

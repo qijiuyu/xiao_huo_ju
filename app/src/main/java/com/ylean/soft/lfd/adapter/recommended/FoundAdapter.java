@@ -184,7 +184,6 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                  break;
             //评论
             case R.id.img_comm:
-                videoPlayPersenter.showComment();
                 break;
             //转发
             case R.id.img_share:

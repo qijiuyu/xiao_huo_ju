@@ -34,4 +34,7 @@ public class HandlerConstant {
     public static final int GET_PROJECT_SUCCESS2=10030;
     public static final int GET_SERIAL_LIST_SUCCESS1=10031;
     public static final int GET_SERIAL_LIST_SUCCESS2=10032;
+    public static final int FOUND_VIDEO_SUCCESS=10033;
+    public static final int GET_COMMENT_SUCCESS=10034;
+    public static final int REPLY_SUCCESS=10035;
 }

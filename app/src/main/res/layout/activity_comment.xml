@@ -31,17 +31,23 @@
             android:layout_marginRight="19dp"
             android:layout_marginTop="17dp"/>
 
-        <LinearLayout
+        <com.zxdc.utils.library.view.MyRefreshLayout
+            android:id="@+id/re_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/tv_total"
-            android:background="@color/transparent"
             android:layout_marginTop="22dp"
             android:layout_marginBottom="49dp">
 
-            <include layout="@layout/listview"/>
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                android:focusable="true"
+                android:scrollbars="none" />
 
-        </LinearLayout>
+        </com.zxdc.utils.library.view.MyRefreshLayout>
 
         <EditText
             android:id="@+id/et_content"
@@ -51,10 +57,12 @@
             android:layout_alignParentBottom="true"
             android:hint="说点什么吧～～"
             android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#ABFFFFFF"
             android:textSize="15sp"
             android:gravity="center"
-            android:singleLine="true"/>
+            android:imeOptions="actionSend"
+            android:singleLine="true"
+            android:inputType="text"/>
 
     </RelativeLayout>
 

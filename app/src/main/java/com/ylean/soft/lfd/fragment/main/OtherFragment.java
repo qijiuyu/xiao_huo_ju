@@ -117,7 +117,7 @@ public class OtherFragment extends BaseFragment implements MyRefreshLayoutListen
      */
     public void onRefresh(View view) {
         page=1;
-        HttpMethod.serialList(getChannelId(),null,page, HandlerConstant.GET_SERIAL_LIST_SUCCESS1,handler);
+        HttpMethod.serialList(getChannelId(),null,page,0, HandlerConstant.GET_SERIAL_LIST_SUCCESS1,handler);
     }
 
     /**
@@ -126,7 +126,7 @@ public class OtherFragment extends BaseFragment implements MyRefreshLayoutListen
      */
     public void onLoadMore(View view) {
         page++;
-        HttpMethod.serialList(getChannelId(),null,page, HandlerConstant.GET_SERIAL_LIST_SUCCESS2,handler);
+        HttpMethod.serialList(getChannelId(),null,page,0, HandlerConstant.GET_SERIAL_LIST_SUCCESS2,handler);
     }
 
 
