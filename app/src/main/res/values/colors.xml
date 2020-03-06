@@ -74,4 +74,6 @@
     <color name="color_FFBC32">#FFBC32</color>
     <color name="color_FF6732">#FF6732</color>
     <color name="color_FFF7F1">#FFF7F3</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
 </resources>

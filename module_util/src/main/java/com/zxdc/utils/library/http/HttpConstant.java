@@ -73,5 +73,7 @@ public class HttpConstant {
 
     public static final String FOCUS_SERIAL="api/app/follow/serial";
 
+    public static final String MY_LIKE="api/app/thumb/serial";
+
 
 }

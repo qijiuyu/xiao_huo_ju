@@ -2,6 +2,7 @@ package com.ylean.soft.lfd.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,10 +20,18 @@ import com.ylean.soft.lfd.fragment.user.MyFocusFragment;
 import com.ylean.soft.lfd.fragment.user.MyLikeFragment;
 import com.ylean.soft.lfd.persenter.user.UserPersenter;
 import com.ylean.soft.lfd.view.ViewPagerForScrollView;
+import com.ylean.soft.lfd.view.scrollview.XScrollView;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.UserInfo;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
+import com.zxdc.utils.library.view.MyRefreshLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -33,8 +42,10 @@ import butterknife.OnClick;
  * 我的
  * Created by Administrator on 2020/2/5.
  */
-public class UserActivity extends BaseActivity{
+public class UserActivity extends BaseActivity implements XScrollView.IXScrollViewListener{
 
+    @BindView(R.id.scrollView)
+    XScrollView scrollView;
     @BindView(R.id.img_head)
     CircleImageView imgHead;
     @BindView(R.id.tv_fans)
@@ -89,6 +100,8 @@ public class UserActivity extends BaseActivity{
         setContentView(R.layout.activity_user);
         ButterKnife.bind(this);
         initView();
+        //注册eventBus
+        EventBus.getDefault().register(this);
         userPersenter=new UserPersenter(this);
     }
 
@@ -115,6 +128,11 @@ public class UserActivity extends BaseActivity{
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        //scrollView上拉下刷事件
+        scrollView.setXScrollViewListener(this);
+        //隐藏下拉刷新
+        scrollView.setPullRefreshEnable(false);
     }
 
     @OnClick({R.id.img_setting, R.id.img_news, R.id.tv_edit, R.id.tv_works, R.id.tv_my_focus, R.id.tv_my_look})
@@ -153,7 +171,6 @@ public class UserActivity extends BaseActivity{
                 break;
         }
     }
-
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -281,10 +298,46 @@ public class UserActivity extends BaseActivity{
     }
 
 
+    /**
+     * 刷新
+     */
+    public void onRefresh() {
+
+    }
+
+    /**
+     * 加载
+     */
+    public void onLoadMore() {
+        EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE));
+    }
+
+    /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        switch (eventBusType.getStatus()) {
+            case EventStatus.USER_LOAD_MORE_SUCCESS:
+                 scrollView.stopLoadMore();  // 停止加载
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
         //获取用户信息
         userPersenter.getUser();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

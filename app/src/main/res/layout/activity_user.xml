@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <android.support.v4.widget.NestedScrollView
+    <com.ylean.soft.lfd.view.scrollview.XScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -296,6 +297,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </com.ylean.soft.lfd.view.scrollview.XScrollView>
 
 </LinearLayout>

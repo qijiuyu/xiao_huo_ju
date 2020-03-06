@@ -76,5 +76,11 @@ public class EventStatus {
     //发现页面，获取视频详情
     public static final int FOUND_VIDEO_INFO=204;
 
+    //我的页面下拉加载更多
+    public static final int USER_LOAD_MORE=205;
+
+    //我的页面下拉加载更多已完成
+    public static final int USER_LOAD_MORE_SUCCESS=206;
+
 
 }

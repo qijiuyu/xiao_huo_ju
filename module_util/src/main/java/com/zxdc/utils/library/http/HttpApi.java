@@ -153,4 +153,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.FOCUS_SERIAL)
     Call<HotTop> focusSerial(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.MY_LIKE)
+    Call<HotTop> mylike(@FieldMap Map<String, String> map);
 }

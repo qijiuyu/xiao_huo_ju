@@ -653,4 +653,22 @@ public class HttpMethod extends BaseRequst {
             }
         });
     }
+
+
+    /**
+     * 我的喜欢
+     */
+    public static void mylike(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).mylike(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
 }
