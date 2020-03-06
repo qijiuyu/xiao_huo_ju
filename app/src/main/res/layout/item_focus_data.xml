@@ -15,7 +15,6 @@
            android:id="@+id/img_head"
            android:layout_width="104dp"
            android:layout_height="133dp"
-           android:src="@mipmap/aa"
            android:layout_marginLeft="15dp"
            android:scaleType="centerCrop"/>
 
@@ -23,7 +22,6 @@
            android:id="@+id/tv_title"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="霸道总裁很粘人"
            android:textSize="16sp"
            android:textColor="@android:color/black"
            android:layout_marginLeft="131dp"
@@ -42,14 +40,12 @@
                android:id="@+id/img_pic"
                android:layout_width="15dp"
                android:layout_height="15dp"
-               android:src="@mipmap/bb"
                android:scaleType="centerCrop"/>
 
            <TextView
                android:id="@+id/tv_name"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="暖男先生"
                android:textColor="@color/color_666666"
                android:textSize="12sp"
                android:layout_marginLeft="5dp"/>
@@ -93,7 +89,6 @@
                android:id="@+id/tv_blues"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="第85集"
                android:textSize="12sp"
                android:textColor="@android:color/black"
                android:layout_marginLeft="5dp"/>
@@ -123,7 +118,6 @@
                android:id="@+id/tv_des"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="猫总的秘密"
                android:textSize="12sp"
                android:textColor="@color/color_999999"
                android:layout_marginLeft="10dp"

@@ -1,35 +1,39 @@
 package com.ylean.soft.lfd.activity.main;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.adapter.main.OtherListDataAdapter;
 import com.ylean.soft.lfd.adapter.main.RecommendedAdapter;
 import com.ylean.soft.lfd.adapter.main.SearchAdapter;
 import com.ylean.soft.lfd.persenter.main.SearchPersenter;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MyRefreshLayout;
-
+import com.zxdc.utils.library.view.MyRefreshLayoutListener;
+import java.util.ArrayList;
+import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 /**
  * 搜索结果页
  * Created by Administrator on 2020/2/7.
  */
-
-public class SearchResultActivity extends BaseActivity implements TextView.OnEditorActionListener {
+public class SearchResultActivity extends BaseActivity implements TextView.OnEditorActionListener,MyRefreshLayoutListener {
 
     @BindView(R.id.et_key)
     EditText etKey;
@@ -46,13 +50,24 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
     //要搜索的关键字
     private String strKey;
     private SearchPersenter searchPersenter;
+    //搜索结果的适配器
     private SearchAdapter searchAdapter;
-    private RecommendedAdapter recommendedAdapter;
+    //数据集合
+    private List<HotTop.DataBean> listAll=new ArrayList<>();
+    //页码
+    private int page=1;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
         ButterKnife.bind(this);
         initView();
+        //加载数据
+        reList.startRefresh();
+        findViewById(R.id.img_bank).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SearchResultActivity.this.finish();
+            }
+        });
     }
 
     /**
@@ -60,15 +75,81 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
      */
     private void initView() {
         searchPersenter = new SearchPersenter(this);
+        strKey=getIntent().getStringExtra("keys");
         etKey.setOnEditorActionListener(this);
-
-//        listView.setDivider(null);
-//        searchAdapter = new SearchAdapter(this);
-//        listView.setAdapter(searchAdapter);
-
-        recycle.setLayoutManager(new GridLayoutManager(activity, 3));
-        recycle.setAdapter(new RecommendedAdapter(activity));
+        //刷新加载
+        reList.setMyRefreshLayoutListener(this);
+        listView.setDivider(null);
+        searchAdapter=new SearchAdapter(this,listAll);
+        listView.setAdapter(searchAdapter);
     }
+
+
+    private Handler handler=new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case HandlerConstant.GET_SERIAL_LIST_SUCCESS1:
+                    reList.refreshComplete();
+                    listAll.clear();
+                    refresh((HotTop) msg.obj);
+                    break;
+                case HandlerConstant.GET_SERIAL_LIST_SUCCESS2:
+                    reList.loadMoreComplete();
+                    refresh((HotTop) msg.obj);
+                    break;
+                //获取推荐数据
+                case HandlerConstant.GET_MAIN_BANNER:
+                    HotTop hotTop= (HotTop) msg.obj;
+                    if(hotTop==null){
+                        break;
+                    }
+                    if(hotTop.isSussess()){
+                        recycle.setLayoutManager(new GridLayoutManager(SearchResultActivity.this, 3));
+                        recycle.setAdapter(new RecommendedAdapter(SearchResultActivity.this,hotTop.getData()));
+                    }else{
+                        ToastUtil.showLong(hotTop.getDesc());
+                    }
+                    break;
+                case HandlerConstant.REQUST_ERROR:
+                    ToastUtil.showLong(msg.obj.toString());
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
+
+
+    /**
+     * 刷新界面数据
+     */
+    private void refresh(HotTop hotTop){
+        if(hotTop==null){
+            return;
+        }
+        if(hotTop.isSussess()){
+            List<HotTop.DataBean> list=hotTop.getData();
+            listAll.addAll(list);
+            //刷新数据
+            searchAdapter.notifyDataSetChanged();
+            if(list.size()< HttpMethod.size){
+                reList.setIsLoadingMoreEnabled(false);
+            }
+            if(listAll.size()==0){
+                reList.setVisibility(View.GONE);
+                linNo.setVisibility(View.VISIBLE);
+                //获取推荐数据
+                mainBanner();
+            }else{
+                reList.setVisibility(View.VISIBLE);
+                linNo.setVisibility(View.GONE);
+            }
+        }else{
+            ToastUtil.showLong(hotTop.getDesc());
+        }
+    }
+
 
 
     @Override
@@ -83,7 +164,45 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
             lockKey(etKey);
             //保存搜索过的关键字
             searchPersenter.addTabKey(strKey);
+            //清空列表
+            listAll.clear();
+            searchAdapter.notifyDataSetChanged();
+            //加载数据
+            reList.startRefresh();
         }
         return false;
+    }
+
+
+    /**
+     * 下刷
+     * @param view
+     */
+    public void onRefresh(View view) {
+        page=1;
+        HttpMethod.serialList(0,strKey,page,0, HandlerConstant.GET_SERIAL_LIST_SUCCESS1,handler);
+    }
+
+    /**
+     * 上拉加载更多
+     * @param view
+     */
+    public void onLoadMore(View view) {
+        page++;
+        HttpMethod.serialList(0,strKey,page,0, HandlerConstant.GET_SERIAL_LIST_SUCCESS2,handler);
+    }
+
+
+    /**
+     * 获取推荐数据
+     */
+    private void mainBanner(){
+        HttpMethod.mainBanner(handler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        removeHandler(handler);
     }
 }

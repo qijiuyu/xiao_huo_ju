@@ -82,6 +82,7 @@
         <activity android:name=".activity.user.AbountActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.FeedBackActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.main.CommentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.web.WebViewActivity"  android:screenOrientation="portrait"/>
 
         <!--注册微信回调 WXEntryActivity -->
         <activity

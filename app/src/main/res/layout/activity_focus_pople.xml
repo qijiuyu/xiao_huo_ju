@@ -7,6 +7,25 @@
 
     <include layout="@layout/head"/>
 
-   <include layout="@layout/listview"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/listview"/>
+
+        <TextView
+            android:id="@+id/tv_no"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您暂无关注的用户"
+            android:textSize="14sp"
+            android:textColor="@color/color_999999"
+            android:drawableTop="@mipmap/no_data"
+            android:drawablePadding="7dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

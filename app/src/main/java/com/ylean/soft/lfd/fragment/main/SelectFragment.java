@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +62,8 @@ import static android.R.id.list;
  */
 public class SelectFragment extends BaseFragment {
 
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
     @BindView(R.id.banner)
     Banner banner;
     @BindView(R.id.tv_hottest)
@@ -210,6 +213,7 @@ public class SelectFragment extends BaseFragment {
                 break;
 
         }
+        scrollView.scrollTo(0, 0);
     }
 
 

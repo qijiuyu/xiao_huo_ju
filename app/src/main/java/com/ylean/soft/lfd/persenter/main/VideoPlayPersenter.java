@@ -86,7 +86,7 @@ public class VideoPlayPersenter {
                       if(screen==null){
                           break;
                       }
-                      if(screen.isSussess() && screen.getData()!=null){
+                      if(screen.isSussess() && screen.getData()!=null && screen.getData().size()!=0){
                           EventBus.getDefault().post(new EventBusType(EventStatus.GET_SCREEEN,screen.getData()));
                       }
                       break;

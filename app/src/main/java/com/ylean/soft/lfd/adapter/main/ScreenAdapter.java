@@ -34,9 +34,6 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> 
 
     @Override
     public int getItemCount() {
-        if(list==null || list.size()==0){
-            return 0;
-        }
         return Integer.MAX_VALUE;
     }
 

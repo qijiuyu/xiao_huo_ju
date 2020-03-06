@@ -418,7 +418,7 @@ public class VideoPlayActivity extends BaseActivity {
         if(videoBean==null){
             return;
         }
-        tvTitle.setText(dataBean.getName());
+        tvTitle.setText(videoBean.getIntroduction());
         Glide.with(activity).load(dataBean.getUserImg()).into(imgHead);
         tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
         if(videoBean.isFollowUser()){

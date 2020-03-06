@@ -5,6 +5,7 @@ package com.zxdc.utils.library.http;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.Project;
@@ -144,4 +145,12 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.REPLY)
     Call<BaseBean> reply(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.FOCUS_USER)
+    Call<Focus> focusUser(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.FOCUS_SERIAL)
+    Call<HotTop> focusSerial(@FieldMap Map<String, String> map);
 }

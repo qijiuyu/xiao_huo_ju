@@ -69,5 +69,9 @@ public class HttpConstant {
 
     public static final String REPLY="api/app/reply";
 
+    public static final String FOCUS_USER="api/app/follow/user";
+
+    public static final String FOCUS_SERIAL="api/app/follow/serial";
+
 
 }

@@ -25,6 +25,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
+import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
@@ -148,6 +149,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.imgPraise.setImageResource(R.mipmap.no_praise);
             }
             //获取弹屏列表
+            holder.listComm.setVisibility(View.GONE);
             videoPlayPersenter.getScreen(videoBean.getId());
 
             //监听弹屏输入框
@@ -200,7 +202,10 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                  break;
             //评论
             case R.id.img_comm:
-                removeVideo();
+                intent.setClass(activity,CommentActivity.class);
+                intent.putExtra("videoBean",videoBean);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.activity_open,0);
                 break;
             //转发
             case R.id.img_share:
@@ -388,11 +393,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * @param screenList
      */
     public void showScreen(List<Screen.ScreenBean> screenList){
+        holder.listComm.setVisibility(View.VISIBLE);
         ScreenAdapter screenAdapter=new ScreenAdapter(activity,screenList);
         holder.listComm.setLayoutManager(new LinearLayoutManager(activity));
         holder.listComm.setAdapter(screenAdapter);
         holder.listComm.start();
-        holder.listComm.setVisibility(View.VISIBLE);
     }
 
 

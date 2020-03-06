@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.Project;
@@ -537,7 +538,9 @@ public class HttpMethod extends BaseRequst {
      */
     public static void serialList(int channelid,String name,int pageindex,int userid,final int index,final Handler handler) {
         Map<String,String> map=new HashMap<>();
-        map.put("channelid",String.valueOf(channelid));
+        if(channelid!=0){
+            map.put("channelid",String.valueOf(channelid));
+        }
         if(!TextUtils.isEmpty(name)){
             map.put("name",name);
         }
@@ -610,6 +613,42 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, HandlerConstant.REPLY_SUCCESS, response.body());
             }
             public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 关注的用户
+     */
+    public static void focusUser(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).focusUser(map).enqueue(new Callback<Focus>() {
+            public void onResponse(Call<Focus> call, Response<Focus> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<Focus> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 关注的剧集
+     */
+    public static void focusSerial(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).focusSerial(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

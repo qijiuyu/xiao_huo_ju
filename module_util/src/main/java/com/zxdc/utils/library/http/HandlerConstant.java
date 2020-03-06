@@ -37,4 +37,8 @@ public class HandlerConstant {
     public static final int FOUND_VIDEO_SUCCESS=10033;
     public static final int GET_COMMENT_SUCCESS=10034;
     public static final int REPLY_SUCCESS=10035;
+    public static final int FOCUS_USER_SUCCESS1=10036;
+    public static final int FOCUS_USER_SUCCESS2=10037;
+    public static final int FOCUS_SERIAL_SUCCESS1=10038;
+    public static final int FOCUS_SERIAL_SUCCESS2=10039;
 }

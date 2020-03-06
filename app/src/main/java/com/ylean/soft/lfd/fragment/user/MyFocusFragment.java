@@ -33,7 +33,7 @@ public class MyFocusFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         ((UserActivity)mActivity).pager.setObjectForPosition(view,1);
 
-        focusPopleAdapter=new FocusPopleAdapter(mActivity);
+        focusPopleAdapter=new FocusPopleAdapter(mActivity,null);
         listView.setAdapter(focusPopleAdapter);
 
         return view;
