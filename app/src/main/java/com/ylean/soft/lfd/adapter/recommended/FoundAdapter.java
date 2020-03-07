@@ -36,6 +36,7 @@ import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
+import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -78,7 +79,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private IjkVideoView videoView;
         private TableLayout tableLayout;
         private ProgressBar progressBar;
-        private TextView tvTitle,tvBlues,tvPraise,tvComm,tvShare,tvTime;
+        private TextView tvTitle,tvBlues,tvPraise,tvFocusSerial,tvComm,tvShare,tvTime;
         private CircleImageView imgHead;
         private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
         private SeekBar seekbar;
@@ -100,6 +101,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             tvPraise=view.findViewById(R.id.tv_praise);
             imgComm=view.findViewById(R.id.img_comm);
             imgColl=view.findViewById(R.id.img_coll);
+            tvFocusSerial=view.findViewById(R.id.tv_focusserial);
             tvComm=view.findViewById(R.id.tv_comm);
             imgShare=view.findViewById(R.id.img_share);
             tvShare=view.findViewById(R.id.tv_share);
@@ -134,20 +136,32 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }
         this.holder=holder;
         if(holder.getPosition()==currentPosition){
-            //播放视频
-            playVideo();
-            holder.tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+            holder.tvTitle.setText("剧情："+videoBean.getIntroduction());
+            /**
+             * 是否关注用户
+             */
             if(videoBean.isFollowUser()){
                 holder.imgFocus.setVisibility(View.GONE);
             }else{
                 holder.imgFocus.setVisibility(View.VISIBLE);
             }
-            holder.tvTitle.setText("剧情："+videoBean.getIntroduction());
+            /**
+             * 是否点赞
+             */
             if(videoBean.isThumbEpisode()){
                 holder.imgPraise.setImageResource(R.mipmap.yes_praise);
             }else{
                 holder.imgPraise.setImageResource(R.mipmap.no_praise);
             }
+            holder.tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+            //是否关注剧集
+            if(videoBean.isFollowSerial()){
+                holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
+            }else{
+                holder.imgColl.setImageResource(R.mipmap.coll_icon);
+            }
+            holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
+
             //获取弹屏列表
             holder.listComm.setVisibility(View.GONE);
             videoPlayPersenter.getScreen(videoBean.getId());
@@ -165,6 +179,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.videoView.setVisibility(View.VISIBLE);
             //屏幕点击
             holder.love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
+            //播放视频
+            playVideo();
         }else{
             holder.videoView.setVisibility(View.GONE);
         }
@@ -195,10 +211,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             case R.id.img_praise:
                  videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
-            //收藏
+            //关注剧情
             case R.id.img_coll:
-                 holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
-                 holder.imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
             case R.id.img_comm:
@@ -380,11 +395,30 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * @param status
      */
     public void praiseEnd(boolean status){
+        String praiseNum=holder.tvPraise.getText().toString().trim();
         if(status){
             holder.imgPraise.setImageResource(R.mipmap.yes_praise);
             holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+            holder.tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
         }else{
             holder.imgPraise.setImageResource(R.mipmap.no_praise);
+            holder.tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)-1));
+        }
+    }
+
+    /**
+     * 是否关注剧情
+     * @param status
+     */
+    public void focusSerial(boolean status){
+        String serialNum=holder.tvFocusSerial.getText().toString().trim();
+        if(!status){
+            holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
+            holder.imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+            holder.tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)+1));
+        }else{
+            holder.imgColl.setImageResource(R.mipmap.coll_icon);
+            holder.tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)-1));
         }
     }
 

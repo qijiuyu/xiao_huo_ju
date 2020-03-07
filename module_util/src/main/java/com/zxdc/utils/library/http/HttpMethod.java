@@ -3,16 +3,21 @@ package com.zxdc.utils.library.http;
 import android.os.Handler;
 import android.text.TextUtils;
 
+import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Focus;
+import com.zxdc.utils.library.bean.Help;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
+import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.http.base.BaseRequst;
 import com.zxdc.utils.library.http.base.Http;
@@ -394,13 +399,13 @@ public class HttpMethod extends BaseRequst {
     /**
      * 关注、取消关注
      */
-    public static void follow(int relateid,String type,final Handler handler) {
+    public static void follow(int relateid,String type,final int index,final Handler handler) {
         Map<String,String> map=new HashMap<>();
         map.put("relateid",String.valueOf(relateid));
         map.put("type",type);
         Http.getRetrofit().create(HttpApi.class).follow(map).enqueue(new Callback<BaseBean>() {
             public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
-                BaseRequst.sendMessage(handler, HandlerConstant.FOLLOW_SUCCESS, response.body());
+                BaseRequst.sendMessage(handler, index, response.body());
             }
             public void onFailure(Call<BaseBean> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
@@ -668,6 +673,109 @@ public class HttpMethod extends BaseRequst {
             }
             public void onFailure(Call<HotTop> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取消息
+     */
+    public static void getNews(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getNews(map).enqueue(new Callback<News>() {
+            public void onResponse(Call<News> call, Response<News> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<News> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取协议
+     */
+    public static void getAgreement(int type,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("type",String.valueOf(type));
+        Http.getRetrofit().create(HttpApi.class).getAgreement(map).enqueue(new Callback<Agreement>() {
+            public void onResponse(Call<Agreement> call, Response<Agreement> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_AGREEMENT_SUCCESS, response.body());
+            }
+            public void onFailure(Call<Agreement> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * 帮助列表
+     */
+    public static void getHelp(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex","1");
+        map.put("pagesize","100");
+        Http.getRetrofit().create(HttpApi.class).getHelp(map).enqueue(new Callback<Help>() {
+            public void onResponse(Call<Help> call, Response<Help> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_AGREEMENT_SUCCESS, response.body());
+            }
+            public void onFailure(Call<Help> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 帮助列表
+     */
+    public static void feedBack(String content,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("content",content);
+        Http.getRetrofit().create(HttpApi.class).feedBack(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.FEEDBACK_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取版本
+     */
+    public static void version(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        Http.getRetrofit().create(HttpApi.class).version(map).enqueue(new Callback<Version>() {
+            public void onResponse(Call<Version> call, Response<Version> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.UPDATE_VERSION_SUCCESS, response.body());
+            }
+            public void onFailure(Call<Version> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 文件下载
+     * @param handler
+     */
+    public static void download(final DownLoad downLoad, final Handler handler) {
+        Http.dowload(downLoad.getDownPath(), downLoad.getSavePath(),handler, new okhttp3.Callback() {
+            public void onFailure(okhttp3.Call call, IOException e) {
+                sendMessage(handler, HandlerConstant.REQUST_ERROR, null);
+            }
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if(response.isSuccessful()){
+                    sendMessage(handler, HandlerConstant.DOWNLOAD_SUCCESS, downLoad);
+                }
             }
         });
     }

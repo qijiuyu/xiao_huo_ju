@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.AgreementActivity;
 import com.ylean.soft.lfd.activity.init.BingMobileActivity;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.DataCleanManager;
@@ -53,8 +55,9 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.img_bank, R.id.rel_mobile, R.id.rel_wx, R.id.rel_qq, R.id.rel_pwd, R.id.rel_agreement, R.id.rel_privacy, R.id.rel_help, R.id.rel_feedback, R.id.rel_cache, R.id.rel_about, R.id.tv_out})
+    @OnClick({R.id.img_bank, R.id.rel_mobile, R.id.rel_wx, R.id.rel_qq, R.id.rel_pwd, R.id.rel_agreement, R.id.rel_privacy, R.id.rel_hezuo,R.id.rel_help, R.id.rel_feedback, R.id.rel_cache, R.id.rel_about, R.id.tv_out})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
             case R.id.img_bank:
                 finish();
@@ -68,11 +71,26 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rel_pwd:
                 break;
+            //用户协议
             case R.id.rel_agreement:
+                intent.setClass(this,AgreementActivity.class);
+                intent.putExtra("type",2);
+                startActivity(intent);
                 break;
+            //隐私协议
             case R.id.rel_privacy:
+                intent.setClass(this,AgreementActivity.class);
+                intent.putExtra("type",3);
+                startActivity(intent);
                 break;
+            //合作内容
+            case R.id.rel_hezuo:
+                 intent.setClass(this,AgreementActivity.class);
+                 intent.putExtra("type",4);
+                 startActivity(intent);
+                  break;
             case R.id.rel_help:
+                 setClass(HelpListActivity.class);
                 break;
             case R.id.rel_feedback:
                 setClass(FeedBackActivity.class);

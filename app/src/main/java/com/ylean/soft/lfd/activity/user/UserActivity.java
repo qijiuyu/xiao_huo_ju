@@ -140,7 +140,7 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
         switch (view.getId()) {
             //设置
             case R.id.img_setting:
-                setClass(SelectTagActivity.class);
+                setClass(SettingActivity.class);
                 break;
             //消息
             case R.id.img_news:

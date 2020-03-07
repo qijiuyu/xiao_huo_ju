@@ -128,10 +128,9 @@
                 android:layout_marginTop="24dp"/>
 
             <TextView
-                android:id="@+id/tv_coll"
+                android:id="@+id/tv_focusserial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8877"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:layout_marginTop="8.5dp"/>
@@ -163,7 +162,6 @@
                 android:id="@+id/tv_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1123"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:layout_marginTop="8.5dp"/>
@@ -254,8 +252,9 @@
                 android:hint="发个弹幕冒个泡～"
                 android:textColor="@color/color_666666"
                 android:textSize="13sp"
-                android:maxLines="1"
-                android:imeOptions="actionSearch"/>
+                android:imeOptions="actionSend"
+                android:singleLine="true"
+                android:inputType="text"/>
 
         </LinearLayout>
 

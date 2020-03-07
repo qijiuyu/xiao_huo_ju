@@ -39,6 +39,7 @@ import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
@@ -102,6 +103,8 @@ public class VideoPlayActivity extends BaseActivity {
     ImageView imgScreen;
     @BindView(R.id.img_coll)
     ImageView imgColl;
+    @BindView(R.id.tv_focus_serial)
+    TextView tvFocusSerial;
     //视频控制器
     private AndroidMediaController controller;
     private Handler handler=new Handler();
@@ -212,18 +215,17 @@ public class VideoPlayActivity extends BaseActivity {
             //选集
             case R.id.tv_blues:
                 break;
-            //关注
+            //关注用户
             case R.id.img_focus:
-                videoPlayPersenter.follow(dataBean.getUserId());
+                videoPlayPersenter.followUser("0",dataBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
                 break;
             //点赞
             case R.id.img_praise:
                 videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
-            //收藏
+            //关注剧集
             case R.id.img_coll:
-                 imgColl.setImageResource(R.mipmap.coll_icon_yes);
-                 imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
             case R.id.img_comm:
@@ -364,7 +366,7 @@ public class VideoPlayActivity extends BaseActivity {
                   //获取弹屏列表
                   videoPlayPersenter.getScreen(videoBean.getId());
                   break;
-            //关注、取消关注
+            //关注、取消关注用户
             case EventStatus.IS_FOLLOW:
                   if(imgFocus.getVisibility()==View.VISIBLE){
                       imgFocus.setVisibility(View.GONE);
@@ -372,15 +374,32 @@ public class VideoPlayActivity extends BaseActivity {
                       imgFocus.setVisibility(View.VISIBLE);
                   }
                   break;
+            //关注、取消关注剧集
+            case EventStatus.FOCUS_SERIAL:
+                  String serialNum=tvFocusSerial.getText().toString().trim();
+                  if(!videoBean.isFollowSerial()){
+                      videoBean.setFollowSerial(true);
+                      imgColl.setImageResource(R.mipmap.coll_icon_yes);
+                      imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                      tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)+1));
+                  }else{
+                      videoBean.setFollowSerial(false);
+                      imgColl.setImageResource(R.mipmap.coll_icon);
+                      tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)-1));
+                  }
+                  break;
             //点赞、取消点赞
             case EventStatus.IS_THUMP:
+                  String praiseNum=tvPraise.getText().toString().trim();
                   if(videoBean.isThumbEpisode()){
                       videoBean.setThumbEpisode(false);
                       imgPraise.setImageResource(R.mipmap.no_praise);
+                      tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)-1));
                   }else{
                       videoBean.setThumbEpisode(true);
                       imgPraise.setImageResource(R.mipmap.yes_praise);
                       imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                      tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
                   }
                   break;
             //发送弹屏成功
@@ -420,17 +439,26 @@ public class VideoPlayActivity extends BaseActivity {
         }
         tvTitle.setText(videoBean.getIntroduction());
         Glide.with(activity).load(dataBean.getUserImg()).into(imgHead);
-        tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+        //是否关注用户
         if(videoBean.isFollowUser()){
             imgFocus.setVisibility(View.GONE);
         }else{
             imgFocus.setVisibility(View.VISIBLE);
         }
+        //是否点赞
         if(videoBean.isThumbEpisode()){
             imgPraise.setImageResource(R.mipmap.yes_praise);
         }else{
             imgPraise.setImageResource(R.mipmap.no_praise);
         }
+        tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+        //是否关注剧集
+        if(videoBean.isFollowSerial()){
+            imgColl.setImageResource(R.mipmap.coll_icon_yes);
+        }else{
+            imgColl.setImageResource(R.mipmap.coll_icon);
+        }
+        tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
     }
 
 

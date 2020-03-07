@@ -1,7 +1,7 @@
 package com.ylean.soft.lfd.adapter.user;
 
 import android.app.Activity;
-import android.text.Html;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +9,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
-import com.zxdc.utils.library.bean.News;
+import com.ylean.soft.lfd.activity.user.HelpDetailsActivity;
+import com.zxdc.utils.library.bean.Help;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsAdapter extends BaseAdapter {
+public class HelpListAdapter extends BaseAdapter {
 
     private Activity activity;
-    private List<News.NewsBean> list;
-    public NewsAdapter(Activity activity,List<News.NewsBean> list) {
+    private List<Help.HelpBean> list;
+
+    public HelpListAdapter(Activity activity, List<Help.HelpBean> list) {
         super();
         this.activity = activity;
-        this.list=list;
+        this.list = list;
     }
 
     @Override
     public int getCount() {
-        return list==null ? 0 : list.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override
@@ -44,32 +46,30 @@ public class NewsAdapter extends BaseAdapter {
     ViewHolder holder = null;
     public View getView(int position, View view, ViewGroup parent) {
         if (view == null) {
-            view = LayoutInflater.from(activity).inflate(R.layout.item_news, null);
+            view = LayoutInflater.from(activity).inflate(R.layout.item_help, null);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        News.NewsBean newsBean=list.get(position);
-        holder.tvTitle.setText(newsBean.getTitle());
-        if(newsBean.getType()==1){
-            String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
-            holder.tvDes.setText(Html.fromHtml(content));
-        }else{
-            holder.tvDes.setText(newsBean.getContent());
-        }
-        holder.tvTime.setText(newsBean.getCreatetime());
+        Help.HelpBean helpBean = list.get(position);
+        holder.tvName.setText(helpBean.getTitle());
+        holder.tvName.setTag(helpBean);
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Help.HelpBean helpBean= (Help.HelpBean) v.getTag();
+                Intent intent=new Intent(activity, HelpDetailsActivity.class);
+                intent.putExtra("helpBean",helpBean);
+                activity.startActivity(intent);
+            }
+        });
         return view;
     }
 
 
     static class ViewHolder {
-        @BindView(R.id.tv_title)
-        TextView tvTitle;
-        @BindView(R.id.tv_time)
-        TextView tvTime;
-        @BindView(R.id.tv_des)
-        TextView tvDes;
+        @BindView(R.id.tv_name)
+        TextView tvName;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -75,5 +75,15 @@ public class HttpConstant {
 
     public static final String MY_LIKE="api/app/thumb/serial";
 
+    public static final String GET_NEWS="api/app/message/list";
+
+    public static final String AGREEMENT="api/app/singlepage/info";
+
+    public static final String HELP="api/app/help/list";
+
+    public static final String FEEDBACK="api/app/feedback";
+
+    public static final String VERSION="api/app/version";
+
 
 }

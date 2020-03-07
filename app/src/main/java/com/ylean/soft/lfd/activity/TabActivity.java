@@ -18,6 +18,7 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
+import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
 import com.zxdc.utils.library.util.ToastUtil;
@@ -66,6 +67,9 @@ public class TabActivity extends android.app.TabActivity {
         setContentView(R.layout.activity_tab);
         ButterKnife.bind(this);
         initView();
+
+        //查询最新版本
+        new UpdateVersionUtils().getVersion(this);
     }
 
 

@@ -173,6 +173,15 @@ public class RecommendedActivity extends BaseActivity {
                  }
                   foundAdapter.praiseEnd(videoBean.isThumbEpisode());
                   break;
+            //关注、取消关注剧集
+            case EventStatus.FOCUS_SERIAL:
+                  if(!videoBean.isFollowSerial()){
+                      videoBean.setFollowSerial(true);
+                  }else{
+                      videoBean.setFollowSerial(false);
+                  }
+                foundAdapter.focusSerial(videoBean.isFollowSerial());
+                  break;
             //获取弹屏成功
             case EventStatus.GET_SCREEEN:
                   List<Screen.ScreenBean> screenList= (List<Screen.ScreenBean>) eventBusType.getObject();

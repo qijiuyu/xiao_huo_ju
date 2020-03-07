@@ -4,62 +4,45 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.user.HelpListAdapter;
 import com.zxdc.utils.library.base.BaseActivity;
-import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Help;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
-import com.zxdc.utils.library.view.ClickTextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
- * Created by Administrator on 2020/2/8.
+ * 帮助中心
+ * Created by Administrator on 2020/3/7.
  */
+public class HelpListActivity extends BaseActivity {
 
-public class FeedBackActivity extends BaseActivity {
-
+    @BindView(R.id.img_bank)
+    ImageView imgBank;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.et_name)
-    EditText etName;
+    @BindView(R.id.listView)
+    ListView listView;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback);
+        setContentView(R.layout.activity_help);
         ButterKnife.bind(this);
+        tvTitle.setText("帮助中心");
+        //帮助列表
+        getHelp();
 
-        tvTitle.setText("意见反馈");
-    }
-
-    @OnClick({R.id.img_bank, R.id.tv_confirm})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.img_bank:
-                finish();
-                break;
-            case R.id.tv_confirm:
-                String name=etName.getText().toString().trim();
-                if(TextUtils.isEmpty(name)){
-                    ToastUtil.showLong("请输入您想反馈的意见或建议");
-                    return;
-                }
-                DialogUtil.showProgress(this,"反馈中");
-                HttpMethod.feedBack(name,handler);
-                break;
-            default:
-                break;
-        }
+        imgBank.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HelpListActivity.this.finish();
+            }
+        });
     }
 
 
@@ -67,15 +50,17 @@ public class FeedBackActivity extends BaseActivity {
         public boolean handleMessage(Message msg) {
             DialogUtil.closeProgress();
             switch (msg.what){
-                case HandlerConstant.FEEDBACK_SUCCESS:
-                    BaseBean baseBean= (BaseBean) msg.obj;
-                    if(baseBean==null){
+                case HandlerConstant.GET_AGREEMENT_SUCCESS:
+                    Help help= (Help) msg.obj;
+                    if(help==null){
                         break;
                     }
-                    if(baseBean.isSussess()){
-                        finish();
+                    if(help.isSussess()){
+                        HelpListAdapter helpListAdapter=new HelpListAdapter(HelpListActivity.this,help.getData());
+                        listView.setAdapter(helpListAdapter);
+                    }else{
+                        ToastUtil.showLong(help.getDesc());
                     }
-                    ToastUtil.showLong(baseBean.getDesc());
                     break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
@@ -87,6 +72,14 @@ public class FeedBackActivity extends BaseActivity {
         }
     });
 
+
+    /**
+     * 帮助列表
+     */
+    private void getHelp(){
+        DialogUtil.showProgress(this,"加载中");
+        HttpMethod.getHelp(handler);
+    }
 
     @Override
     protected void onDestroy() {

@@ -82,5 +82,8 @@ public class EventStatus {
     //我的页面下拉加载更多已完成
     public static final int USER_LOAD_MORE_SUCCESS=206;
 
+    //关注剧集
+    public static final int FOCUS_SERIAL=207;
+
 
 }

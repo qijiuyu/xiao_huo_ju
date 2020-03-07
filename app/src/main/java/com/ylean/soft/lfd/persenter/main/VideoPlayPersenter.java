@@ -47,7 +47,7 @@ public class VideoPlayPersenter {
                           ToastUtil.showLong(videoInfo.getDesc());
                       }
                       break;
-                //关注、取消关注
+                //关注、取消关注用户
                 case HandlerConstant.FOLLOW_SUCCESS:
                       baseBean= (BaseBean) msg.obj;
                       if(baseBean==null){
@@ -57,6 +57,17 @@ public class VideoPlayPersenter {
                           EventBus.getDefault().post(new EventBusType(EventStatus.IS_FOLLOW));
                       }
                       ToastUtil.showLong(baseBean.getDesc());
+                      break;
+                //关注、取消关注剧集
+                case HandlerConstant.FOLLOW_SERIAL_SUCCESS:
+                     baseBean= (BaseBean) msg.obj;
+                     if(baseBean==null){
+                         break;
+                     }
+                     if(baseBean.isSussess()){
+                         EventBus.getDefault().post(new EventBusType(EventStatus.FOCUS_SERIAL));
+                     }
+                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 //点赞、取消点赞
                 case HandlerConstant.THUMP_SUCCESS:
@@ -167,10 +178,10 @@ public class VideoPlayPersenter {
 
 
     /**
-     * 关注、取消关注
+     * 关注、取消关注用户
      */
-    public void follow(int relateid){
-        HttpMethod.follow(relateid,"0",handler);
+    public void followUser(String type,int relateid,int index){
+        HttpMethod.follow(relateid,type,index,handler);
     }
 
 

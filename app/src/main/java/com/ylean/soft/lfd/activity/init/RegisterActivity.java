@@ -78,6 +78,7 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick({R.id.img_bank, R.id.tv_send_code, R.id.img_check, R.id.tv_des, R.id.tv_next})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         String mobile=etMobile.getText().toString().trim();
         String code=etCode.getText().toString().trim();
         switch (view.getId()) {
@@ -111,6 +112,9 @@ public class RegisterActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_des:
+                 intent.setClass(this,AgreementActivity.class);
+                 intent.putExtra("type",1);
+                 startActivity(intent);
                 break;
             //下一步
             case R.id.tv_next:
@@ -130,7 +134,7 @@ public class RegisterActivity extends BaseActivity {
                     ToastUtil.showLong("请同意注册协议！");
                     return;
                 }
-                Intent intent=new Intent(this,ResetPassWordActivity.class);
+                intent.setClass(this,ResetPassWordActivity.class);
                 intent.putExtra("type",1);
                 intent.putExtra("mobile",mobile);
                 intent.putExtra("code",code);

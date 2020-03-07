@@ -1,51 +1,69 @@
-package com.ylean.soft.lfd.activity.user;
+package com.ylean.soft.lfd.activity.init;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.Agreement;
+import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
-import com.zxdc.utils.library.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2020/2/8.
+ * Created by Administrator on 2020/3/7.
  */
 
-public class AbountActivity extends BaseActivity {
+public class AgreementActivity extends BaseActivity {
 
+    @BindView(R.id.img_bank)
+    ImageView imgBank;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_version)
-    TextView tvVersion;
     @BindView(R.id.tv_content)
     TextView tvContent;
+    //1：注册协议，2：用户协议，3：隐私协议，4：合作内容，5：关于我们
+    private int type;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_abount);
+        setContentView(R.layout.activity_agreement);
         ButterKnife.bind(this);
-
-        tvTitle.setText("关于我们");
-        tvVersion.setText(Util.getVersionName(this));
-
+        initView();
+        //查询协议
         getAgreement();
     }
 
-    @OnClick(R.id.img_bank)
-    public void onViewClicked() {
-        finish();
+    /**
+     * 初始化
+     */
+    private void initView(){
+        type=getIntent().getIntExtra("type",-1);
+        switch (type){
+            case 1:
+                 tvTitle.setText("注册协议");
+                 break;
+            case 2:
+                tvTitle.setText("用户协议");
+                break;
+            case 3:
+                tvTitle.setText("隐私协议");
+                break;
+            case 4:
+                tvTitle.setText("合作内容");
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -54,16 +72,16 @@ public class AbountActivity extends BaseActivity {
             DialogUtil.closeProgress();
             switch (msg.what){
                 case HandlerConstant.GET_AGREEMENT_SUCCESS:
-                    Agreement agreement= (Agreement) msg.obj;
-                    if(agreement==null){
-                        break;
-                    }
-                    if(agreement.isSussess() && agreement.getData()!=null){
-                        tvContent.setText(Html.fromHtml(agreement.getData().getContent()));
-                    }else{
-                        ToastUtil.showLong(agreement.getDesc());
-                    }
-                    break;
+                     Agreement agreement= (Agreement) msg.obj;
+                     if(agreement==null){
+                         break;
+                     }
+                     if(agreement.isSussess() && agreement.getData()!=null){
+                         tvContent.setText(Html.fromHtml(agreement.getData().getContent()));
+                     }else{
+                         ToastUtil.showLong(agreement.getDesc());
+                     }
+                     break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -80,7 +98,7 @@ public class AbountActivity extends BaseActivity {
      */
     private void getAgreement(){
         DialogUtil.showProgress(this,"加载中");
-        HttpMethod.getAgreement(5,handler);
+        HttpMethod.getAgreement(type,handler);
     }
 
     @Override

@@ -52,6 +52,7 @@
         </activity>
 
         <activity android:name=".activity.init.GuideActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.init.AgreementActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.TabActivity"  android:screenOrientation="portrait"  android:launchMode="singleTask"/>
         <activity android:name=".activity.init.LoginActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.init.VerifyMobileActvity"  android:screenOrientation="portrait"/>
@@ -83,6 +84,8 @@
         <activity android:name=".activity.user.FeedBackActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.main.CommentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.web.WebViewActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.user.HelpListActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.user.HelpDetailsActivity"  android:screenOrientation="portrait"/>
 
         <!--注册微信回调 WXEntryActivity -->
         <activity

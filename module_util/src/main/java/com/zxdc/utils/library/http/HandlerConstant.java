@@ -41,4 +41,10 @@ public class HandlerConstant {
     public static final int FOCUS_USER_SUCCESS2=10037;
     public static final int FOCUS_SERIAL_SUCCESS1=10038;
     public static final int FOCUS_SERIAL_SUCCESS2=10039;
+    public static final int GET_NEWS_SUCCESS1=10040;
+    public static final int GET_NEWS_SUCCESS2=10041;
+    public static final int GET_AGREEMENT_SUCCESS=10042;
+    public static final int FEEDBACK_SUCCESS=10043;
+    public static final int UPDATE_VERSION_SUCCESS=10044;
+    public static final int FOLLOW_SERIAL_SUCCESS=10045;
 }

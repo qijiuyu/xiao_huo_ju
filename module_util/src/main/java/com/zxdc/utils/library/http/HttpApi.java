@@ -2,16 +2,20 @@ package com.zxdc.utils.library.http;
 
 
 
+import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.Focus;
+import com.zxdc.utils.library.bean.Help;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
+import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.bean.VideoInfo;
 
 import java.util.Map;
@@ -157,4 +161,24 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.MY_LIKE)
     Call<HotTop> mylike(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_NEWS)
+    Call<News> getNews(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.AGREEMENT)
+    Call<Agreement> getAgreement(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.HELP)
+    Call<Help> getHelp(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.FEEDBACK)
+    Call<BaseBean> feedBack(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.VERSION)
+    Call<Version> version(@FieldMap Map<String, String> map);
 }
