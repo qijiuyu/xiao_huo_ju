@@ -48,4 +48,6 @@ public class HandlerConstant {
     public static final int UPDATE_VERSION_SUCCESS=10044;
     public static final int FOLLOW_SERIAL_SUCCESS=10045;
     public static final int AUTHOR_DETAILS_SUCCESS=10046;
+    public static final int GET_SERIAL_VIDEO_SUCCESS1=10047;
+    public static final int GET_SERIAL_VIDEO_SUCCESS2=10048;
 }

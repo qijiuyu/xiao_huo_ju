@@ -27,7 +27,6 @@
            android:layout_height="18dp"
            android:background="@drawable/bg_main_blues"
            android:layout_alignParentRight="true"
-           android:text="全30集"
            android:textColor="@android:color/white"
            android:textSize="11sp"
            android:gravity="center"/>

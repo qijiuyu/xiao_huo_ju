@@ -87,5 +87,7 @@ public class HttpConstant {
 
     public static final String AUTHOR_DETAILS="api/app/user/author";
 
+    public static final String SERIAL_VIDEO="api/app/serial/episode";
+
 
 }

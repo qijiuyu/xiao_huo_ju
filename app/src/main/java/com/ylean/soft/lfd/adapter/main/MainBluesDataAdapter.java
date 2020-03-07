@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -41,6 +43,19 @@ public class MainBluesDataAdapter extends RecyclerView.Adapter<MainBluesDataAdap
         holder.tvSize.setHint(listData.getPlayCount()+"w");
         holder.tvTitle.setText(listData.getName());
         holder.tvNum.setText("第"+listData.getEpisodeCount()+"集");
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setTag(R.id.tag1,listData);
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Tag.ListData listData= (Tag.ListData) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("videoId",listData.getId());
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override

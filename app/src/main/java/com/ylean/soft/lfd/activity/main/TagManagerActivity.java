@@ -8,9 +8,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.ChannerAdapter;
+import com.ylean.soft.lfd.utils.AnimUtil;
 import com.ylean.soft.lfd.utils.channel.MyItemTouchCallBack;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.BaseBean;
@@ -81,6 +86,11 @@ public class TagManagerActivity extends BaseActivity {
                      tvRight.setText("完成");
                      channerAdapter.setOnClick(true);
                  }else{
+                     //判断是否登录了
+                     if(!MyApplication.isLogin()){
+                         setClass(LoginActivity.class);
+                         return;
+                     }
                      List<SortChannel> sortList=new ArrayList<>();
                      for (int i=0;i<list.size();i++){
                          SortChannel sortChannel=new SortChannel();

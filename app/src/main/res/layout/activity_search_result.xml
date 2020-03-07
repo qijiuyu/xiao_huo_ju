@@ -97,17 +97,31 @@
                 android:textSize="16sp"
                 android:textColor="@color/color_FFBC32"/>
 
-            <TextView
-                android:id="@+id/tv_refresh"
+            <LinearLayout
+                android:id="@+id/lin_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="换一批"
-                android:textSize="12sp"
-                android:textColor="@color/color_999999"
-                android:drawableLeft="@mipmap/refresh_icon"
-                android:drawablePadding="6dp"
+                android:orientation="horizontal"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/imgRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/refresh_icon"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="换一批"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_999999"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 

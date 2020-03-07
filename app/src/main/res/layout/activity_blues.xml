@@ -7,13 +7,20 @@
 
     <include layout="@layout/head"/>
 
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/listView"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginLeft="10dp"
-       android:layout_marginRight="10dp"
-       android:layout_marginTop="5dp">
-   </android.support.v7.widget.RecyclerView>
+    <com.zxdc.utils.library.view.MyRefreshLayout
+        android:id="@+id/re_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp">
+        </android.support.v7.widget.RecyclerView>
+
+     </com.zxdc.utils.library.view.MyRefreshLayout>
 
 </LinearLayout>

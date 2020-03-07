@@ -16,6 +16,7 @@ import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.bean.Version;
@@ -793,6 +794,26 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, HandlerConstant.AUTHOR_DETAILS_SUCCESS, response.body());
             }
             public void onFailure(Call<AuthorDetails> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 剧集视频列表
+     */
+    public static void getSerialVideo(int order,int pageindex,int serialid,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("order",String.valueOf(order));
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        map.put("serialid",String.valueOf(serialid));
+        Http.getRetrofit().create(HttpApi.class).getSerialVideo(map).enqueue(new Callback<SerialVideo>() {
+            public void onResponse(Call<SerialVideo> call, Response<SerialVideo> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<SerialVideo> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

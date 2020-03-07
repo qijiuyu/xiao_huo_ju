@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.AuthorDetailsAdapter;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.AuthorDetails;
@@ -83,6 +85,10 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
 
     @OnClick(R.id.tv_focus)
     public void onViewClicked() {
+        if(!MyApplication.isLogin()){
+            setClass(LoginActivity.class);
+            return;
+        }
         //关注、取消关注用户
         if(detailsBean==null){
             return;

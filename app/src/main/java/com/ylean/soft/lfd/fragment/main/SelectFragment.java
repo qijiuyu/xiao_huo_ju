@@ -1,8 +1,10 @@
 package com.ylean.soft.lfd.fragment.main;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -88,6 +94,8 @@ public class SelectFragment extends BaseFragment {
     MeasureListView listBlues;
     @BindView(R.id.tv_project)
     TextView tvProject;
+    @BindView(R.id.img_like)
+    ImageView imgLike;
     Unbinder unbinder;
     /**
      * 0：热播排行
@@ -96,6 +104,8 @@ public class SelectFragment extends BaseFragment {
     private int hot_top=0;
     //专题对象
     private Project.ProjectBean projectBean;
+    //旋转动画
+    private ObjectAnimator rotation;
     private SelectFragmentPersenter selectFragmentPersenter;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +137,7 @@ public class SelectFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_hottest, R.id.tv_top, R.id.tv_more_hottest, R.id.tv_refresh_look,R.id.tv_more_project,R.id.tv_more_online})
+    @OnClick({R.id.tv_hottest, R.id.tv_top, R.id.tv_more_hottest,R.id.tv_more_project,R.id.tv_more_online,R.id.lin_like})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //今日最热
@@ -154,8 +164,19 @@ public class SelectFragment extends BaseFragment {
             case R.id.tv_more_hottest:
                 setClass(MoreHotterActivity.class);
                 break;
-            //换一换：大家都在看
-            case R.id.tv_refresh_look:
+            //刷新--猜你喜欢
+            case R.id.lin_like:
+                rotation = ObjectAnimator.ofFloat(imgLike, "rotation", 0f, 359f);
+                rotation.setRepeatCount(ObjectAnimator.INFINITE);
+                rotation.setInterpolator(new LinearInterpolator());
+                rotation.setDuration(800);
+                rotation.start();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        //获取猜你喜欢的数据
+                        selectFragmentPersenter.guessLike();
+                    }
+                },1500);
                 break;
             //热门专题查看更多
             case R.id.tv_more_project:
@@ -213,7 +234,6 @@ public class SelectFragment extends BaseFragment {
                 break;
 
         }
-        scrollView.scrollTo(0, 0);
     }
 
 
@@ -265,17 +285,26 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleHottest.setLayoutManager(layoutManager);
         recycleHottest.setAdapter(new MainHottestAdapter(mActivity,list));
+
+        //置顶
+        scrollView.scrollTo(0, 0);
     }
 
 
     /**
-     * 显示大家都在看
+     * 显示猜你喜欢
      */
     private void showLook(List<HotTop.DataBean> list){
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleLook.setLayoutManager(layoutManager);
         recycleLook.setAdapter(new MainLookAdapter(mActivity,list));
+        if(rotation!=null){
+            rotation.end();
+        }else{
+            //置顶
+            scrollView.scrollTo(0, 0);
+        }
     }
 
 
@@ -292,6 +321,8 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleProject.setLayoutManager(layoutManager);
         recycleProject.setAdapter(new MainProjectAdapter(mActivity,projectBean.getSerialList()));
+        //置顶
+        scrollView.scrollTo(0, 0);
     }
 
 
@@ -303,6 +334,8 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleOnLine.setLayoutManager(layoutManager);
         recycleOnLine.setAdapter(new MainOnlineAdapter(mActivity,list));
+        //置顶
+        scrollView.scrollTo(0, 0);
     }
 
 
@@ -312,6 +345,8 @@ public class SelectFragment extends BaseFragment {
     private void showAuthor(List<Author.DataBean> list){
         recycleAuthor.setLayoutManager(new GridLayoutManager(mActivity, 4));
         recycleAuthor.setAdapter(new MainAuthorAdapter(mActivity,list));
+        //置顶
+        scrollView.scrollTo(0, 0);
     }
 
 
@@ -320,6 +355,8 @@ public class SelectFragment extends BaseFragment {
      */
     private void showBlues(List<Tag.TagBean> list){
         listBlues.setAdapter(new MainBluesAdapter(mActivity,list));
+        //置顶
+        scrollView.scrollTo(0, 0);
     }
 
 

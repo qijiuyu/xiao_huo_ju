@@ -30,7 +30,9 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMWeb;
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
@@ -226,14 +228,26 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //关注用户
             case R.id.img_focus:
+                if(!MyApplication.isLogin()){
+                    setClass(LoginActivity.class);
+                    return;
+                }
                 videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
                 break;
             //点赞
             case R.id.img_praise:
+                if(!MyApplication.isLogin()){
+                    setClass(LoginActivity.class);
+                    return;
+                }
                 videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
             //关注剧集
             case R.id.img_coll:
+                if(!MyApplication.isLogin()){
+                    setClass(LoginActivity.class);
+                    return;
+                }
                 videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
@@ -486,6 +500,11 @@ public class VideoPlayActivity extends BaseActivity {
                 if(TextUtils.isEmpty(content)){
                     ToastUtil.showLong("请输入弹屏内容");
                 }else{
+                    //先登录
+                    if(!MyApplication.isLogin()){
+                        setClass(LoginActivity.class);
+                        return false;
+                    }
                     videoPlayPersenter.sendScreen(content,videoBean);
                     etScreen.setText(null);
                 }

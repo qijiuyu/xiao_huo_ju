@@ -1,14 +1,17 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -73,11 +76,27 @@ public class OnlineListAdapter extends BaseAdapter {
         }
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.rel.setTag(dataBean);
+        holder.rel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("videoId",dataBean.getId());
+                activity.startActivity(intent);
+            }
+        });
         return view;
     }
 
 
     static class ViewHolder {
+        @BindView(R.id.rel)
+        RelativeLayout rel;
         @BindView(R.id.img_head)
         OvalImageViews imgHead;
         @BindView(R.id.tv_title)

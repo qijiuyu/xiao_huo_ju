@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.activity.web.WebViewActivity;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
@@ -87,6 +88,20 @@ public class MainBluesAdapter extends BaseAdapter {
             if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
                 Glide.with(activity).load(imgUrl).into(holder.imgHead);
             }
+
+            /**
+             * 进入视频详情页面
+             */
+            holder.imgHead.setTag(R.id.tag1,tagBean.getSerialList().get(0));
+            holder.imgHead.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Tag.ListData listData= (Tag.ListData) v.getTag(R.id.tag1);
+                    Intent intent=new Intent(activity, VideoPlayActivity.class);
+                    intent.putExtra("videoId",listData.getId());
+                    activity.startActivity(intent);
+                }
+            });
+
 
             //显示列表
             LinearLayoutManager layoutManager=new LinearLayoutManager(activity);

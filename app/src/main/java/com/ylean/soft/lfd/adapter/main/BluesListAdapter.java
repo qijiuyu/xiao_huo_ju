@@ -9,15 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.BluesListActivity;
+import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import java.util.List;
 
 public class BluesListAdapter extends RecyclerView.Adapter<BluesListAdapter.MyHolder> {
 
     private Activity activity;
-    public BluesListAdapter(Activity activity) {
+    private List<SerialVideo.SerialVideoBean> list;
+    public BluesListAdapter(Activity activity,List<SerialVideo.SerialVideoBean> list) {
         this.activity = activity;
+        this.list=list;
     }
 
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -27,14 +33,20 @@ public class BluesListAdapter extends RecyclerView.Adapter<BluesListAdapter.MyHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MyHolder holder =myHolder;
-
+    public void onBindViewHolder(@NonNull MyHolder holder, int i) {
+        SerialVideo.SerialVideoBean serialVideoBean=list.get(i);
+        //背景图片
+        String imgUrl=serialVideoBean.getImgurl();
+        holder.imgHead.setTag(R.id.imageid,imgUrl);
+        if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
+            Glide.with(activity).load(imgUrl).into(holder.imgHead);
+        }
+        holder.tvBlues.setText(serialVideoBean.getName());
     }
 
     @Override
     public int getItemCount() {
-        return 15;
+        return list==null ? 0 : list.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {

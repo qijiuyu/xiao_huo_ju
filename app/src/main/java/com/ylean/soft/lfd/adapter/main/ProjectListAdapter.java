@@ -36,7 +36,6 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         //背景图片
         String imgUrl=dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
-        holder.imgHead.setTag(R.id.tag1,dataBean);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }

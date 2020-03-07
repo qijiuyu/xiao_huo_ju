@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -81,9 +83,23 @@ public class OtherListAdapter extends BaseAdapter {
             }
             holder.tvSize.setText(dataBean.getPlayCount()+"w");
             holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
+
+            /**
+             * 进入视频详情页面
+             */
+            holder.imgHead.setTag(R.id.tag1,dataBean);
+            holder.imgHead.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                    Intent intent=new Intent(activity, VideoPlayActivity.class);
+                    intent.putExtra("videoId",dataBean.getId());
+                    activity.startActivity(intent);
+                }
+            });
         }else{
             holder.relBottom.setVisibility(View.GONE);
         }
+
 
         holder.listView.setLayoutManager(new GridLayoutManager(activity, 3));
         holder.listView.setAdapter(new OtherListDataAdapter(activity,list));

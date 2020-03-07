@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -50,6 +53,19 @@ public class MainProjectAdapter extends RecyclerView.Adapter<MainProjectAdapter.
         holder.tvSize.setText(listData.getPlayCount()+"w");
         holder.tvTitle.setText(listData.getName());
         holder.tvNum.setText("第"+listData.getEpisodeCount()+"集");
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setTag(R.id.tag1,listData);
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Project.ListData listData= (Project.ListData) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("videoId",listData.getId());
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override

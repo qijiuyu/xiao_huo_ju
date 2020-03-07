@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.TagManagerActivity;
+import com.ylean.soft.lfd.utils.AnimUtil;
 import com.ylean.soft.lfd.utils.channel.DataUtils;
 import com.ylean.soft.lfd.utils.channel.TouchInterface;
 import com.zxdc.utils.library.bean.Tag;
@@ -30,14 +31,9 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
      * false：只能长按拖拽
      */
     private boolean isClick=false;
-    //是否抖动
-    public boolean isJitter=false;
-    //抖动动画
-    private Animation shake;
     public ChannerAdapter(TagManagerActivity activity, List<Tag.TagBean> list) {
         this.activity = activity;
         this.list = list;
-        shake = AnimationUtils.loadAnimation(activity, R.anim.jitter);
     }
 
     @Override
@@ -52,11 +48,7 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
         holder.tvName.setText(tagBean.getName());
         //图片
 //        Glide.with(activity).load(tagBean.getImgurl()).into(holder.imgTag);
-        //设置标签抖动动画
-        if(isJitter){
-            isJitter=false;
-            holder.tvName.setAnimation(shake);
-        }
+
 
         /**
          * 标签长按震动

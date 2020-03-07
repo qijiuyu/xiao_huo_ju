@@ -80,7 +80,6 @@ public class MainHottestDataAdapter extends BaseAdapter {
         //背景图片
         String imgUrl=dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
-        holder.imgHead.setTag(R.id.tag1,dataBean);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
@@ -99,6 +98,7 @@ public class MainHottestDataAdapter extends BaseAdapter {
         /**
          * 进入视频详情页面
          */
+        holder.imgHead.setTag(R.id.tag1,dataBean);
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);

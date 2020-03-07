@@ -13,7 +13,6 @@
             android:id="@+id/img_abvert"
             android:layout_width="match_parent"
             android:layout_height="95dp"
-            android:src="@mipmap/aa"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="25dp"
@@ -53,7 +52,6 @@
             android:layout_marginLeft="15dp"
             android:layout_below="@id/tv_more"
             android:layout_marginTop="23dp"
-            android:src="@mipmap/aa"
             android:scaleType="centerCrop"/>
 
         <android.support.v7.widget.RecyclerView

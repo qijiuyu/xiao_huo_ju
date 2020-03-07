@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -95,6 +97,19 @@ public class HotterFragmentAdapter extends BaseAdapter {
         holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setTag(R.id.tag1,dataBean);
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("videoId",dataBean.getId());
+                activity.startActivity(intent);
+            }
+        });
         return view;
     }
 

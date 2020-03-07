@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.CommentAdapter;
 import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.zxdc.utils.library.base.BaseActivity;
@@ -168,6 +170,12 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                 if (TextUtils.isEmpty(content)) {
                     ToastUtil.showLong("请输入评论内容");
                 } else {
+                    //先登录
+                    if(!MyApplication.isLogin()){
+                        setClass(LoginActivity.class);
+                        return false;
+                    }
+
                     etContent.setText(null);
                     if(commentBean==null){
                         //发送评论

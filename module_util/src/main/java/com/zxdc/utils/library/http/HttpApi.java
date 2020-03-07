@@ -14,6 +14,7 @@ import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.bean.Version;
@@ -186,4 +187,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.AUTHOR_DETAILS)
     Call<AuthorDetails> getAuthorDetails(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.SERIAL_VIDEO)
+    Call<SerialVideo> getSerialVideo(@FieldMap Map<String, String> map);
 }

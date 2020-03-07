@@ -23,7 +23,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
@@ -209,10 +212,22 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 break;
             //点赞
             case R.id.img_praise:
+                //先登录
+                if(!MyApplication.isLogin()){
+                    intent.setClass(activity,LoginActivity.class);
+                    activity.startActivity(intent);
+                    return;
+                }
                  videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
             //关注剧情
             case R.id.img_coll:
+                //先登录
+                if(!MyApplication.isLogin()){
+                    intent.setClass(activity,LoginActivity.class);
+                    activity.startActivity(intent);
+                    return;
+                }
                 videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
@@ -445,6 +460,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 if(TextUtils.isEmpty(content)){
                     ToastUtil.showLong("请输入弹屏内容");
                 }else{
+                    //先登录
+                    if(!MyApplication.isLogin()){
+                        Intent intent=new Intent(activity,LoginActivity.class);
+                        activity.startActivity(intent);
+                        return false;
+                    }
                     videoPlayPersenter.sendScreen(content,videoBean);
                     holder.etScreen.setText(null);
                 }
