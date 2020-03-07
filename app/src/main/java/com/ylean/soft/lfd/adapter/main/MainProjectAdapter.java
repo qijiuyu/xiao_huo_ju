@@ -62,7 +62,7 @@ public class MainProjectAdapter extends RecyclerView.Adapter<MainProjectAdapter.
             public void onClick(View v) {
                 Project.ListData listData= (Project.ListData) v.getTag(R.id.tag1);
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
-                intent.putExtra("videoId",listData.getId());
+                intent.putExtra("serialId",listData.getId());
                 activity.startActivity(intent);
             }
         });

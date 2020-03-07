@@ -54,7 +54,7 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
-                intent.putExtra("videoId",dataBean.getId());
+                intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
             }
         });

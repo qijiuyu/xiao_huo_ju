@@ -39,10 +39,14 @@ import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -262,6 +266,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                   break;
             //选集
             case R.id.img_select_blues:
+                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             default:
@@ -342,8 +347,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         public void doubleClick(MotionEvent event) {
             holder.love.addLoveView(event.getX(),event.getY());
             holder.love.addLoveView(event.getX(),event.getY());
-            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-            holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+            if(videoBean!=null && videoBean.isThumbEpisode()){
+                holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+                holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                String praiseNum=holder.tvPraise.getText().toString().trim();
+                holder.tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
+            }
         }
     };
 

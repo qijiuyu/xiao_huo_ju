@@ -97,7 +97,7 @@ public class MainBluesAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Tag.ListData listData= (Tag.ListData) v.getTag(R.id.tag1);
                     Intent intent=new Intent(activity, VideoPlayActivity.class);
-                    intent.putExtra("videoId",listData.getId());
+                    intent.putExtra("serialId",listData.getId());
                     activity.startActivity(intent);
                 }
             });

@@ -117,11 +117,6 @@ public class VideoPlayActivity extends BaseActivity {
     private AndroidMediaController controller;
     private Handler handler=new Handler();
     /**
-     * true:已点赞
-     * false：未点赞
-     */
-    private boolean isPraise=false;
-    /**
      * 1：显示弹屏布局
      * 2：显示进度条布局
      */
@@ -133,8 +128,8 @@ public class VideoPlayActivity extends BaseActivity {
     private ScreenAdapter screenAdapter;
     //弹屏列表数据
     private List<Screen.ScreenBean> screenList;
-    //视频id
-    private int videoId;
+    //剧集id/单集id
+    private int serialId,singleId;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoview);
@@ -144,7 +139,7 @@ public class VideoPlayActivity extends BaseActivity {
         initView();
         rightMenu();
         //获取视频详情
-        videoPlayPersenter.videoInfo(videoId);
+        videoPlayPersenter.videoInfo(singleId,serialId);
     }
 
 
@@ -152,7 +147,8 @@ public class VideoPlayActivity extends BaseActivity {
      * 初始化
      */
     private void initView(){
-        videoId=getIntent().getIntExtra("videoId",0);
+        serialId=getIntent().getIntExtra("serialId",0);
+        singleId=getIntent().getIntExtra("singleId",0);
         //实例化MVP对象
         videoPlayPersenter=new VideoPlayPersenter(this);
         //实例化视频控制器
@@ -282,7 +278,8 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //选集
             case R.id.img_select_blues:
-                drawerLayout.openDrawer(Gravity.RIGHT);
+                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
+                 drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             default:
                 break;
@@ -335,10 +332,12 @@ public class VideoPlayActivity extends BaseActivity {
         public void doubleClick(MotionEvent event) {
             love.addLoveView(event.getX(),event.getY());
             love.addLoveView(event.getX(),event.getY());
-            if(!isPraise){
-                isPraise=true;
+            if(videoBean!=null && !videoBean.isThumbEpisode()){
+                videoBean.setThumbEpisode(true);
                 imgPraise.setImageResource(R.mipmap.yes_praise);
                 imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
+                String praiseNum=tvPraise.getText().toString().trim();
+                tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
             }
         }
     };
@@ -423,6 +422,7 @@ public class VideoPlayActivity extends BaseActivity {
                       imgPraise.setImageResource(R.mipmap.yes_praise);
                       imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                       tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
+
                   }
                   break;
             //发送弹屏成功
@@ -446,6 +446,14 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                   drawerLayout.closeDrawer(Gravity.RIGHT);
                  break;
+            //选择单集视频播放
+            case EventStatus.SELECT_SINGLE_PLAY:
+                  drawerLayout.closeDrawer(Gravity.RIGHT);
+                  singleId= (int) eventBusType.getObject();
+                  serialId=0;
+                  //获取视频详情
+                  videoPlayPersenter.videoInfo(singleId,serialId);
+                  break;
             //分享
             case EventStatus.SHARE_APP:
                   SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();

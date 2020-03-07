@@ -31,6 +31,7 @@ public class RecommendedPersenter {
             switch (msg.what){
                 //获取视频对象
                 case HandlerConstant.FOUND_VIDEO_SUCCESS:
+                case HandlerConstant.GET_VIDEO_INFO_SUCCESS:
                       final VideoInfo videoInfo= (VideoInfo) msg.obj;
                       if(videoInfo==null){
                           break;
@@ -63,6 +64,15 @@ public class RecommendedPersenter {
             String DEVICE_ID = tm.getDeviceId();
             HttpMethod.foundVideo(DEVICE_ID,episodeid,handler);
         }
+    }
+
+
+    /**
+     * 获取视频详情
+     */
+    public void videoInfo(int singleId){
+        DialogUtil.showProgress(activity,"视频加载中");
+        HttpMethod.videoInfo(singleId,0,handler);
     }
 
 }

@@ -197,6 +197,12 @@ public class RecommendedActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                 drawerLayout.closeDrawer(Gravity.RIGHT);
                 break;
+            //选择单集视频播放
+            case EventStatus.SELECT_SINGLE_PLAY:
+                  drawerLayout.closeDrawer(Gravity.RIGHT);
+                  int singleId= (int) eventBusType.getObject();
+                  recommendedPersenter.videoInfo(singleId);
+                  break;
             //分享
             case EventStatus.SHARE_APP:
                 SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();

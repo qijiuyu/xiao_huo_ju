@@ -88,5 +88,11 @@ public class EventStatus {
    //分享
    public static final int SHARE_APP=208;
 
+   //播放页面查看剧集列表
+   public static final int SELECT_BLUES=209;
+
+    //选择单集视频播放
+    public static final int SELECT_SINGLE_PLAY=210;
+
 
 }

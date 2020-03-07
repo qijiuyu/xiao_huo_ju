@@ -86,7 +86,7 @@ public class OnlineListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
-                intent.putExtra("videoId",dataBean.getId());
+                intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
             }
         });

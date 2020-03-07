@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.BluesListActivity;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -42,6 +44,19 @@ public class BluesListAdapter extends RecyclerView.Adapter<BluesListAdapter.MyHo
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
         holder.tvBlues.setText(serialVideoBean.getName());
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setTag(R.id.tag1,serialVideoBean);
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SerialVideo.SerialVideoBean serialVideoBean= (SerialVideo.SerialVideoBean) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("singleId",serialVideoBean.getId());
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override

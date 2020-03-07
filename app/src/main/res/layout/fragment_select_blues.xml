@@ -48,7 +48,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
                 android:focusable="true"
-                android:scrollbars="none" />
+                android:scrollbars="none"
+                android:divider="@null"/>
 
         </com.zxdc.utils.library.view.MyRefreshLayout>
 

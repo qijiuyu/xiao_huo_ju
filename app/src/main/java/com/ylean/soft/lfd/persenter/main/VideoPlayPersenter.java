@@ -173,9 +173,9 @@ public class VideoPlayPersenter {
     /**
      * 获取视频详情
      */
-    public void videoInfo(int videoId){
+    public void videoInfo(int singleId,int serialId){
         DialogUtil.showProgress(activity,"视频加载中");
-        HttpMethod.videoInfo(0,videoId,handler);
+        HttpMethod.videoInfo(singleId,serialId,handler);
     }
 
 
