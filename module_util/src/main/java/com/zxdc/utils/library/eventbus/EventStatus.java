@@ -85,5 +85,8 @@ public class EventStatus {
     //关注剧集
     public static final int FOCUS_SERIAL=207;
 
+   //分享
+   public static final int SHARE_APP=208;
+
 
 }

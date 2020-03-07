@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.recommended;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,11 @@ import android.view.animation.AnimationUtils;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.recommended.FoundAdapter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
@@ -175,12 +181,12 @@ public class RecommendedActivity extends BaseActivity {
                   break;
             //关注、取消关注剧集
             case EventStatus.FOCUS_SERIAL:
-                  if(!videoBean.isFollowSerial()){
-                      videoBean.setFollowSerial(true);
-                  }else{
+                  if(videoBean.isFollowSerial()){
                       videoBean.setFollowSerial(false);
+                  }else{
+                      videoBean.setFollowSerial(true);
                   }
-                foundAdapter.focusSerial(videoBean.isFollowSerial());
+                  foundAdapter.focusSerial(videoBean.isFollowSerial());
                   break;
             //获取弹屏成功
             case EventStatus.GET_SCREEEN:
@@ -191,10 +197,64 @@ public class RecommendedActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                 drawerLayout.closeDrawer(Gravity.RIGHT);
                 break;
+            //分享
+            case EventStatus.SHARE_APP:
+                SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();
+                startShare(share_media);
+                break;
             default:
                 break;
 
         }
+    }
+
+
+    /**
+     * 分享
+     */
+    private void startShare(SHARE_MEDIA share_media) {
+        UMWeb web = new UMWeb("www.baidu.com");
+        web.setTitle("上市品质 邀您共鉴！");
+        web.setDescription("东易日盛20余年的努力与坚持，都只是为了做好家装这一件事！");
+        new ShareAction(activity).setPlatform(share_media)
+                .setCallback(umShareListener)
+                .withMedia(web)
+                .share();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        public void onResult(SHARE_MEDIA platform) {
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                ToastUtil.showLong(activity.getString(R.string.share_success));
+            } else {
+                ToastUtil.showLong(activity.getString(R.string.share_success));
+            }
+        }
+
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (t.getMessage().indexOf("2008") != -1) {
+                if (platform.name().equals("WEIXIN") || platform.name().equals("WEIXIN_CIRCLE")) {
+                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_wechat));
+                } else if (platform.name().equals("QQ") || platform.name().equals("QZONE")) {
+                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_qq));
+                }
+            }
+            ToastUtil.showLong(activity.getString(R.string.share_failed));
+        }
+
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtil.showLong(activity.getString(R.string.share_canceled));
+        }
+    };
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

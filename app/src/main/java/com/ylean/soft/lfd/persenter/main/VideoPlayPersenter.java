@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.zxdc.utils.library.bean.BaseBean;
@@ -131,22 +133,22 @@ public class VideoPlayPersenter {
         });
         view.findViewById(R.id.tv_wx).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.WEIXIN));
             }
         });
         view.findViewById(R.id.tv_pyq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.WEIXIN_CIRCLE));
             }
         });
         view.findViewById(R.id.tv_qq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QQ));
             }
         });
         view.findViewById(R.id.tv_kj).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QZONE));
             }
         });
     }
@@ -171,9 +173,9 @@ public class VideoPlayPersenter {
     /**
      * 获取视频详情
      */
-    public void videoInfo(HotTop.DataBean dataBean){
+    public void videoInfo(int videoId){
         DialogUtil.showProgress(activity,"视频加载中");
-        HttpMethod.videoInfo(0,dataBean.getId(),handler);
+        HttpMethod.videoInfo(0,videoId,handler);
     }
 
 

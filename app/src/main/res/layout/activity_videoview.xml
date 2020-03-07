@@ -98,7 +98,7 @@
                     android:id="@+id/img_head"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:src="@mipmap/bb"/>
+                    android:background="@drawable/bg_shape"/>
 
                 <ImageView
                     android:id="@+id/img_focus"

@@ -45,9 +45,15 @@ public class MainAuthorAdapter extends RecyclerView.Adapter<MainAuthorAdapter.My
         /**
          * 进入作者详情
          */
+        holder.imgHead.setTag(R.id.tag1,dataBean.getId());
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(v.getTag(R.id.tag1)==null){
+                    return;
+                }
+                int id= (int) v.getTag(R.id.tag1);
                 Intent intent=new Intent(activity, AuthorDetailsActivity.class);
+                intent.putExtra("id",id);
                 activity.startActivity(intent);
             }
         });

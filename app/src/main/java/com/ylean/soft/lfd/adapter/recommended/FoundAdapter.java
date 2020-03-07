@@ -131,11 +131,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if(videoBean==null){
-            return;
-        }
         this.holder=holder;
         if(holder.getPosition()==currentPosition){
+            if(videoBean==null){
+                return;
+            }
             holder.tvTitle.setText("剧情："+videoBean.getIntroduction());
             /**
              * 是否关注用户
@@ -412,7 +412,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void focusSerial(boolean status){
         String serialNum=holder.tvFocusSerial.getText().toString().trim();
-        if(!status){
+        if(status){
             holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
             holder.imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
             holder.tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)+1));

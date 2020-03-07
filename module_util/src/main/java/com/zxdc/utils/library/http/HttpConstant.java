@@ -85,5 +85,7 @@ public class HttpConstant {
 
     public static final String VERSION="api/app/version";
 
+    public static final String AUTHOR_DETAILS="api/app/user/author";
+
 
 }

@@ -47,4 +47,5 @@ public class HandlerConstant {
     public static final int FEEDBACK_SUCCESS=10043;
     public static final int UPDATE_VERSION_SUCCESS=10044;
     public static final int FOLLOW_SERIAL_SUCCESS=10045;
+    public static final int AUTHOR_DETAILS_SUCCESS=10046;
 }

@@ -4,6 +4,7 @@ package com.zxdc.utils.library.http;
 
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
+import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.Focus;
@@ -181,4 +182,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.VERSION)
     Call<Version> version(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.AUTHOR_DETAILS)
+    Call<AuthorDetails> getAuthorDetails(@FieldMap Map<String, String> map);
 }

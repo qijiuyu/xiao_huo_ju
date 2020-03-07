@@ -6,4 +6,9 @@
     <string name="xscrollview_header_last_time">最近刷新</string>
     <string name="xscrollview_footer_hint_normal">加载更多</string>
     <string name="xscrollview_footer_hint_ready">松开加载</string>
+    <string name="share_success">分享成功</string>
+    <string name="share_failed_install_qq">分享失败，请安装QQ客户端</string>
+    <string name="share_failed">分享失败</string>
+    <string name="share_failed_install_wechat">分享失败，请安装微信客户端</string>
+    <string name="share_canceled">分享取消</string>
 </resources>

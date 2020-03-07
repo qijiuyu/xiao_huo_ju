@@ -103,7 +103,7 @@ public class MainHottestDataAdapter extends BaseAdapter {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
-                intent.putExtra("dataBean",dataBean);
+                intent.putExtra("videoId",dataBean.getId());
                 activity.startActivity(intent);
             }
         });

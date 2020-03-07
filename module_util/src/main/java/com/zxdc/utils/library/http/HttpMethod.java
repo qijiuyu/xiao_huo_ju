@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
+import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.DownLoad;
@@ -776,6 +777,23 @@ public class HttpMethod extends BaseRequst {
                 if(response.isSuccessful()){
                     sendMessage(handler, HandlerConstant.DOWNLOAD_SUCCESS, downLoad);
                 }
+            }
+        });
+    }
+
+
+    /**
+     * 获取作者详情
+     */
+    public static void getAuthorDetails(int id,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("id",String.valueOf(id));
+        Http.getRetrofit().create(HttpApi.class).getAuthorDetails(map).enqueue(new Callback<AuthorDetails>() {
+            public void onResponse(Call<AuthorDetails> call, Response<AuthorDetails> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.AUTHOR_DETAILS_SUCCESS, response.body());
+            }
+            public void onFailure(Call<AuthorDetails> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
     }

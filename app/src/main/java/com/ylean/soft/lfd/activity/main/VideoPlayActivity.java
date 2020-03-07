@@ -25,6 +25,11 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
@@ -40,6 +45,7 @@ import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
@@ -119,14 +125,14 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private int showBottom=1;
     private VideoPlayPersenter videoPlayPersenter;
-    //视频列表对象
-    private HotTop.DataBean dataBean;
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
     //弹屏adapter
     private ScreenAdapter screenAdapter;
     //弹屏列表数据
     private List<Screen.ScreenBean> screenList;
+    //视频id
+    private int videoId;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoview);
@@ -136,7 +142,7 @@ public class VideoPlayActivity extends BaseActivity {
         initView();
         rightMenu();
         //获取视频详情
-        videoPlayPersenter.videoInfo(dataBean);
+        videoPlayPersenter.videoInfo(videoId);
     }
 
 
@@ -144,7 +150,7 @@ public class VideoPlayActivity extends BaseActivity {
      * 初始化
      */
     private void initView(){
-        dataBean= (HotTop.DataBean) getIntent().getSerializableExtra("dataBean");
+        videoId=getIntent().getIntExtra("videoId",0);
         //实例化MVP对象
         videoPlayPersenter=new VideoPlayPersenter(this);
         //实例化视频控制器
@@ -204,20 +210,23 @@ public class VideoPlayActivity extends BaseActivity {
 
     @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.img_select_blues,R.id.img_coll})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
             case R.id.img_bank:
                 finish();
                 break;
             //进入作者首页
             case R.id.img_head:
-                 setClass(AuthorDetailsActivity.class);
+                 intent.setClass(this,AuthorDetailsActivity.class);
+                 intent.putExtra("id",videoBean.getUserId());
+                 startActivity(intent);
                  break;
             //选集
             case R.id.tv_blues:
                 break;
             //关注用户
             case R.id.img_focus:
-                videoPlayPersenter.followUser("0",dataBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
+                videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
                 break;
             //点赞
             case R.id.img_praise:
@@ -229,7 +238,7 @@ public class VideoPlayActivity extends BaseActivity {
                  break;
             //评论
             case R.id.img_comm:
-                Intent intent=new Intent(this,CommentActivity.class);
+                intent.setClass(this,CommentActivity.class);
                 intent.putExtra("videoBean",videoBean);
                 startActivity(intent);
                 overridePendingTransition(R.anim.activity_open,0);
@@ -423,6 +432,11 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                   drawerLayout.closeDrawer(Gravity.RIGHT);
                  break;
+            //分享
+            case EventStatus.SHARE_APP:
+                  SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();
+                  startShare(share_media);
+                  break;
             default:
                 break;
 
@@ -438,7 +452,7 @@ public class VideoPlayActivity extends BaseActivity {
             return;
         }
         tvTitle.setText(videoBean.getIntroduction());
-        Glide.with(activity).load(dataBean.getUserImg()).into(imgHead);
+        Glide.with(activity).load(videoBean.getUserImg()).into(imgHead);
         //是否关注用户
         if(videoBean.isFollowUser()){
             imgFocus.setVisibility(View.GONE);
@@ -479,6 +493,56 @@ public class VideoPlayActivity extends BaseActivity {
             return false;
         }
     };
+
+
+    /**
+     * 分享
+     */
+    private void startShare(SHARE_MEDIA share_media) {
+        UMWeb web = new UMWeb("www.baidu.com");
+        web.setTitle("上市品质 邀您共鉴！");
+        web.setDescription("东易日盛20余年的努力与坚持，都只是为了做好家装这一件事！");
+        new ShareAction(activity).setPlatform(share_media)
+                .setCallback(umShareListener)
+                .withMedia(web)
+                .share();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        public void onResult(SHARE_MEDIA platform) {
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                ToastUtil.showLong(activity.getString(R.string.share_success));
+            } else {
+                ToastUtil.showLong(activity.getString(R.string.share_success));
+            }
+        }
+
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (t.getMessage().indexOf("2008") != -1) {
+                if (platform.name().equals("WEIXIN") || platform.name().equals("WEIXIN_CIRCLE")) {
+                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_wechat));
+                } else if (platform.name().equals("QQ") || platform.name().equals("QZONE")) {
+                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_qq));
+                }
+            }
+            ToastUtil.showLong(activity.getString(R.string.share_failed));
+        }
+
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtil.showLong(activity.getString(R.string.share_canceled));
+        }
+    };
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
 
 
     @Override

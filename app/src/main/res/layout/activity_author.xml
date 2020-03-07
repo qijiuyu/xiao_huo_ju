@@ -14,10 +14,10 @@
             android:id="@+id/img_head"
             android:layout_width="97dp"
             android:layout_height="97dp"
-            android:src="@mipmap/bb"
             android:scaleType="centerCrop"
             android:layout_marginTop="65dp"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_shape"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -30,7 +30,6 @@
                 android:id="@+id/tv_fans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2022"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"/>
 
@@ -63,7 +62,6 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="行走的胡萝卜"
             android:textSize="23sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
@@ -90,13 +88,20 @@
         android:background="@drawable/textview_color"
         android:layout_marginLeft="55dp"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listView"
+    <com.zxdc.utils.library.view.MyRefreshLayout
+        android:id="@+id/re_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+        </android.support.v7.widget.RecyclerView>
+
+     </com.zxdc.utils.library.view.MyRefreshLayout>
 
 </LinearLayout>

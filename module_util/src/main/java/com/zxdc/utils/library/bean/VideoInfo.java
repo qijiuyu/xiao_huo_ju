@@ -32,6 +32,8 @@ public class VideoInfo extends BaseBean {
         private String videourl;
         private int nextEpisodeId;
         private int prevEpisodeId;
+        private int userId;
+        private String userImg;
 
         public int getEpisodeCount() {
             return episodeCount;
@@ -135,6 +137,22 @@ public class VideoInfo extends BaseBean {
 
         public void setPrevEpisodeId(int prevEpisodeId) {
             this.prevEpisodeId = prevEpisodeId;
+        }
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+
+        public String getUserImg() {
+            return userImg;
+        }
+
+        public void setUserImg(String userImg) {
+            this.userImg = userImg;
         }
     }
 }
