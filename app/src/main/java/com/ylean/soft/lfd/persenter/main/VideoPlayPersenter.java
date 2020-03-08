@@ -211,4 +211,12 @@ public class VideoPlayPersenter {
         HttpMethod.getScreen(id,handler);
     }
 
+
+    /**
+     * 添加浏览记录
+     */
+    public void addBrowse(int episodeid,int seconds){
+        HttpMethod.addBrowse(episodeid,seconds,handler);
+    }
+
 }

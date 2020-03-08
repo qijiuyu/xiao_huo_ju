@@ -200,6 +200,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void onViewRecycled(@NonNull ViewHolder holder) {
         this.holder=holder;
+        //添加浏览记录
+        addBrowse();
+        //释放资源
         removeVideo();
         super.onViewRecycled(holder);
     }
@@ -482,6 +485,20 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             return false;
         }
     };
+
+
+    /**
+     * 添加浏览记录
+     */
+    public void addBrowse(){
+        if(videoBean!=null){
+            int seconds=holder.videoView.getCurrentPosition()/1000;
+            if(seconds==0){
+                return;
+            }
+            videoPlayPersenter.addBrowse(videoBean.getId(),seconds);
+        }
+    }
 
     public void setVideoBean(VideoInfo.VideoBean videoBean){
         this.videoBean=videoBean;

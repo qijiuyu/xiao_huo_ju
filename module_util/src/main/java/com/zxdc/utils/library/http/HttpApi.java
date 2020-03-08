@@ -6,6 +6,7 @@ import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.Help;
@@ -13,6 +14,7 @@ import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.bean.ReplyList;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.bean.Tag;
@@ -191,4 +193,16 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.SERIAL_VIDEO)
     Call<SerialVideo> getSerialVideo(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.ADD_BROWSE)
+    Call<BaseBean> addBrowse(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_BROWSE)
+    Call<Browse> getBrowse(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.REPLY_LIST)
+    Call<ReplyList> getReply(@FieldMap Map<String, String> map);
 }

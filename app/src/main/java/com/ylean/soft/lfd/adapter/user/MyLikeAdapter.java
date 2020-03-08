@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.user;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -36,13 +39,26 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.MyHolder> 
         //背景图片
         String imgUrl=dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
-        holder.imgHead.setTag(R.id.tag1,dataBean);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
         holder.tvTitle.setText(dataBean.getName());
         holder.tvSize.setText(dataBean.getPlayCount()+"w");
         holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
+
+
+        /**
+         * 进入视频详情页面
+         */
+        holder.imgHead.setTag(R.id.tag1,dataBean);
+        holder.imgHead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("serialId",dataBean.getId());
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override

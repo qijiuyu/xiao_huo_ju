@@ -180,7 +180,8 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private void startPlay(){
         videoView.setMediaController(controller);
-        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
+//        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
+        videoView.setVideoURI(Uri.parse("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4"));
         videoView.start();
         //监听视频播放完毕
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -583,8 +584,8 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         //暂停视频播放
         if(videoView.isPlaying()){
             videoView.pause();
@@ -594,6 +595,10 @@ public class VideoPlayActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //添加浏览记录
+        if(videoBean!=null){
+            videoPlayPersenter.addBrowse(videoBean.getId(),videoView.getCurrentPosition()/1000);
+        }
         EventBus.getDefault().unregister(this);
         //释放视频资源
         videoView.stopPlayback();

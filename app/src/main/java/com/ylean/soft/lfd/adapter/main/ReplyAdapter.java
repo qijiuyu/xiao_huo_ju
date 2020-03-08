@@ -1,17 +1,19 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.Reply;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.Util;
@@ -20,18 +22,19 @@ import com.zxdc.utils.library.view.MeasureListView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CommentAdapter extends BaseAdapter {
+public class ReplyAdapter extends BaseAdapter {
 
-    private CommentActivity activity;
-    private List<Comment.CommentBean> list;
-    //回复列表适配器
-    private ReplyAdapter replyAdapter;
-    public CommentAdapter(CommentActivity activity,List<Comment.CommentBean> list) {
+    private Activity activity;
+    private List<Reply> list;
+    private Map<Integer,Integer> praiseMap=new HashMap<>();
+    public ReplyAdapter(Activity activity, List<Reply> list) {
         super();
         this.activity = activity;
         this.list=list;
@@ -55,68 +58,39 @@ public class CommentAdapter extends BaseAdapter {
     ViewHolder holder = null;
     public View getView(int position, View view, ViewGroup parent) {
         if (view == null) {
-            view = LayoutInflater.from(activity).inflate(R.layout.item_comment, null);
+            view = LayoutInflater.from(activity).inflate(R.layout.item_reply, null);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-
-        final Comment.CommentBean commentBean=list.get(position);
+        final Reply reply=list.get(position);
         //用户头像
-        String headUrl=commentBean.getUserImg();
+        String headUrl=reply.getUserImg();
         holder.imgHead.setTag(R.id.imageid,headUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(headUrl).into(holder.imgHead);
         }
-        holder.tvName.setText(commentBean.getNickname());
-        holder.tvContent.setText(Util.getSpanString(activity,commentBean.getContent()+"  ",commentBean.getCreatetimestr(),R.style.text1,R.style.text2));
-
-        /**
-         * 显示回复列表
-         */
-        if(commentBean.getReplyCount()>0){
-            holder.replyList.setVisibility(View.VISIBLE);
-            holder.replyList.setAdapter(replyAdapter=new ReplyAdapter(activity,commentBean.getReplyList()));
+        holder.tvName.setText(reply.getNickname());
+        String content;
+        if(TextUtils.isEmpty(reply.getBeNickName())){
+            content=reply.getContent();
         }else{
-            holder.replyList.setVisibility(View.GONE);
+            content="回复  "+reply.getBeNickName()+"："+reply.getContent();
         }
-
-        //显示或隐藏“查看更多”
-        if(commentBean.getReplyCount()>1 && commentBean.getReplyCount()!=commentBean.getReplyList().size()){
-            holder.tvMore.setVisibility(View.VISIBLE);
-        }else{
-            holder.tvMore.setVisibility(View.GONE);
-        }
-
+        holder.tvContent.setText(Util.getSpanString(activity,content+"  ",reply.getCreatetimestr(),R.style.text3,R.style.text4));
 
         /**
-         * 点击查看更多
+         * 二级回复
          */
-        holder.tvMore.setTag(commentBean);
-        holder.tvMore.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
-                if(commentBean!=null){
-                    activity.getReply(commentBean.getId());
-                }
-
-            }
-        });
-
-
-
-        /**
-         * 回复
-         */
-        holder.tvContent.setTag(commentBean);
+        holder.tvContent.setTag(reply);
         holder.tvContent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(v.getTag()==null){
                     return;
                 }
-                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
-                EventBus.getDefault().post(new EventBusType(EventStatus.START_REPLY,commentBean));
+                Reply reply= (Reply) v.getTag();
+                EventBus.getDefault().post(new EventBusType(EventStatus.REPLY_REPLY,reply));
             }
         });
         return view;
@@ -134,10 +108,6 @@ public class CommentAdapter extends BaseAdapter {
         TextView tvNum;
         @BindView(R.id.tv_content)
         TextView tvContent;
-        @BindView(R.id.reply_list)
-        MeasureListView replyList;
-        @BindView(R.id.tv_more)
-        TextView tvMore;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -8,7 +8,6 @@
         android:id="@+id/img_head"
         android:layout_width="104dp"
         android:layout_height="134dp"
-        android:src="@mipmap/aa"
         android:scaleType="centerCrop"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"/>
@@ -23,7 +22,6 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="霸道总裁很粘人"
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
@@ -32,7 +30,6 @@
             android:id="@+id/tv_blues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="第85集"
             android:textSize="12sp"
             android:textColor="@android:color/black"
             android:layout_marginLeft="7dp"/>
@@ -43,7 +40,6 @@
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="剩余 23:56"
         android:textColor="@color/color_999999"
         android:textSize="12sp"
         android:layout_marginLeft="141dp"

@@ -35,4 +35,17 @@
         android:divider="@null">
     </com.zxdc.utils.library.view.MeasureListView>
 
+    <TextView
+        android:id="@+id/tv_no"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="您暂无浏览记录"
+        android:textSize="14sp"
+        android:textColor="@color/color_999999"
+        android:drawableTop="@mipmap/no_data"
+        android:drawablePadding="7dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

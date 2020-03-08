@@ -94,5 +94,8 @@ public class EventStatus {
     //选择单集视频播放
     public static final int SELECT_SINGLE_PLAY=210;
 
+    //二级回复
+    public static final int REPLY_REPLY=211;
+
 
 }

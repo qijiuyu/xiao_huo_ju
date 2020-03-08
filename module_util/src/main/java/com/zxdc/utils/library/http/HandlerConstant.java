@@ -50,4 +50,7 @@ public class HandlerConstant {
     public static final int AUTHOR_DETAILS_SUCCESS=10046;
     public static final int GET_SERIAL_VIDEO_SUCCESS1=10047;
     public static final int GET_SERIAL_VIDEO_SUCCESS2=10048;
+    public static final int ADD_BROWSE_SUCCESS=10049;
+    public static final int GET_BROWSE_SUCCESS=10050;
+    public static final int GET_REPLY_LIST_SUCCESS=10051;
 }

@@ -21,6 +21,8 @@ import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.Reply;
+import com.zxdc.utils.library.bean.ReplyList;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
@@ -61,11 +63,16 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
     //页码
-    private int page;
+    private int page=1;
     //评论对象
     private Comment.CommentBean commentBean;
+    //回复对象
+    private Reply reply;
     private CommentAdapter commentAdapter;
+    //列表数据集合
     private List<Comment.CommentBean> listAll = new ArrayList<>();
+    //评论id
+    private int pid;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
@@ -123,6 +130,25 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                     }
                     ToastUtil.showLong(baseBean.getDesc());
                     break;
+                //获取回复列表
+                case HandlerConstant.GET_REPLY_LIST_SUCCESS:
+                      ReplyList replyList= (ReplyList) msg.obj;
+                      if(replyList==null){
+                          break;
+                      }
+                      if(replyList.isSussess()){
+                          for (int i=0,len=listAll.size();i<len;i++){
+                                if(listAll.get(i).getId()==pid){
+                                    listAll.get(i).getReplyList().clear();
+                                    listAll.get(i).setReplyList(replyList.getData());
+                                    commentAdapter.notifyDataSetChanged();
+                                    break;
+                                }
+                          }
+                      }else{
+                          ToastUtil.showLong(replyList.getDesc());
+                      }
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -177,7 +203,7 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                     }
 
                     etContent.setText(null);
-                    if(commentBean==null){
+                    if(commentBean==null && reply==null){
                         //发送评论
                         sendComment(content);
                     }else{
@@ -197,9 +223,10 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     @Subscribe
     public void onEvent(EventBusType eventBusType) {
         switch (eventBusType.getStatus()) {
-            //开始回复
+            //回复评论
             case EventStatus.START_REPLY:
                 commentBean = (Comment.CommentBean) eventBusType.getObject();
+                reply=null;
                 if (commentBean == null) {
                     return;
                 }
@@ -207,6 +234,17 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                 //弹出软键盘
                 showInput(etContent);
                 break;
+            //二级回复
+            case EventStatus.REPLY_REPLY:
+                  reply= (Reply) eventBusType.getObject();
+                  commentBean=null;
+                  if(reply==null){
+                      return;
+                  }
+                  etContent.setHint("回复 @" + reply.getNickname());
+                  //弹出软键盘
+                  showInput(etContent);
+                  break;
             default:
                 break;
         }
@@ -225,6 +263,7 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
             }
             public void onSoftKeyboardClosed() {
                 commentBean=null;
+                reply=null;
                 etContent.setHint("说点什么吧～～");
             }
         });
@@ -273,11 +312,21 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
      * 回复评论
      */
     private void reply(String content){
-        if(commentBean==null){
-            return;
-        }
         DialogUtil.showProgress(activity, "回复中");
-        HttpMethod.reply(content,commentBean.getId(),handler);
+        if(commentBean!=null){
+            HttpMethod.reply(content,commentBean.getId(),handler);
+        }
+        if(reply!=null){
+            HttpMethod.reply(content,reply.getId(),handler);
+        }
+    }
+
+    /**
+     * 获取回复列表
+     */
+    public void getReply(int pid){
+        this.pid=pid;
+        HttpMethod.getReply(pid,1,handler);
     }
 
     @Override

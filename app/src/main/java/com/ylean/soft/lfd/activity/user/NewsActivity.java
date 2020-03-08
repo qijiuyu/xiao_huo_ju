@@ -71,12 +71,12 @@ public class NewsActivity extends BaseActivity  implements MyRefreshLayoutListen
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
             switch (msg.what){
-                case HandlerConstant.GET_HOT_TOP_SUCCESS1:
+                case HandlerConstant.GET_NEWS_SUCCESS1:
                     reList.refreshComplete();
                     listAll.clear();
                     refresh((News) msg.obj);
                     break;
-                case HandlerConstant.GET_HOT_TOP_SUCCESS2:
+                case HandlerConstant.GET_NEWS_SUCCESS2:
                     reList.loadMoreComplete();
                     refresh((News) msg.obj);
                     break;

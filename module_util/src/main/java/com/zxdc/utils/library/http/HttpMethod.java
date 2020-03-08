@@ -7,6 +7,7 @@ import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Focus;
@@ -15,6 +16,7 @@ import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.bean.ReplyList;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.bean.Tag;
@@ -814,6 +816,61 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, index, response.body());
             }
             public void onFailure(Call<SerialVideo> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 添加浏览记录
+     */
+    public static void addBrowse(int episodeid,int seconds,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("episodeid",String.valueOf(episodeid));
+        map.put("seconds",String.valueOf(seconds));
+        Http.getRetrofit().create(HttpApi.class).addBrowse(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.ADD_BROWSE_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取浏览记录
+     */
+    public static void getBrowse(int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getBrowse(map).enqueue(new Callback<Browse>() {
+            public void onResponse(Call<Browse> call, Response<Browse> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<Browse> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取回复列表
+     */
+    public static void getReply(int pid,int pageindex,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pid",String.valueOf(pid));
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize",pageSize);
+        Http.getRetrofit().create(HttpApi.class).getReply(map).enqueue(new Callback<ReplyList>() {
+            public void onResponse(Call<ReplyList> call, Response<ReplyList> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_REPLY_LIST_SUCCESS, response.body());
+            }
+            public void onFailure(Call<ReplyList> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

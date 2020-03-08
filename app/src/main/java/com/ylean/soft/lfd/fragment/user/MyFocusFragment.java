@@ -114,12 +114,11 @@ public class MyFocusFragment extends BaseFragment{
     public void onEvent(EventBusType eventBusType) {
         switch (eventBusType.getStatus()) {
             case EventStatus.USER_LOAD_MORE:
-                LogUtils.e("+++++++++++++++++++++++456");
-//                if(list.size()< HttpMethod.size){
-//                    //加载完成
-//                    EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE_SUCCESS));
-//                    return;
-//                }
+                if(list.size()< HttpMethod.size){
+                    //加载完成
+                    EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE_SUCCESS));
+                    return;
+                }
                 //加载数据
                 if(isVisibleToUser && view!=null){
                     page++;

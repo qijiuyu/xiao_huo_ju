@@ -13,10 +13,9 @@
 
        <com.zxdc.utils.library.view.CircleImageView
            android:id="@+id/img_head"
-           android:layout_width="33dp"
-           android:layout_height="33dp"
-           android:background="@drawable/bg_shape"
-           android:layout_marginLeft="15dp"/>
+           android:layout_width="15dp"
+           android:layout_height="15dp"
+           android:background="@drawable/bg_shape"/>
 
        <TextView
            android:id="@+id/tv_name"
@@ -56,28 +55,6 @@
            android:text="8"
            android:textColor="@android:color/white"
            android:textSize="13sp"/>
-
-       <com.zxdc.utils.library.view.MeasureListView
-           android:id="@+id/reply_list"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_below="@id/tv_content"
-           android:divider="@null"
-           android:layout_toRightOf="@id/img_head"
-           android:layout_marginTop="20dp"
-           android:layout_marginLeft="12dp">
-       </com.zxdc.utils.library.view.MeasureListView>
-
-       <TextView
-           android:id="@+id/tv_more"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="查看更多回复"
-           android:textSize="13sp"
-           android:textColor="@color/color_666666"
-           android:layout_below="@id/reply_list"
-           android:layout_toRightOf="@id/img_head"
-           android:layout_marginLeft="12dp"/>
 
    </RelativeLayout>
 

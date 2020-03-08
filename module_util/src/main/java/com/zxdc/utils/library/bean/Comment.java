@@ -26,7 +26,7 @@ public class Comment extends BaseBean {
         private String nickname;
         private String userImg;
         private int replyCount;
-        private List<ReplyList> replyList;
+        private List<Reply> replyList;
 
         public int getId() {
             return id;
@@ -76,70 +76,12 @@ public class Comment extends BaseBean {
             this.replyCount = replyCount;
         }
 
-        public List<ReplyList> getReplyList() {
+        public List<Reply> getReplyList() {
             return replyList;
         }
 
-        public void setReplyList(List<ReplyList> replyList) {
+        public void setReplyList(List<Reply> replyList) {
             this.replyList = replyList;
-        }
-    }
-
-
-    public static class ReplyList implements Serializable{
-        private String beNickName;
-        private int id;
-        private String content;
-        private String createtimestr;
-        private String nickname;
-        private String userImg;
-
-        public String getBeNickName() {
-            return beNickName;
-        }
-
-        public void setBeNickName(String beNickName) {
-            this.beNickName = beNickName;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getCreatetimestr() {
-            return createtimestr;
-        }
-
-        public void setCreatetimestr(String createtimestr) {
-            this.createtimestr = createtimestr;
-        }
-
-        public String getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public String getUserImg() {
-            return userImg;
-        }
-
-        public void setUserImg(String userImg) {
-            this.userImg = userImg;
         }
     }
 }

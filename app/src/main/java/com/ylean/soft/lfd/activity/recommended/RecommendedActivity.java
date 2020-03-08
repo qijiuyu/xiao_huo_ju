@@ -272,16 +272,11 @@ public class RecommendedActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStop() {
+        super.onStop();
         if(foundAdapter!=null){
             foundAdapter.setVideoStatus();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -289,6 +284,9 @@ public class RecommendedActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         if(foundAdapter!=null){
+            //添加浏览记录
+            foundAdapter.addBrowse();
+            //释放资源
             foundAdapter.removeVideo();
         }
     }
