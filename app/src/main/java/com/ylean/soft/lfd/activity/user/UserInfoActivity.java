@@ -18,11 +18,16 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.utils.SelectPhoto;
 import com.ylean.soft.lfd.view.SelectTimeDialog;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.Upload;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.BitMapUtil;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -126,6 +131,27 @@ public class UserInfoActivity extends BaseActivity {
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
             DialogUtil.closeProgress();
+            switch (msg.what){
+                //图片上传
+                case HandlerConstant.UPLOAD_SUCCESS:
+                      Upload upload= (Upload) msg.obj;
+                      if(upload==null){
+                          break;
+                      }
+                      if(upload.isSussess() && upload.getData()!=null && upload.getData().size()>0){
+                          LogUtils.e(upload.getData().get(0)+"++++++++++++++++++");
+                          userBean.setImgurl(upload.getData().get(0));
+                          //修改个人信息
+                          editUser();
+                      }
+                      ToastUtil.showLong(upload.getDesc());
+                      break;
+                case HandlerConstant.REQUST_ERROR:
+                    ToastUtil.showLong(msg.obj.toString());
+                    break;
+                default:
+                    break;
+            }
             return false;
         }
     });
@@ -278,10 +304,8 @@ public class UserInfoActivity extends BaseActivity {
      * 上传图片
      */
     private void upload(File file){
-        List<File> files=new ArrayList<>();
-        files.add(file);
         DialogUtil.showProgress(this,"图片上传中");
-        HttpMethod.upload(files,handler);
+        HttpMethod.upload(file,handler);
 
     }
 

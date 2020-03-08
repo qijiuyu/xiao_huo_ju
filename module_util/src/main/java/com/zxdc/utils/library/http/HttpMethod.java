@@ -20,6 +20,7 @@ import com.zxdc.utils.library.bean.ReplyList;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.bean.Upload;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.bean.VideoInfo;
@@ -250,7 +251,7 @@ public class HttpMethod extends BaseRequst {
      * 上传图片
      * @param file
      */
-    public static void upload(List<File> file, final Handler handler){
+    public static void upload(File file, final Handler handler){
         Map<String, String> map = new HashMap<>();
         map.put("relationtype","0");
         Http.upLoadFile(HttpConstant.UPLOAD_FILE,"images", file, map, new okhttp3.Callback() {
@@ -258,7 +259,8 @@ public class HttpMethod extends BaseRequst {
                 try {
                     final String str=response.body().string();
                     LogUtils.e(str+"__________________");
-//                    sendMessage(handler, HandlerConstant.ADD_GOODS_SUCCESS, str);
+                    Upload upload=SPUtil.gson.fromJson(str,Upload.class);
+                    sendMessage(handler, HandlerConstant.UPLOAD_SUCCESS, upload);
                 }catch (Exception e){
                     e.printStackTrace();
                     sendMessage(handler, HandlerConstant.REQUST_ERROR, null);

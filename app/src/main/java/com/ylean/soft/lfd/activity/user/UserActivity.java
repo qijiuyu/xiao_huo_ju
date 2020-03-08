@@ -254,7 +254,12 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
             default:
                 break;
         }
-        tvAge.setText(userBean.getBirthday());
+        if(!TextUtils.isEmpty(userBean.getBirthday())){
+            tvAge.setText(userBean.getBirthday());
+        }else{
+            tvAge.setText("无");
+        }
+
         switch (userBean.getConstellation()){
             case 1:
                 tvXz.setText("白羊座");
@@ -293,6 +298,7 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
                 tvXz.setText("双鱼座");
                 break;
             default:
+                tvXz.setText("无");
                 break;
         }
     }

@@ -10,9 +10,12 @@ import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.AgreementActivity;
 import com.ylean.soft.lfd.activity.init.BingMobileActivity;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
+import com.ylean.soft.lfd.activity.init.VerifyMobileActvity;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.DataCleanManager;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.SPUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +72,9 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rel_qq:
                 break;
+            //修改密码
             case R.id.rel_pwd:
+                setClass(VerifyMobileActvity.class);
                 break;
             //用户协议
             case R.id.rel_agreement:
@@ -102,6 +107,11 @@ public class SettingActivity extends BaseActivity {
                 setClass(AbountActivity.class);
                 break;
             case R.id.tv_out:
+                SPUtil.getInstance(this).removeMessage(SPUtil.TOKEN);
+                intent.setClass(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
                 break;
             default:
                 break;

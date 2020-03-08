@@ -74,17 +74,13 @@ public class Http {
     /**
      * 上传文件
      */
-    public static void upLoadFile(String url, String fileKey, List<File> list, Map<String, String> map, Callback callback) {
+    public static void upLoadFile(String url, String fileKey, File file, Map<String, String> map, Callback callback) {
         //添加token参数
         map.put("token", SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.TOKEN));
         //创建RequestBody
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if(null!=list){
-            for (int i=0;i<list.size();i++){
-                RequestBody body = RequestBody.create(MediaType.parse("application/octet-stream"), list.get(i));
-                builder.addFormDataPart(fileKey+i, list.get(i).getName(), body);
-            }
-        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        builder.addFormDataPart(fileKey, file.getName(), body);
         for (String key : map.keySet()) {
             builder.addFormDataPart(key, map.get(key));
         }

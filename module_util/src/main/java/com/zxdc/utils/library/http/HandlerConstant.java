@@ -53,4 +53,5 @@ public class HandlerConstant {
     public static final int ADD_BROWSE_SUCCESS=10049;
     public static final int GET_BROWSE_SUCCESS=10050;
     public static final int GET_REPLY_LIST_SUCCESS=10051;
+    public static final int UPLOAD_SUCCESS=10052;
 }
