@@ -867,7 +867,7 @@ public class HttpMethod extends BaseRequst {
         Map<String,String> map=new HashMap<>();
         map.put("pid",String.valueOf(pid));
         map.put("pageindex",String.valueOf(pageindex));
-        map.put("pagesize",pageSize);
+        map.put("pagesize","100");
         Http.getRetrofit().create(HttpApi.class).getReply(map).enqueue(new Callback<ReplyList>() {
             public void onResponse(Call<ReplyList> call, Response<ReplyList> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_REPLY_LIST_SUCCESS, response.body());

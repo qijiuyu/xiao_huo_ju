@@ -59,9 +59,9 @@ public class AnimUtil {
                 Keyframe.ofFloat(.9f, 3f * shakeFactor),
                 Keyframe.ofFloat(1f, 0)
         );
-        ObjectAnimator animator=ObjectAnimator.ofPropertyValuesHolder(view, pvhScaleX, pvhScaleY, pvhRotate).
+        ObjectAnimator animator=ObjectAnimator.ofPropertyValuesHolder(view, pvhRotate).
                 setDuration(1000);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatCount(ValueAnimator.RESTART);
         animator.start();
     }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
@@ -31,6 +32,8 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
      * false：只能长按拖拽
      */
     private boolean isClick=false;
+    //是否抖动
+    public boolean isJitter=false;
     public ChannerAdapter(TagManagerActivity activity, List<Tag.TagBean> list) {
         this.activity = activity;
         this.list = list;
@@ -47,7 +50,11 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
         //名称
         holder.tvName.setText(tagBean.getName());
         //图片
-//        Glide.with(activity).load(tagBean.getImgurl()).into(holder.imgTag);
+        Glide.with(activity).load(tagBean.getImgurl()).into(holder.imgTag);
+
+        if(isJitter){
+            AnimUtil.tada(holder.relTag);
+        }
 
 
         /**
@@ -111,12 +118,14 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {
+    public RelativeLayout relTag;
     public TextView tvName;
     public ImageView imgTag;
     public MyViewHolder(View itemView) {
         super(itemView);
+        relTag=itemView.findViewById(R.id.rel_tag);
         tvName =itemView.findViewById(R.id.text_item);
-        imgTag=itemView.findViewWithTag(R.id.img_tag);
+        imgTag=itemView.findViewById(R.id.img_tag);
     }
 }
 

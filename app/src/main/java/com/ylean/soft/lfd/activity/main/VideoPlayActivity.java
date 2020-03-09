@@ -433,15 +433,10 @@ public class VideoPlayActivity extends BaseActivity {
             //获取弹屏成功
             case EventStatus.GET_SCREEEN:
                  screenList= (List<Screen.ScreenBean>) eventBusType.getObject();
-                  if(screenAdapter==null){
-                      screenAdapter=new ScreenAdapter(this,screenList);
-                      listComm.setLayoutManager(new LinearLayoutManager(this));
-                      listComm.setAdapter(screenAdapter);
-                      listComm.start();
-                  }else{
-                      screenAdapter.notifyDataSetChanged();
-                      listComm.start();
-                  }
+                 screenAdapter=new ScreenAdapter(this,screenList);
+                 listComm.setLayoutManager(new LinearLayoutManager(this));
+                 listComm.setAdapter(screenAdapter);
+                 listComm.start();
                   break;
             //关闭侧边栏
             case EventStatus.CLOSE_VIDEO_RIGHT:

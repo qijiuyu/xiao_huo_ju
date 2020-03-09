@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.adapter.recommended;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +44,7 @@ import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -171,7 +174,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
             //获取弹屏列表
             holder.listComm.setVisibility(View.GONE);
-            videoPlayPersenter.getScreen(videoBean.getId());
+            getScreen();
 
             //监听弹屏输入框
             holder.etScreen.setOnEditorActionListener(screenListener);
@@ -419,11 +422,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     /**
      * true：点赞成功
      * false：取消点赞
-     * @param status
      */
-    public void praiseEnd(boolean status){
+    public void praiseEnd(VideoInfo.VideoBean videoBean){
+        this.videoBean=videoBean;
         String praiseNum=holder.tvPraise.getText().toString().trim();
-        if(status){
+        if(videoBean.isThumbEpisode()){
             holder.imgPraise.setImageResource(R.mipmap.yes_praise);
             holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
             holder.tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
@@ -435,11 +438,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
     /**
      * 是否关注剧情
-     * @param status
      */
-    public void focusSerial(boolean status){
+    public void focusSerial(VideoInfo.VideoBean videoBean){
+        this.videoBean=videoBean;
         String serialNum=holder.tvFocusSerial.getText().toString().trim();
-        if(status){
+        if(videoBean.isFollowSerial()){
             holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
             holder.imgColl.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
             holder.tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)+1));
@@ -455,9 +458,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void showScreen(List<Screen.ScreenBean> screenList){
         holder.listComm.setVisibility(View.VISIBLE);
-        ScreenAdapter screenAdapter=new ScreenAdapter(activity,screenList);
         holder.listComm.setLayoutManager(new LinearLayoutManager(activity));
-        holder.listComm.setAdapter(screenAdapter);
+        holder.listComm.setAdapter(new ScreenAdapter(activity,screenList));
         holder.listComm.start();
     }
 
@@ -478,11 +480,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                         activity.startActivity(intent);
                         return false;
                     }
+                    v.setText(null);
                     videoPlayPersenter.sendScreen(content,videoBean);
-                    holder.etScreen.setText(null);
                 }
             }
-            return false;
+            return true;
         }
     };
 
@@ -498,6 +500,14 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             }
             videoPlayPersenter.addBrowse(videoBean.getId(),seconds);
         }
+    }
+
+
+    /**
+     * 获取弹屏列表
+     */
+    public void getScreen(){
+        videoPlayPersenter.getScreen(videoBean.getId());
     }
 
     public void setVideoBean(VideoInfo.VideoBean videoBean){

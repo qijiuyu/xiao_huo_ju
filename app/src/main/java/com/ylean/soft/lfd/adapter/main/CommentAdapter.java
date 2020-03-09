@@ -100,7 +100,6 @@ public class CommentAdapter extends BaseAdapter {
                 if(commentBean!=null){
                     activity.getReply(commentBean.getId());
                 }
-
             }
         });
 

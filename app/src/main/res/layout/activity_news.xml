@@ -7,6 +7,19 @@
 
     <include layout="@layout/head"/>
 
-    <include layout="@layout/listview"/>
+    <com.zxdc.utils.library.view.MyRefreshLayout
+        android:id="@+id/re_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:scrollbars="none"
+            android:background="@color/color_F8F8F8"/>
+
+    </com.zxdc.utils.library.view.MyRefreshLayout>
 
 </LinearLayout>

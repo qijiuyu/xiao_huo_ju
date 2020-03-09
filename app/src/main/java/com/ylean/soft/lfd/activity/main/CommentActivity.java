@@ -38,7 +38,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,8 +64,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     RelativeLayout rel;
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
-    //页码
-    private int page=1;
     //评论对象
     private Comment.CommentBean commentBean;
     //回复对象
@@ -71,8 +71,16 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     private CommentAdapter commentAdapter;
     //列表数据集合
     private List<Comment.CommentBean> listAll = new ArrayList<>();
+    //回复数据列表集合
+    private List<Reply> replyData=new ArrayList<>();
     //评论id
     private int pid;
+    //评论的页码
+    private int page=1;
+    //回复列表的页码
+    private int replyPage=1;
+    //存储回复列表的页码
+    private Map<Integer,Integer> pageMap=new HashMap<>();
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
@@ -137,10 +145,11 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                           break;
                       }
                       if(replyList.isSussess()){
+                          replyData=replyList.getData();
                           for (int i=0,len=listAll.size();i<len;i++){
                                 if(listAll.get(i).getId()==pid){
                                     listAll.get(i).getReplyList().clear();
-                                    listAll.get(i).setReplyList(replyList.getData());
+                                    listAll.get(i).setReplyList(replyData);
                                     commentAdapter.notifyDataSetChanged();
                                     break;
                                 }
@@ -326,7 +335,13 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
      */
     public void getReply(int pid){
         this.pid=pid;
-        HttpMethod.getReply(pid,1,handler);
+//        if(pageMap.get(pid)==null){
+//            pageMap.put(pid,replyPage);
+//        }else{
+//            replyPage=pageMap.get(pid);
+//
+//        }
+        HttpMethod.getReply(pid,replyPage,handler);
     }
 
     @Override

@@ -139,7 +139,6 @@ public class UserInfoActivity extends BaseActivity {
                           break;
                       }
                       if(upload.isSussess() && upload.getData()!=null && upload.getData().size()>0){
-                          LogUtils.e(upload.getData().get(0)+"++++++++++++++++++");
                           userBean.setImgurl(upload.getData().get(0));
                           //修改个人信息
                           editUser();

@@ -82,9 +82,14 @@ public class TagManagerActivity extends BaseActivity {
                 break;
             //编辑/完成
             case R.id.tv_right:
+                if(channerAdapter==null){
+                    return;
+                }
                  if(tvRight.getText().toString().trim().equals("编辑")){
                      tvRight.setText("完成");
+                     channerAdapter.isJitter=true;
                      channerAdapter.setOnClick(true);
+                     channerAdapter.notifyDataSetChanged();
                  }else{
                      //判断是否登录了
                      if(!MyApplication.isLogin()){

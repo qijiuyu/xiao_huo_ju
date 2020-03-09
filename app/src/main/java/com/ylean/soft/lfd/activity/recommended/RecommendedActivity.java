@@ -25,6 +25,7 @@ import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -177,7 +178,7 @@ public class RecommendedActivity extends BaseActivity {
                  }else{
                      videoBean.setThumbEpisode(true);
                  }
-                  foundAdapter.praiseEnd(videoBean.isThumbEpisode());
+                  foundAdapter.praiseEnd(videoBean);
                   break;
             //关注、取消关注剧集
             case EventStatus.FOCUS_SERIAL:
@@ -186,8 +187,12 @@ public class RecommendedActivity extends BaseActivity {
                   }else{
                       videoBean.setFollowSerial(true);
                   }
-                  foundAdapter.focusSerial(videoBean.isFollowSerial());
+                  foundAdapter.focusSerial(videoBean);
                   break;
+            //发送弹屏成功
+            case EventStatus.SEND_SCREEN:
+                 foundAdapter.getScreen();
+                 break;
             //获取弹屏成功
             case EventStatus.GET_SCREEEN:
                   List<Screen.ScreenBean> screenList= (List<Screen.ScreenBean>) eventBusType.getObject();
