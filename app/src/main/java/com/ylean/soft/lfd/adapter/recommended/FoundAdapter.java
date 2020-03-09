@@ -185,6 +185,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.imgSelectBlues.setOnClickListener(this);
             holder.imgColl.setOnClickListener(this);
             holder.relScreen.setOnClickListener(this);
+            holder.imgFocus.setOnClickListener(this);
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.videoView.setVisibility(View.VISIBLE);
             //屏幕点击
@@ -220,6 +221,16 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 intent.setClass(activity,AuthorDetailsActivity.class);
                 activity.startActivity(intent);
                 break;
+            //关注/取消用户
+            case R.id.img_focus:
+                 //先登录
+                 if(!MyApplication.isLogin()){
+                     intent.setClass(activity,LoginActivity.class);
+                     activity.startActivity(intent);
+                     return;
+                 }
+                 videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
+                  break;
             //点赞
             case R.id.img_praise:
                 //先登录
@@ -461,6 +472,19 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         holder.listComm.setLayoutManager(new LinearLayoutManager(activity));
         holder.listComm.setAdapter(new ScreenAdapter(activity,screenList));
         holder.listComm.start();
+    }
+
+    /**
+     * 是否关注用户
+     * @param videoBean
+     */
+    public void isFocusUser(VideoInfo.VideoBean videoBean){
+        this.videoBean=videoBean;
+        if(videoBean.isFollowUser()){
+            holder.imgFocus.setVisibility(View.GONE);
+        }else{
+            holder.imgFocus.setVisibility(View.VISIBLE);
+        }
     }
 
 

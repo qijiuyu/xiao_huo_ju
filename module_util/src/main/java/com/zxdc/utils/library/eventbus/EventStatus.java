@@ -97,5 +97,11 @@ public class EventStatus {
     //二级回复
     public static final int REPLY_REPLY=211;
 
+    //取消用户关注
+    public static final int CANCLE_FOCUS_USER=212;
+
+   //关注用户
+   public static final int FOCUS_USER=222;
+
 
 }

@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
@@ -208,6 +209,25 @@ public class RecommendedActivity extends BaseActivity {
                   int singleId= (int) eventBusType.getObject();
                   recommendedPersenter.videoInfo(singleId);
                   break;
+            //关注、取消关注用户
+            case EventStatus.IS_FOLLOW:
+                 if(videoBean.isFollowUser()){
+                     videoBean.setFollowUser(false);
+                 }else{
+                     videoBean.setFollowUser(true);
+                 }
+                foundAdapter.isFocusUser(videoBean);
+                break;
+            //取消用户关注
+            case EventStatus.CANCLE_FOCUS_USER:
+                videoBean.setFollowUser(false);
+                foundAdapter.isFocusUser(videoBean);
+                break;
+            //关注用户
+            case EventStatus.FOCUS_USER:
+                videoBean.setFollowUser(true);
+                foundAdapter.isFocusUser(videoBean);
+                break;
             //分享
             case EventStatus.SHARE_APP:
                 SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();
@@ -268,9 +288,10 @@ public class RecommendedActivity extends BaseActivity {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onResume() {
+        super.onResume();
         if(foundAdapter!=null){
             foundAdapter.setVideoStatus();
         }

@@ -218,7 +218,7 @@ public class VideoPlayActivity extends BaseActivity {
             case R.id.img_head:
                  intent.setClass(this,AuthorDetailsActivity.class);
                  intent.putExtra("id",videoBean.getUserId());
-                 startActivity(intent);
+                 startActivityForResult(intent,100);
                  break;
             //选集
             case R.id.tv_blues:
@@ -392,8 +392,10 @@ public class VideoPlayActivity extends BaseActivity {
             //关注、取消关注用户
             case EventStatus.IS_FOLLOW:
                   if(imgFocus.getVisibility()==View.VISIBLE){
+                      videoBean.setFollowUser(true);
                       imgFocus.setVisibility(View.GONE);
                   }else{
+                      videoBean.setFollowUser(false);
                       imgFocus.setVisibility(View.VISIBLE);
                   }
                   break;
@@ -449,6 +451,16 @@ public class VideoPlayActivity extends BaseActivity {
                   serialId=0;
                   //获取视频详情
                   videoPlayPersenter.videoInfo(singleId,serialId);
+                  break;
+            //取消用户关注
+            case EventStatus.CANCLE_FOCUS_USER:
+                 videoBean.setFollowUser(false);
+                 imgFocus.setVisibility(View.VISIBLE);
+                  break;
+            //关注用户
+            case EventStatus.FOCUS_USER:
+                 videoBean.setFollowUser(true);
+                 imgFocus.setVisibility(View.GONE);
                   break;
             //分享
             case EventStatus.SHARE_APP:

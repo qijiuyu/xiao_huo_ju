@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,15 +18,21 @@ import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.ClickTextView;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -232,9 +239,19 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
         HttpMethod.follow(id, "0", HandlerConstant.FOLLOW_SUCCESS, handler);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         removeHandler(handler);
+        LogUtils.e("+++++++++++++++++++++++++=111");
+        if(detailsBean==null){
+            return;
+        }
+        if(!detailsBean.isFollowUser()){
+            EventBus.getDefault().post(new EventBusType(EventStatus.CANCLE_FOCUS_USER,id));
+        }else{
+            EventBus.getDefault().post(new EventBusType(EventStatus.FOCUS_USER,id));
+        }
     }
 }

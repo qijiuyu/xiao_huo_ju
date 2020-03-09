@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.adapter.user.MyLikeAdapter;
@@ -33,6 +35,8 @@ public class MyLikeFragment extends BaseFragment{
     @BindView(R.id.listView)
     RecyclerView listView;
     Unbinder unbinder;
+    @BindView(R.id.tv_no)
+    TextView tvNo;
     private MyLikeAdapter myLikeAdapter;
     //数据集合
     private List<HotTop.DataBean> listAll = new ArrayList<>();
@@ -98,6 +102,10 @@ public class MyLikeFragment extends BaseFragment{
             listAll.addAll(list);
             //适配器遍历显示
             myLikeAdapter.notifyDataSetChanged();
+
+            if(listAll.size()==0){
+                tvNo.setVisibility(View.VISIBLE);
+            }
         } else {
             ToastUtil.showLong(hotTop.getDesc());
         }
