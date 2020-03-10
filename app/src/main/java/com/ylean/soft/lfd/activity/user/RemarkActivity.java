@@ -38,6 +38,8 @@ public class RemarkActivity extends BaseActivity {
 
         tvTitle.setText("个人介绍");
         tvRight.setText("确认");
+        String content=getIntent().getStringExtra("content");
+        etName.setText(content);
     }
 
     @OnClick({R.id.img_bank, R.id.tv_right})

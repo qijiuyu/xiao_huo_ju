@@ -20,8 +20,8 @@
             android:id="@+id/xscrollview_footer_hint_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/xscrollview_footer_hint_normal" />
+            android:layout_centerInParent="true"/>
+            <!--android:text="@string/xscrollview_footer_hint_normal" />-->
     </RelativeLayout>
 
 </LinearLayout>

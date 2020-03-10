@@ -130,6 +130,8 @@ public class VideoPlayActivity extends BaseActivity {
     private List<Screen.ScreenBean> screenList;
     //剧集id/单集id
     private int serialId,singleId;
+    //已观看的秒数
+    private int lookSeconds;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoview);
@@ -149,6 +151,7 @@ public class VideoPlayActivity extends BaseActivity {
     private void initView(){
         serialId=getIntent().getIntExtra("serialId",0);
         singleId=getIntent().getIntExtra("singleId",0);
+        lookSeconds=getIntent().getIntExtra("seconds",0);
         //实例化MVP对象
         videoPlayPersenter=new VideoPlayPersenter(this);
         //实例化视频控制器
@@ -202,6 +205,12 @@ public class VideoPlayActivity extends BaseActivity {
                 handler.postDelayed(runnable, 0);
                 //隐藏进度圈
                 pbProgressbar.setVisibility(View.GONE);
+                //从上次进度开始播放
+                if(lookSeconds!=0){
+                    final int startTo=videoView.getDuration()-lookSeconds*1000;
+                    videoView.seekTo(startTo);
+                    seekbar.setProgress(startTo);
+                }
             }
         });
     }

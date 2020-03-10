@@ -89,6 +89,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick({R.id.img_bank, R.id.img_head, R.id.tv_name, R.id.rel_girl, R.id.rel_boy, R.id.tv_birthday,R.id.rel_remark})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
             case R.id.img_bank:
                 finish();
@@ -99,7 +100,9 @@ public class UserInfoActivity extends BaseActivity {
                 break;
             //昵称
             case R.id.tv_name:
-                setClass(EditNameActivity.class);
+                intent.setClass(this,EditNameActivity.class);
+                intent.putExtra("name",tvName.getText().toString().trim());
+                startActivity(intent);
                 break;
             //女孩
             case R.id.rel_girl:
@@ -120,7 +123,9 @@ public class UserInfoActivity extends BaseActivity {
                 break;
             //个人介绍
             case R.id.rel_remark:
-                 setClass(RemarkActivity.class);
+                 intent.setClass(this,RemarkActivity.class);
+                 intent.putExtra("content",tvRemark.getText().toString().trim());
+                 startActivity(intent);
                  break;
             default:
                 break;

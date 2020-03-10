@@ -39,6 +39,8 @@ public class EditNameActivity extends BaseActivity {
 
         tvTitle.setText("昵称修改");
         tvRight.setText("确认");
+        String name=getIntent().getStringExtra("name");
+        etName.setText(name);
     }
 
     @OnClick({R.id.img_bank, R.id.tv_right})

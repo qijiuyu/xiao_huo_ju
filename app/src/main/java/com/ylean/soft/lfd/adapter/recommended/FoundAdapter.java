@@ -34,6 +34,7 @@ import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
+import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
@@ -67,9 +68,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     private Handler handler=new Handler();
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
-    public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean) {
+    private RecommendedPersenter recommendedPersenter;
+    public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean,RecommendedPersenter recommendedPersenter) {
         this.activity=activity;
         this.videoBean=videoBean;
+        this.recommendedPersenter=recommendedPersenter;
         //实例化视频控制器
         controller=new AndroidMediaController(activity, false);
         //实例化MVP控制器
@@ -303,7 +306,10 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             public void onCompletion(IMediaPlayer iMediaPlayer) {
-                holder.videoView.seekTo(0);
+                //添加浏览记录
+                addBrowse();
+                //滑动到指定位置播放下一个视频
+                activity.recyclerView.smoothScrollToPosition(currentPosition+1);
             }
         });
 

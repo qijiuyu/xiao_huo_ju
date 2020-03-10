@@ -80,6 +80,7 @@ public class LookHistoryAdapter extends BaseAdapter {
                 Browse.BrowseBean browseBean= (Browse.BrowseBean) v.getTag(R.id.tag1);
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
                 intent.putExtra("singleId",browseBean.getEpisodeId());
+                intent.putExtra("seconds",browseBean.getSeconds());
                 activity.startActivity(intent);
             }
         });

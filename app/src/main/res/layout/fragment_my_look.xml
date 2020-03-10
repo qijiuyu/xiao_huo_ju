@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
+    <com.zxdc.utils.library.view.MeasureListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:divider="@null">
+    </com.zxdc.utils.library.view.MeasureListView>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,13 +35,6 @@
             android:paddingTop="7dp"/>
 
     </RelativeLayout>
-
-    <com.zxdc.utils.library.view.MeasureListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null">
-    </com.zxdc.utils.library.view.MeasureListView>
 
     <TextView
         android:id="@+id/tv_no"

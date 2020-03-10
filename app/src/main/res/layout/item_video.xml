@@ -55,12 +55,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14.5dp">
 
-            <ImageView
-                android:id="@+id/img_bank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/white_bank"
-                android:layout_marginLeft="15dp"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/img_bank"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@mipmap/white_bank"-->
+                <!--android:layout_marginLeft="15dp"/>-->
 
             <TextView
                 android:id="@+id/tv_blues"
@@ -92,7 +92,7 @@
                     android:id="@+id/img_head"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:src="@mipmap/bb"/>
+                    android:background="@drawable/bg_shape"/>
 
                 <ImageView
                     android:id="@+id/img_focus"

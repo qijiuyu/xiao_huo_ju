@@ -46,7 +46,7 @@ public class RecommendedActivity extends BaseActivity {
     @BindView(R.id.drawer_layout)
     public DrawerLayout drawerLayout;
     @BindView(R.id.listView)
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     //当前滑动的页码,防止没滑动过去重新加载视频
     private int currentPosition = -1;
     //滑动停止后为true
@@ -70,9 +70,6 @@ public class RecommendedActivity extends BaseActivity {
         rightMenu();
         //获取视频数据
         recommendedPersenter.foundVideo(0);
-
-        //滑动到指定位置
-//        recyclerView.smoothScrollToPosition(1);
     }
 
 
@@ -165,7 +162,7 @@ public class RecommendedActivity extends BaseActivity {
                       return;
                   }
                   if(foundAdapter==null){
-                      foundAdapter=new FoundAdapter(this,videoBean);
+                      foundAdapter=new FoundAdapter(this,videoBean,recommendedPersenter);
                       recyclerView.setAdapter(foundAdapter);
                   }else{
                       foundAdapter.setVideoBean(videoBean);
