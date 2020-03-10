@@ -34,6 +34,7 @@ public class VideoInfo extends BaseBean {
         private int prevEpisodeId;
         private int userId;
         private String userImg;
+        private int commentCount;
 
         public int getEpisodeCount() {
             return episodeCount;
@@ -153,6 +154,14 @@ public class VideoInfo extends BaseBean {
 
         public void setUserImg(String userImg) {
             this.userImg = userImg;
+        }
+
+        public int getCommentCount() {
+            return commentCount;
+        }
+
+        public void setCommentCount(int commentCount) {
+            this.commentCount = commentCount;
         }
     }
 }

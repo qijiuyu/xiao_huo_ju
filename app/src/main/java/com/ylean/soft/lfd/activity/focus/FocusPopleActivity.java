@@ -174,6 +174,9 @@ public class FocusPopleActivity extends BaseActivity  implements MyRefreshLayout
                           break;
                       }
                   }
+                 if(listAll.size()==0){
+                    tvNo.setVisibility(View.VISIBLE);
+                 }
                   break;
             default:
                 break;

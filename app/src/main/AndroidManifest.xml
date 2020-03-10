@@ -86,6 +86,7 @@
         <activity android:name=".activity.web.WebViewActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.HelpListActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.HelpDetailsActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.main.AbvertActivity"  android:screenOrientation="portrait"/>
 
         <!--注册微信回调 WXEntryActivity -->
         <activity

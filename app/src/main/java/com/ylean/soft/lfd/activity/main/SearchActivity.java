@@ -41,6 +41,8 @@ public class SearchActivity extends BaseActivity  implements TextView.OnEditorAc
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         initView();
+        //热门搜索
+        searchPersenter.hotSearch(tagHot);
     }
 
     /**

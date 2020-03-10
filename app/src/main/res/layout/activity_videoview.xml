@@ -151,7 +151,6 @@
                 android:id="@+id/tv_comm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1123"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:layout_marginTop="8.5dp"/>
@@ -162,6 +161,15 @@
                 android:layout_height="27.5dp"
                 android:src="@mipmap/share_icon"
                 android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:text="分享"
+                android:layout_marginTop="8.5dp"/>
 
         </LinearLayout>
 

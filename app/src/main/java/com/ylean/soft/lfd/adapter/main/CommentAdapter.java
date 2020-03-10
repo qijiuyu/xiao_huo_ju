@@ -71,6 +71,12 @@ public class CommentAdapter extends BaseAdapter {
         }
         holder.tvName.setText(commentBean.getNickname());
         holder.tvContent.setText(Util.getSpanString(activity,commentBean.getContent()+"  ",commentBean.getCreatetimestr(),R.style.text1,R.style.text2));
+        if(commentBean.isThumbComment()){
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+        }else{
+            holder.imgPraise.setImageResource(R.mipmap.no_praise);
+        }
+        holder.tvNum.setText(String.valueOf(commentBean.getThumbCount()));
 
         /**
          * 显示回复列表
@@ -98,7 +104,7 @@ public class CommentAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
                 if(commentBean!=null){
-                    activity.getReply(commentBean.getId());
+                    activity.getReply(commentBean);
                 }
             }
         });
@@ -116,6 +122,19 @@ public class CommentAdapter extends BaseAdapter {
                 }
                 Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
                 EventBus.getDefault().post(new EventBusType(EventStatus.START_REPLY,commentBean));
+            }
+        });
+
+
+        /**
+         * 评论点赞
+         */
+        holder.imgPraise.setTag(commentBean);
+        holder.imgPraise.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
+                activity.commPrise(commentBean);
+
             }
         });
         return view;

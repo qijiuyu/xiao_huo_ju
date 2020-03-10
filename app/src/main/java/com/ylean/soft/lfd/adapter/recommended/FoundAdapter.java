@@ -174,6 +174,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 holder.imgColl.setImageResource(R.mipmap.coll_icon);
             }
             holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
+            holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
 
             //获取弹屏列表
             holder.listComm.setVisibility(View.GONE);
@@ -232,6 +233,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                      activity.startActivity(intent);
                      return;
                  }
+                 if(videoBean==null){
+                     return;
+                 }
                  videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
                   break;
             //点赞
@@ -240,6 +244,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 if(!MyApplication.isLogin()){
                     intent.setClass(activity,LoginActivity.class);
                     activity.startActivity(intent);
+                    return;
+                }
+                if(videoBean==null){
                     return;
                 }
                  videoPlayPersenter.thump(videoBean.getSerialId());
@@ -252,10 +259,16 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     activity.startActivity(intent);
                     return;
                 }
+                if(videoBean==null){
+                    return;
+                }
                 videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
             case R.id.img_comm:
+                if(videoBean==null){
+                    return;
+                }
                 intent.setClass(activity,CommentActivity.class);
                 intent.putExtra("videoBean",videoBean);
                 activity.startActivity(intent);

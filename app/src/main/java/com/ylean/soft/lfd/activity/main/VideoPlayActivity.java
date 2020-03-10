@@ -183,8 +183,7 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private void startPlay(){
         videoView.setMediaController(controller);
-//        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
-        videoView.setVideoURI(Uri.parse("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4"));
+        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         videoView.start();
         //监听视频播放完毕
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -225,6 +224,9 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //进入作者首页
             case R.id.img_head:
+                 if(videoBean==null){
+                     return;
+                 }
                  intent.setClass(this,AuthorDetailsActivity.class);
                  intent.putExtra("id",videoBean.getUserId());
                  startActivityForResult(intent,100);
@@ -238,12 +240,18 @@ public class VideoPlayActivity extends BaseActivity {
                     setClass(LoginActivity.class);
                     return;
                 }
+                if(videoBean==null){
+                    return;
+                }
                 videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
                 break;
             //点赞
             case R.id.img_praise:
                 if(!MyApplication.isLogin()){
                     setClass(LoginActivity.class);
+                    return;
+                }
+                if(videoBean==null){
                     return;
                 }
                 videoPlayPersenter.thump(videoBean.getSerialId());
@@ -254,10 +262,16 @@ public class VideoPlayActivity extends BaseActivity {
                     setClass(LoginActivity.class);
                     return;
                 }
+                if(videoBean==null){
+                    return;
+                }
                 videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
                  break;
             //评论
             case R.id.img_comm:
+                if(videoBean==null){
+                    return;
+                }
                 intent.setClass(this,CommentActivity.class);
                 intent.putExtra("videoBean",videoBean);
                 startActivity(intent);
@@ -512,6 +526,7 @@ public class VideoPlayActivity extends BaseActivity {
             imgColl.setImageResource(R.mipmap.coll_icon);
         }
         tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
+        tvComm.setText(String.valueOf(videoBean.getCommentCount()));
     }
 
 

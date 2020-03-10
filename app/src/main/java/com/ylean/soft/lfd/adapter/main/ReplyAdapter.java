@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.Reply;
 import com.zxdc.utils.library.eventbus.EventBusType;
@@ -31,10 +32,9 @@ import butterknife.ButterKnife;
 
 public class ReplyAdapter extends BaseAdapter {
 
-    private Activity activity;
+    private CommentActivity activity;
     private List<Reply> list;
-    private Map<Integer,Integer> praiseMap=new HashMap<>();
-    public ReplyAdapter(Activity activity, List<Reply> list) {
+    public ReplyAdapter(CommentActivity activity, List<Reply> list) {
         super();
         this.activity = activity;
         this.list=list;
@@ -79,6 +79,12 @@ public class ReplyAdapter extends BaseAdapter {
             content="回复  "+reply.getBeNickName()+"："+reply.getContent();
         }
         holder.tvContent.setText(Util.getSpanString(activity,content+"  ",reply.getCreatetimestr(),R.style.text3,R.style.text4));
+        if(reply.isThumbComment()){
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+        }else{
+            holder.imgPraise.setImageResource(R.mipmap.no_praise);
+        }
+        holder.tvNum.setText(String.valueOf(reply.getThumbCount()));
 
         /**
          * 二级回复
@@ -91,6 +97,19 @@ public class ReplyAdapter extends BaseAdapter {
                 }
                 Reply reply= (Reply) v.getTag();
                 EventBus.getDefault().post(new EventBusType(EventStatus.REPLY_REPLY,reply));
+            }
+        });
+
+
+        /**
+         * 回复点赞
+         */
+        holder.imgPraise.setTag(reply);
+        holder.imgPraise.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Reply reply= (Reply) v.getTag();
+                activity.replyPrise(reply);
+
             }
         });
         return view;

@@ -3,6 +3,7 @@ package com.zxdc.utils.library.http;
 import android.os.Handler;
 import android.text.TextUtils;
 
+import com.zxdc.utils.library.bean.AbvertList;
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
@@ -12,6 +13,7 @@ import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.Help;
+import com.zxdc.utils.library.bean.HotSearch;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
@@ -873,6 +875,80 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_REPLY_LIST_SUCCESS, response.body());
             }
             public void onFailure(Call<ReplyList> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 热门搜索
+     */
+    public static void hotSearch(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("pageindex","1");
+        map.put("pagesize","100");
+        Http.getRetrofit().create(HttpApi.class).hotSearch(map).enqueue(new Callback<HotSearch>() {
+            public void onResponse(Call<HotSearch> call, Response<HotSearch> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.HOT_SEARCH_SUCCESS, response.body());
+            }
+            public void onFailure(Call<HotSearch> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 一键清除
+     */
+    public static void clearLook(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        Http.getRetrofit().create(HttpApi.class).clearLook(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.CLEAR_LOOK_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+
+    /**
+     * 评论/回复点赞、取消点赞
+     */
+    public static void commPrise(int commentid,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("commentid",String.valueOf(commentid));
+        Http.getRetrofit().create(HttpApi.class).commPrise(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 获取广告列表
+     */
+    public static void getAbvert(String type,int channelid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("type",type);
+        if(channelid!=0){
+            map.put("channelid",String.valueOf(channelid));
+        }
+        map.put("pageindex","1");
+        map.put("pagesize","100");
+        Http.getRetrofit().create(HttpApi.class).getAbvert(map).enqueue(new Callback<AbvertList>() {
+            public void onResponse(Call<AbvertList> call, Response<AbvertList> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_ABVERT_SUCCESS, response.body());
+            }
+            public void onFailure(Call<AbvertList> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

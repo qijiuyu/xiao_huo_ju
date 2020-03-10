@@ -23,7 +23,7 @@ public class HttpConstant {
 
     public static final String CHANNEL="api/app/channel/list";
 
-    public static final String GET_USER="api/app/user/getinfo";
+    public static final String GET_USER="api/app/user/basicinfo";
 
     public static final String EDIT_USER="api/app/user/editinfo";
 
@@ -94,6 +94,14 @@ public class HttpConstant {
     public static final String GET_BROWSE="api/app/serial/browse/list";
 
     public static final String REPLY_LIST="api/app/reply/list";
+
+    public static final String HOT_SEARCH="api/app/searchkey";
+
+    public static final String CLEAR_LOOK="api/app/serial/browse/del";
+
+    public static final String COMM_PRISE="api/app/comment/thumb";
+
+    public static final String GET_ABVERT="api/app/banner/list";
 
 
 }

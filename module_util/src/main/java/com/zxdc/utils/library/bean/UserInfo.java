@@ -24,6 +24,8 @@ public class UserInfo extends BaseBean{
         private String birthday;
         private String code;
         private int constellation;
+        private int fansCount;
+        private int followCount;
         private String imgurl;
         private String introduction;
         private String mobile;
@@ -109,6 +111,22 @@ public class UserInfo extends BaseBean{
 
         public void setType(int type) {
             this.type = type;
+        }
+
+        public int getFansCount() {
+            return fansCount;
+        }
+
+        public void setFansCount(int fansCount) {
+            this.fansCount = fansCount;
+        }
+
+        public int getFollowCount() {
+            return followCount;
+        }
+
+        public void setFollowCount(int followCount) {
+            this.followCount = followCount;
         }
     }
 }

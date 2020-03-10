@@ -26,6 +26,8 @@ public class Comment extends BaseBean {
         private String nickname;
         private String userImg;
         private int replyCount;
+        private boolean thumbComment;
+        private int thumbCount;
         private List<Reply> replyList;
 
         public int getId() {
@@ -82,6 +84,22 @@ public class Comment extends BaseBean {
 
         public void setReplyList(List<Reply> replyList) {
             this.replyList = replyList;
+        }
+
+        public boolean isThumbComment() {
+            return thumbComment;
+        }
+
+        public void setThumbComment(boolean thumbComment) {
+            this.thumbComment = thumbComment;
+        }
+
+        public int getThumbCount() {
+            return thumbCount;
+        }
+
+        public void setThumbCount(int thumbCount) {
+            this.thumbCount = thumbCount;
         }
     }
 }

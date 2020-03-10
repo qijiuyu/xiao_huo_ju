@@ -85,6 +85,8 @@ dependencies {
     //弹屏
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
 
+    compile 'org.sufficientlysecure:html-textview:3.8'
+
 
 
 }

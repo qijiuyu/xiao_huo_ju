@@ -164,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
+                android:text="分享"
                 android:layout_marginTop="8.5dp"/>
 
         </LinearLayout>

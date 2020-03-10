@@ -268,8 +268,9 @@ public class UserInfoActivity extends BaseActivity {
         switch (eventBusType.getStatus()) {
             //回执时间
             case EventStatus.SHOW_SELECT_TIME:
-                  tvBirthday.setText(eventBusType.getObject().toString());
-                  userBean.setBirthday(eventBusType.getObject().toString());
+                  String birthday=eventBusType.getObject().toString().replace("年","-").replace("月","-").replace("日","");
+                  tvBirthday.setText(birthday);
+                  userBean.setBirthday(birthday);
                  //修改个人信息
                  editUser();
                   break;

@@ -14,6 +14,8 @@ public class Reply implements Serializable {
     private String createtimestr;
     private String nickname;
     private String userImg;
+    private boolean thumbComment;
+    private int thumbCount;
 
     public String getBeNickName() {
         return beNickName;
@@ -61,5 +63,21 @@ public class Reply implements Serializable {
 
     public void setUserImg(String userImg) {
         this.userImg = userImg;
+    }
+
+    public boolean isThumbComment() {
+        return thumbComment;
+    }
+
+    public void setThumbComment(boolean thumbComment) {
+        this.thumbComment = thumbComment;
+    }
+
+    public int getThumbCount() {
+        return thumbCount;
+    }
+
+    public void setThumbCount(int thumbCount) {
+        this.thumbCount = thumbCount;
     }
 }

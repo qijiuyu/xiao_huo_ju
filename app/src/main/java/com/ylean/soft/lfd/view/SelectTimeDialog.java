@@ -134,7 +134,6 @@ public class SelectTimeDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_confirm:
-                LogUtils.e("++++++++++++++++++"+strYear+strMonth+strDay);
                  EventBus.getDefault().post(new EventBusType(EventStatus.SHOW_SELECT_TIME,strYear+strMonth+strDay));
                  break;
            default:

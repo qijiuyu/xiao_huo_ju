@@ -12,11 +12,13 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.adapter.focus.LookHistoryAdapter;
 import com.zxdc.utils.library.base.BaseFragment;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MeasureListView;
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +58,15 @@ public class LookHistoryFragment extends BaseFragment {
         lookHistoryAdapter=new LookHistoryAdapter(mActivity,listAll);
         listView.setAdapter(lookHistoryAdapter);
 
+        /**
+         * 一键清除
+         */
+        view.findViewById(R.id.tv_clear).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clearLook();
+            }
+        });
+
         //加载数据
         if(isVisibleToUser && view!=null && listAll.size()==0){
             getBrowse();
@@ -66,6 +77,7 @@ public class LookHistoryFragment extends BaseFragment {
 
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
             //加载完成
             EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE_SUCCESS));
             switch (msg.what){
@@ -73,6 +85,20 @@ public class LookHistoryFragment extends BaseFragment {
                     listAll.clear();
                     refresh((Browse) msg.obj);
                     break;
+                //一键清除
+                case HandlerConstant.CLEAR_LOOK_SUCCESS:
+                      BaseBean baseBean= (BaseBean) msg.obj;
+                      if(baseBean==null){
+                          break;
+                      }
+                      if(baseBean.isSussess()){
+                          listAll.clear();
+                          if(lookHistoryAdapter!=null){
+                              lookHistoryAdapter.notifyDataSetChanged();
+                          }
+                      }
+                      ToastUtil.showLong(baseBean.getDesc());
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -134,6 +160,18 @@ public class LookHistoryFragment extends BaseFragment {
      */
     private void getBrowse(){
         HttpMethod.getBrowse(page, HandlerConstant.GET_BROWSE_SUCCESS,handler);
+    }
+
+
+    /**
+     * 一键清除
+     */
+    private void clearLook(){
+        if(listAll.size()==0){
+            return;
+        }
+        DialogUtil.showProgress(mActivity,"清除中");
+        HttpMethod.clearLook(handler);
     }
 
     @Override

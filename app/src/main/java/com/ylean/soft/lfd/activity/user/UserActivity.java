@@ -230,6 +230,8 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
         if(!TextUtils.isEmpty(userBean.getImgurl())){
             Glide.with(this).load(userBean.getImgurl()).into(imgHead);
         }
+        tvFans.setText(String.valueOf(userBean.getFansCount()));
+        tvFocus.setText(String.valueOf(userBean.getFollowCount()));
         tvId.setText("ID:"+userBean.getCode());
         if(!TextUtils.isEmpty(userBean.getNickname())){
             tvName.setText(userBean.getNickname());

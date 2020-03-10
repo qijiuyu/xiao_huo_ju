@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.user;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.News;
 
 import java.util.List;
@@ -59,6 +61,24 @@ public class NewsAdapter extends BaseAdapter {
             holder.tvDes.setText(newsBean.getContent());
         }
         holder.tvTime.setText(newsBean.getCreatetime());
+
+        /**
+         * 进入播放页面
+         */
+        holder.tvDes.setTag(newsBean);
+        holder.tvDes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                News.NewsBean newsBean= (News.NewsBean) v.getTag();
+                if(newsBean.getType()==1){
+                    Intent intent=new Intent(activity, VideoPlayActivity.class);
+                    if(newsBean.getEpisodeId()!=0){
+                        intent.putExtra("singleId",newsBean.getEpisodeId());
+                    }
+                    intent.putExtra("serialId",newsBean.getSerialId());
+                    activity.startActivity(intent);
+                }
+            }
+        });
         return view;
     }
 

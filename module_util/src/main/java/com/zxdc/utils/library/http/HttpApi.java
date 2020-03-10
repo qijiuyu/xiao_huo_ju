@@ -2,6 +2,7 @@ package com.zxdc.utils.library.http;
 
 
 
+import com.zxdc.utils.library.bean.AbvertList;
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
@@ -10,6 +11,7 @@ import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.Help;
+import com.zxdc.utils.library.bean.HotSearch;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.bean.News;
@@ -205,4 +207,20 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.REPLY_LIST)
     Call<ReplyList> getReply(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.HOT_SEARCH)
+    Call<HotSearch> hotSearch(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.CLEAR_LOOK)
+    Call<BaseBean> clearLook(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.COMM_PRISE)
+    Call<BaseBean> commPrise(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.GET_ABVERT)
+    Call<AbvertList> getAbvert(@FieldMap Map<String, String> map);
 }
