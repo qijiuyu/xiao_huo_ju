@@ -52,7 +52,6 @@
            android:layout_alignParentRight="true"
            android:layout_marginRight="20dp"
            android:layout_below="@id/img_praise"
-           android:text="8"
            android:textColor="@android:color/white"
            android:textSize="13sp"/>
 

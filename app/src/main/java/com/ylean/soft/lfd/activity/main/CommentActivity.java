@@ -29,6 +29,7 @@ import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
@@ -122,12 +123,16 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                     refresh((Comment) msg.obj);
                     break;
                 //发送评论回执
+                case HandlerConstant.REPLY_SUCCESS:
                 case HandlerConstant.SEND_COMMENT_SUCCESS:
                     baseBean = (BaseBean) msg.obj;
                     if (baseBean == null) {
                         break;
                     }
                     ToastUtil.showLong(baseBean.getDesc());
+
+                    //评论后重新获取列表
+                    
                     break;
                 //获取回复列表
                 case HandlerConstant.GET_REPLY_LIST_SUCCESS:
@@ -170,10 +175,10 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                      if(baseBean.isSussess()){
                          if(reply.isThumbComment()){
                              reply.setThumbComment(false);
-                             reply.setThumbCount(commentBean.getThumbCount()-1);
+                             reply.setThumbCount(reply.getThumbCount()-1);
                          }else{
                              reply.setThumbComment(true);
-                             reply.setThumbCount(commentBean.getThumbCount()+1);
+                             reply.setThumbCount(reply.getThumbCount()+1);
                          }
                          commentAdapter.notifyDataSetChanged();
                      }

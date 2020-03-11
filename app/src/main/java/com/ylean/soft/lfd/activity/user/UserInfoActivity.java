@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,7 +173,10 @@ public class UserInfoActivity extends BaseActivity {
         tvName.setText(userBean.getNickname());
         //设置性别背景
         setSexBj(userBean.getSex());
-        tvBirthday.setText(userBean.getBirthday());
+        //设置生日
+        if(!TextUtils.isEmpty(userBean.getBirthday()) && userBean.getBirthday().length()>=10){
+            tvBirthday.setText(userBean.getBirthday().substring(0,10));
+        }
         tvMobile.setText(userBean.getMobile());
         tvRemark.setText(userBean.getIntroduction());
     }

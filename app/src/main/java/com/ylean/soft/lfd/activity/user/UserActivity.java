@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -256,8 +257,12 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
             default:
                 break;
         }
-        if(!TextUtils.isEmpty(userBean.getBirthday())){
-            tvAge.setText(userBean.getBirthday());
+        if(!TextUtils.isEmpty(userBean.getBirthday()) && userBean.getBirthday().length()>=10){
+            Calendar calendar = Calendar.getInstance();
+            //年
+            int newYear = calendar.get(Calendar.YEAR);
+            int oldYear=Integer.parseInt(userBean.getBirthday().substring(0,4));
+            tvAge.setText(String.valueOf(newYear-oldYear));
         }else{
             tvAge.setText("无");
         }

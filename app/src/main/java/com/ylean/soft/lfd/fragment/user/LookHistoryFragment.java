@@ -35,6 +35,8 @@ public class LookHistoryFragment extends BaseFragment {
     MeasureListView listView;
     @BindView(R.id.tv_no)
     TextView tvNo;
+    @BindView(R.id.tv_clear)
+    TextView tvClear;
     Unbinder unbinder;
     private LookHistoryAdapter lookHistoryAdapter;
     //数据集合
@@ -61,7 +63,7 @@ public class LookHistoryFragment extends BaseFragment {
         /**
          * 一键清除
          */
-        view.findViewById(R.id.tv_clear).setOnClickListener(new View.OnClickListener() {
+        tvClear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clearLook();
             }
@@ -124,6 +126,10 @@ public class LookHistoryFragment extends BaseFragment {
             lookHistoryAdapter.notifyDataSetChanged();
             if(listAll.size()==0){
                 tvNo.setVisibility(View.VISIBLE);
+                tvClear.setVisibility(View.GONE);
+            }else{
+                tvNo.setVisibility(View.GONE);
+                tvClear.setVisibility(View.VISIBLE);
             }
         }else{
             ToastUtil.showLong(browse.getDesc());

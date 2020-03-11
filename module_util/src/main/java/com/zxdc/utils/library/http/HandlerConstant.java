@@ -58,5 +58,5 @@ public class HandlerConstant {
     public static final int CLEAR_LOOK_SUCCESS=10054;
     public static final int COMM_PRISE_SUCCESS=10055;
     public static final int GET_ABVERT_SUCCESS=10056;
-    public static final int REPLY_PRISE_SUCCESS=10056;
+    public static final int REPLY_PRISE_SUCCESS=10057;
 }
