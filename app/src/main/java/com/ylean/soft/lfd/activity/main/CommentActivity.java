@@ -19,8 +19,11 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.CommentAdapter;
 import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.AddComment;
+import com.zxdc.utils.library.bean.AddReply;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.CommentList;
 import com.zxdc.utils.library.bean.Reply;
 import com.zxdc.utils.library.bean.ReplyList;
 import com.zxdc.utils.library.bean.VideoInfo;
@@ -60,20 +63,24 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
     //评论对象
-    private Comment.CommentBean commentBean;
+    private Comment comment;
     //回复对象
     private Reply reply;
     private CommentAdapter commentAdapter;
     //评论列表数据集合
-    private List<Comment.CommentBean> listAll = new ArrayList<>();
+    private List<Comment> listAll = new ArrayList<>();
     //评论的页码
     private int page=1;
+    /**
+     * 0：发送评论
+     * 1：一级回复
+     * 2：二级回复
+     */
+    private int playStatus;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         ButterKnife.bind(this);
-        //注册eventBus
-        EventBus.getDefault().register(this);
         initView();
         //监听软键盘打开还是关闭
         setListenerFotEditText(rel);
@@ -120,20 +127,44 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                 //获取评论列表
                 case HandlerConstant.GET_COMMENT_SUCCESS:
                     reList.loadMoreComplete();
-                    refresh((Comment) msg.obj);
+                    refresh((CommentList) msg.obj);
                     break;
                 //发送评论回执
-                case HandlerConstant.REPLY_SUCCESS:
                 case HandlerConstant.SEND_COMMENT_SUCCESS:
-                    baseBean = (BaseBean) msg.obj;
-                    if (baseBean == null) {
-                        break;
-                    }
-                    ToastUtil.showLong(baseBean.getDesc());
+                     AddComment addComment= (AddComment) msg.obj;
+                     if(addComment==null){
+                         break;
+                     }
+                     if(addComment.isSussess() && addComment.getData()!=null){
+                         listAll.add(0,addComment.getData());
+                         commentAdapter.notifyDataSetChanged();
 
-                    //评论后重新获取列表
-                    
+                         //增加评论个数
+                         videoBean.setCommentCount(videoBean.getCommentCount()+1);
+                         tvTotal.setText(videoBean.getCommentCount()+"条评论");
+                     }
+                     ToastUtil.showLong(addComment.getDesc());
                     break;
+                //发送回复回执
+                case HandlerConstant.REPLY_SUCCESS:
+                      AddReply addReply= (AddReply) msg.obj;
+                      if(addReply==null){
+                          break;
+                      }
+                      if(addReply.isSussess() && addReply.getData()!=null){
+                          //设置回复的个数
+                          if(comment.getReplyCount()==0){
+                              comment.setReplyCount(1);
+                          }
+                          comment.getReplyList().add(0,addReply.getData());
+                          commentAdapter.notifyDataSetChanged();
+
+                          //增加评论个数
+                          videoBean.setCommentCount(videoBean.getCommentCount()+1);
+                          tvTotal.setText(videoBean.getCommentCount()+"条评论");
+                      }
+                      ToastUtil.showLong(addReply.getDesc());
+                      break;
                 //获取回复列表
                 case HandlerConstant.GET_REPLY_LIST_SUCCESS:
                       ReplyList replyList= (ReplyList) msg.obj;
@@ -141,8 +172,8 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                           break;
                       }
                       if(replyList.isSussess()){
-                          commentBean.getReplyList().clear();
-                          commentBean.setReplyList(replyList.getData());
+                          comment.getReplyList().clear();
+                          comment.setReplyList(replyList.getData());
                           commentAdapter.notifyDataSetChanged();
                       }else{
                           ToastUtil.showLong(replyList.getDesc());
@@ -155,12 +186,12 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                          break;
                      }
                      if(baseBean.isSussess()){
-                         if(commentBean.isThumbComment()){
-                             commentBean.setThumbComment(false);
-                             commentBean.setThumbCount(commentBean.getThumbCount()-1);
+                         if(comment.isThumbComment()){
+                             comment.setThumbComment(false);
+                             comment.setThumbCount(comment.getThumbCount()-1);
                          }else{
-                             commentBean.setThumbComment(true);
-                             commentBean.setThumbCount(commentBean.getThumbCount()+1);
+                             comment.setThumbComment(true);
+                             comment.setThumbCount(comment.getThumbCount()+1);
                          }
                          commentAdapter.notifyDataSetChanged();
                      }
@@ -198,12 +229,12 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     /**
      * 刷新界面数据
      */
-    private void refresh(Comment comment) {
-        if (comment == null) {
+    private void refresh(CommentList commentList) {
+        if (commentList == null) {
             return;
         }
-        if (comment.isSussess()) {
-            List<Comment.CommentBean> list = comment.getData();
+        if (commentList.isSussess()) {
+            List<Comment> list = commentList.getData();
             listAll.addAll(list);
             //展示列表
             if (commentAdapter == null) {
@@ -216,7 +247,7 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                 reList.setIsLoadingMoreEnabled(false);
             }
         } else {
-            ToastUtil.showLong(comment.getDesc());
+            ToastUtil.showLong(commentList.getDesc());
         }
     }
 
@@ -236,9 +267,8 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                         setClass(LoginActivity.class);
                         return false;
                     }
-
                     etContent.setText(null);
-                    if(commentBean==null && reply==null){
+                    if(playStatus==0){
                         //发送评论
                         sendComment(content);
                     }else{
@@ -252,43 +282,9 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     };
 
 
-    /**
-     * EventBus注解
-     */
-    @Subscribe
-    public void onEvent(EventBusType eventBusType) {
-        switch (eventBusType.getStatus()) {
-            //回复评论
-            case EventStatus.START_REPLY:
-                commentBean = (Comment.CommentBean) eventBusType.getObject();
-                reply=null;
-                if (commentBean == null) {
-                    return;
-                }
-                etContent.setHint("回复 @" + commentBean.getNickname());
-                //弹出软键盘
-                showInput(etContent);
-                break;
-            //二级回复
-            case EventStatus.REPLY_REPLY:
-                  reply= (Reply) eventBusType.getObject();
-                  commentBean=null;
-                  if(reply==null){
-                      return;
-                  }
-                  etContent.setHint("回复 @" + reply.getNickname());
-                  //弹出软键盘
-                  showInput(etContent);
-                  break;
-            default:
-                break;
-        }
-    }
-
 
     /**
      * 监听软键盘打开还是关闭
-     *
      * @param view
      */
     private void setListenerFotEditText(View view) {
@@ -297,9 +293,11 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
             }
             public void onSoftKeyboardClosed() {
-                commentBean=null;
-                reply=null;
-                etContent.setHint("说点什么吧～～");
+                //输入没有数据
+                if(TextUtils.isEmpty(etContent.getText().toString().trim())){
+                    playStatus=0;
+                    etContent.setHint("说点什么吧～～");
+                }
             }
         });
     }
@@ -343,15 +341,32 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
         HttpMethod.sendComment(content, videoBean.getId(), handler);
     }
 
+
+    /**
+     * 展示回复的界面
+     * @param playStatus:1：一级回复    2：二级回复
+     */
+    public void showSendReply(int playStatus,Comment comment,Reply reply){
+        this.playStatus=playStatus;
+        this.comment=comment;
+        this.reply=reply;
+        if(playStatus==1){
+            etContent.setHint("回复 @" + comment.getNickname());
+        }else{
+            etContent.setHint("回复 @" + reply.getNickname());
+        }
+        //弹出软键盘
+        showInput(etContent);
+    }
+
     /**
      * 回复评论
      */
     private void reply(String content){
         DialogUtil.showProgress(activity, "回复中");
-        if(commentBean!=null){
-            HttpMethod.reply(content,commentBean.getId(),handler);
-        }
-        if(reply!=null){
+        if(playStatus==1){
+            HttpMethod.reply(content,comment.getId(),handler);
+        }else{
             HttpMethod.reply(content,reply.getId(),handler);
         }
     }
@@ -359,23 +374,23 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     /**
      * 获取回复列表
      */
-    public void getReply(Comment.CommentBean commentBean){
-        this.commentBean=commentBean;
-        HttpMethod.getReply(commentBean.getId(),1,handler);
+    public void getReply(Comment comment){
+        this.comment=comment;
+        HttpMethod.getReply(comment.getId(),1,handler);
     }
 
 
     /**
      * 评论点赞、取消点赞
      */
-    public void commPrise(Comment.CommentBean commentBean){
+    public void commPrise(Comment comment){
         //先登录
         if(!MyApplication.isLogin()){
             setClass(LoginActivity.class);
             return;
         }
-        this.commentBean=commentBean;
-        HttpMethod.commPrise(commentBean.getId(),HandlerConstant.COMM_PRISE_SUCCESS,handler);
+        this.comment=comment;
+        HttpMethod.commPrise(comment.getId(),HandlerConstant.COMM_PRISE_SUCCESS,handler);
     }
 
 
@@ -401,6 +416,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        removeHandler(handler);
     }
 }

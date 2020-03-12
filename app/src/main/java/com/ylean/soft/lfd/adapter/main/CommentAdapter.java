@@ -28,10 +28,10 @@ import butterknife.ButterKnife;
 public class CommentAdapter extends BaseAdapter {
 
     private CommentActivity activity;
-    private List<Comment.CommentBean> list;
+    private List<Comment> list;
     //回复列表适配器
     private ReplyAdapter replyAdapter;
-    public CommentAdapter(CommentActivity activity,List<Comment.CommentBean> list) {
+    public CommentAdapter(CommentActivity activity,List<Comment> list) {
         super();
         this.activity = activity;
         this.list=list;
@@ -62,34 +62,34 @@ public class CommentAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        final Comment.CommentBean commentBean=list.get(position);
+        final Comment comment=list.get(position);
         //用户头像
-        String headUrl=commentBean.getUserImg();
+        String headUrl=comment.getUserImg();
         holder.imgHead.setTag(R.id.imageid,headUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(headUrl).into(holder.imgHead);
         }
-        holder.tvName.setText(commentBean.getNickname());
-        holder.tvContent.setText(Util.getSpanString(activity,commentBean.getContent()+"  ",commentBean.getCreatetimestr(),R.style.text1,R.style.text2));
-        if(commentBean.isThumbComment()){
+        holder.tvName.setText(comment.getNickname());
+        holder.tvContent.setText(Util.getSpanString(activity,comment.getContent()+"  ",comment.getCreatetimestr(),R.style.text1,R.style.text2));
+        if(comment.isThumbComment()){
             holder.imgPraise.setImageResource(R.mipmap.yes_praise);
         }else{
             holder.imgPraise.setImageResource(R.mipmap.no_praise);
         }
-        holder.tvNum.setText(String.valueOf(commentBean.getThumbCount()));
+        holder.tvNum.setText(String.valueOf(comment.getThumbCount()));
 
         /**
          * 显示回复列表
          */
-        if(commentBean.getReplyCount()>0){
+        if(comment.getReplyCount()>0){
             holder.replyList.setVisibility(View.VISIBLE);
-            holder.replyList.setAdapter(replyAdapter=new ReplyAdapter(activity,commentBean.getReplyList()));
+            holder.replyList.setAdapter(replyAdapter=new ReplyAdapter(activity,comment.getReplyList(),comment));
         }else{
             holder.replyList.setVisibility(View.GONE);
         }
 
         //显示或隐藏“查看更多”
-        if(commentBean.getReplyCount()>1 && commentBean.getReplyCount()!=commentBean.getReplyList().size()){
+        if(comment.getReplyCount()>1 && comment.getReplyCount()!=comment.getReplyList().size()){
             holder.tvMore.setVisibility(View.VISIBLE);
         }else{
             holder.tvMore.setVisibility(View.GONE);
@@ -99,12 +99,12 @@ public class CommentAdapter extends BaseAdapter {
         /**
          * 点击查看更多
          */
-        holder.tvMore.setTag(commentBean);
+        holder.tvMore.setTag(comment);
         holder.tvMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
-                if(commentBean!=null){
-                    activity.getReply(commentBean);
+                Comment comment= (Comment) v.getTag();
+                if(comment!=null){
+                    activity.getReply(comment);
                 }
             }
         });
@@ -114,14 +114,14 @@ public class CommentAdapter extends BaseAdapter {
         /**
          * 回复
          */
-        holder.tvContent.setTag(commentBean);
+        holder.tvContent.setTag(comment);
         holder.tvContent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(v.getTag()==null){
                     return;
                 }
-                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
-                EventBus.getDefault().post(new EventBusType(EventStatus.START_REPLY,commentBean));
+                Comment comment= (Comment) v.getTag();
+                activity.showSendReply(1,comment,null);
             }
         });
 
@@ -129,11 +129,11 @@ public class CommentAdapter extends BaseAdapter {
         /**
          * 评论点赞
          */
-        holder.imgPraise.setTag(commentBean);
+        holder.imgPraise.setTag(comment);
         holder.imgPraise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Comment.CommentBean commentBean= (Comment.CommentBean) v.getTag();
-                activity.commPrise(commentBean);
+                Comment comment= (Comment) v.getTag();
+                activity.commPrise(comment);
 
             }
         });

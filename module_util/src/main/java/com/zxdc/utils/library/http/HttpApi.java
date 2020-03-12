@@ -3,12 +3,15 @@ package com.zxdc.utils.library.http;
 
 
 import com.zxdc.utils.library.bean.AbvertList;
+import com.zxdc.utils.library.bean.AddComment;
+import com.zxdc.utils.library.bean.AddReply;
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.CommentList;
 import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.Help;
 import com.zxdc.utils.library.bean.HotSearch;
@@ -126,7 +129,7 @@ public interface HttpApi {
 
     @FormUrlEncoded
     @POST(HttpConstant.SEND_COMMENT)
-    Call<BaseBean> sendComment(@FieldMap Map<String, String> map);
+    Call<AddComment> sendComment(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(HttpConstant.MAIN_BANNER)
@@ -150,11 +153,11 @@ public interface HttpApi {
 
     @FormUrlEncoded
     @POST(HttpConstant.GET_COMMENT)
-    Call<Comment> getComment(@FieldMap Map<String, String> map);
+    Call<CommentList> getComment(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(HttpConstant.REPLY)
-    Call<BaseBean> reply(@FieldMap Map<String, String> map);
+    Call<AddReply> reply(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(HttpConstant.FOCUS_USER)

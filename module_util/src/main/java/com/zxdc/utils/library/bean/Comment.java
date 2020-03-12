@@ -7,99 +7,87 @@ import java.util.List;
  * Created by Administrator on 2020/3/5.
  */
 
-public class Comment extends BaseBean {
+public class Comment implements Serializable{
 
-    private List<CommentBean> data;
+    private int id;
+    private String content;
+    private String createtimestr;
+    private String nickname;
+    private String userImg;
+    private int replyCount;
+    private boolean thumbComment;
+    private int thumbCount;
+    private List<Reply> replyList;
 
-    public List<CommentBean> getData() {
-        return data;
+    public int getId() {
+        return id;
     }
 
-    public void setData(List<CommentBean> data) {
-        this.data = data;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static class CommentBean implements Serializable{
-        private int id;
-        private String content;
-        private String createtimestr;
-        private String nickname;
-        private String userImg;
-        private int replyCount;
-        private boolean thumbComment;
-        private int thumbCount;
-        private List<Reply> replyList;
+    public String getContent() {
+        return content;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public String getCreatetimestr() {
+        return createtimestr;
+    }
 
-        public String getContent() {
-            return content;
-        }
+    public void setCreatetimestr(String createtimestr) {
+        this.createtimestr = createtimestr;
+    }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
+    public String getNickname() {
+        return nickname;
+    }
 
-        public String getCreatetimestr() {
-            return createtimestr;
-        }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-        public void setCreatetimestr(String createtimestr) {
-            this.createtimestr = createtimestr;
-        }
+    public String getUserImg() {
+        return userImg;
+    }
 
-        public String getNickname() {
-            return nickname;
-        }
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
 
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
+    public int getReplyCount() {
+        return replyCount;
+    }
 
-        public String getUserImg() {
-            return userImg;
-        }
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
+    }
 
-        public void setUserImg(String userImg) {
-            this.userImg = userImg;
-        }
+    public List<Reply> getReplyList() {
+        return replyList;
+    }
 
-        public int getReplyCount() {
-            return replyCount;
-        }
+    public void setReplyList(List<Reply> replyList) {
+        this.replyList = replyList;
+    }
 
-        public void setReplyCount(int replyCount) {
-            this.replyCount = replyCount;
-        }
+    public boolean isThumbComment() {
+        return thumbComment;
+    }
 
-        public List<Reply> getReplyList() {
-            return replyList;
-        }
+    public void setThumbComment(boolean thumbComment) {
+        this.thumbComment = thumbComment;
+    }
 
-        public void setReplyList(List<Reply> replyList) {
-            this.replyList = replyList;
-        }
+    public int getThumbCount() {
+        return thumbCount;
+    }
 
-        public boolean isThumbComment() {
-            return thumbComment;
-        }
-
-        public void setThumbComment(boolean thumbComment) {
-            this.thumbComment = thumbComment;
-        }
-
-        public int getThumbCount() {
-            return thumbCount;
-        }
-
-        public void setThumbCount(int thumbCount) {
-            this.thumbCount = thumbCount;
-        }
+    public void setThumbCount(int thumbCount) {
+        this.thumbCount = thumbCount;
     }
 }

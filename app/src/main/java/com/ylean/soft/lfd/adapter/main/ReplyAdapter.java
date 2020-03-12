@@ -34,10 +34,13 @@ public class ReplyAdapter extends BaseAdapter {
 
     private CommentActivity activity;
     private List<Reply> list;
-    public ReplyAdapter(CommentActivity activity, List<Reply> list) {
+    //评论对象
+    private Comment comment;
+    public ReplyAdapter(CommentActivity activity, List<Reply> list,Comment comment) {
         super();
         this.activity = activity;
         this.list=list;
+        this.comment=comment;
     }
 
     @Override
@@ -96,7 +99,7 @@ public class ReplyAdapter extends BaseAdapter {
                     return;
                 }
                 Reply reply= (Reply) v.getTag();
-                EventBus.getDefault().post(new EventBusType(EventStatus.REPLY_REPLY,reply));
+                activity.showSendReply(2,comment,reply);
             }
         });
 

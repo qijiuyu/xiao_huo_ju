@@ -4,12 +4,15 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.zxdc.utils.library.bean.AbvertList;
+import com.zxdc.utils.library.bean.AddComment;
+import com.zxdc.utils.library.bean.AddReply;
 import com.zxdc.utils.library.bean.Agreement;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.Comment;
+import com.zxdc.utils.library.bean.CommentList;
 import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Focus;
 import com.zxdc.utils.library.bean.Help;
@@ -482,11 +485,11 @@ public class HttpMethod extends BaseRequst {
         Map<String,String> map=new HashMap<>();
         map.put("content",content);
         map.put("episodeid",String.valueOf(episodeid));
-        Http.getRetrofit().create(HttpApi.class).sendComment(map).enqueue(new Callback<BaseBean>() {
-            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+        Http.getRetrofit().create(HttpApi.class).sendComment(map).enqueue(new Callback<AddComment>() {
+            public void onResponse(Call<AddComment> call, Response<AddComment> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.SEND_COMMENT_SUCCESS, response.body());
             }
-            public void onFailure(Call<BaseBean> call, Throwable t) {
+            public void onFailure(Call<AddComment> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
@@ -603,11 +606,11 @@ public class HttpMethod extends BaseRequst {
         map.put("episodeid",String.valueOf(episodeid));
         map.put("pageindex",String.valueOf(pageindex));
         map.put("pagesize","20");
-        Http.getRetrofit().create(HttpApi.class).getComment(map).enqueue(new Callback<Comment>() {
-            public void onResponse(Call<Comment> call, Response<Comment> response) {
+        Http.getRetrofit().create(HttpApi.class).getComment(map).enqueue(new Callback<CommentList>() {
+            public void onResponse(Call<CommentList> call, Response<CommentList> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_COMMENT_SUCCESS, response.body());
             }
-            public void onFailure(Call<Comment> call, Throwable t) {
+            public void onFailure(Call<CommentList> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
@@ -621,11 +624,11 @@ public class HttpMethod extends BaseRequst {
         Map<String,String> map=new HashMap<>();
         map.put("content",content);
         map.put("pid",String.valueOf(pid));
-        Http.getRetrofit().create(HttpApi.class).reply(map).enqueue(new Callback<BaseBean>() {
-            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+        Http.getRetrofit().create(HttpApi.class).reply(map).enqueue(new Callback<AddReply>() {
+            public void onResponse(Call<AddReply> call, Response<AddReply> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REPLY_SUCCESS, response.body());
             }
-            public void onFailure(Call<BaseBean> call, Throwable t) {
+            public void onFailure(Call<AddReply> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });
