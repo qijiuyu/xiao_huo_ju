@@ -244,7 +244,6 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
     protected void onDestroy() {
         super.onDestroy();
         removeHandler(handler);
-        LogUtils.e("+++++++++++++++++++++++++=111");
         if(detailsBean==null){
             return;
         }

@@ -76,6 +76,9 @@ public class UserInfoActivity extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
         initView();
+
+        //获取用户信息
+        HttpMethod.getUserInfo(handler);
     }
 
     /**
@@ -138,6 +141,16 @@ public class UserInfoActivity extends BaseActivity {
         public boolean handleMessage(Message msg) {
             DialogUtil.closeProgress();
             switch (msg.what){
+                //获取用户信息
+                case HandlerConstant.GET_USER_SUCCESS:
+                      UserInfo userInfo= (UserInfo) msg.obj;
+                      if(userInfo==null){
+                          break;
+                      }
+                      if(userInfo.isSussess()){
+                          tvMobile.setText(userInfo.getData().getMobile());
+                      }
+                      break;
                 //图片上传
                 case HandlerConstant.UPLOAD_SUCCESS:
                       Upload upload= (Upload) msg.obj;
@@ -177,7 +190,6 @@ public class UserInfoActivity extends BaseActivity {
         if(!TextUtils.isEmpty(userBean.getBirthday()) && userBean.getBirthday().length()>=10){
             tvBirthday.setText(userBean.getBirthday().substring(0,10));
         }
-        tvMobile.setText(userBean.getMobile());
         tvRemark.setText(userBean.getIntroduction());
     }
 

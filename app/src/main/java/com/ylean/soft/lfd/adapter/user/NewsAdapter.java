@@ -74,7 +74,9 @@ public class NewsAdapter extends BaseAdapter {
                     if(newsBean.getEpisodeId()!=0){
                         intent.putExtra("singleId",newsBean.getEpisodeId());
                     }
-                    intent.putExtra("serialId",newsBean.getSerialId());
+                    if(newsBean.getSerialId()!=0){
+                        intent.putExtra("serialId",newsBean.getSerialId());
+                    }
                     activity.startActivity(intent);
                 }
             }

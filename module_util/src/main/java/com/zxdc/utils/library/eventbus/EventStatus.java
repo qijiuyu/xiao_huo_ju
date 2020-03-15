@@ -103,5 +103,8 @@ public class EventStatus {
    //关注用户
    public static final int FOCUS_USER=222;
 
+    //取消剧情关注
+    public static final int CANCLE_FOCUS_SERIAL=223;
+
 
 }

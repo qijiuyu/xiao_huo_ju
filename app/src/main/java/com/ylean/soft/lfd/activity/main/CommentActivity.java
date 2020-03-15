@@ -158,10 +158,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                           }
                           comment.getReplyList().add(0,addReply.getData());
                           commentAdapter.notifyDataSetChanged();
-
-                          //增加评论个数
-                          videoBean.setCommentCount(videoBean.getCommentCount()+1);
-                          tvTotal.setText(videoBean.getCommentCount()+"条评论");
                       }
                       ToastUtil.showLong(addReply.getDesc());
                       break;

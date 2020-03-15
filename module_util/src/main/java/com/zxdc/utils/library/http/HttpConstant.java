@@ -103,5 +103,7 @@ public class HttpConstant {
 
     public static final String GET_ABVERT="api/app/banner/list";
 
+    public static final String GET_USER_INFO="api/app/user/getinfo";
+
 
 }

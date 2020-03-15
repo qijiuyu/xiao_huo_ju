@@ -42,7 +42,7 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="您暂无浏览记录"
+        android:text="您暂无观看记录"
         android:textSize="14sp"
         android:textColor="@color/color_999999"
         android:drawableTop="@mipmap/no_data"

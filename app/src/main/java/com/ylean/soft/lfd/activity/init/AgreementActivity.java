@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,12 @@ public class AgreementActivity extends BaseActivity {
         initView();
         //查询协议
         getAgreement();
+
+        imgBank.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AgreementActivity.this.finish();
+            }
+        });
     }
 
     /**

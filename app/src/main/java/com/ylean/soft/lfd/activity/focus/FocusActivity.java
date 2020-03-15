@@ -18,11 +18,16 @@ import com.ylean.soft.lfd.adapter.focus.FocusListAdapter;
 import com.ylean.soft.lfd.adapter.main.RecommendedAdapter;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +64,8 @@ public class FocusActivity extends BaseActivity implements MyRefreshLayoutListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_focus);
         ButterKnife.bind(this);
+        //注册eventBus
+        EventBus.getDefault().register(this);
         initView();
         //加载数据
         reList.startRefresh();
@@ -200,9 +207,39 @@ public class FocusActivity extends BaseActivity implements MyRefreshLayoutListen
     }
 
 
+    /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        switch (eventBusType.getStatus()) {
+            //取消剧情关注
+            case EventStatus.CANCLE_FOCUS_SERIAL:
+                  int serialId= (int) eventBusType.getObject();
+                  for (int i=0;i<listAll.size();i++){
+                       if(serialId==listAll.get(i).getId()){
+                           listAll.remove(i);
+                           focusListAdapter.notifyDataSetChanged();
+                           break;
+                       }
+                  }
+                 if (listAll.size() == 0) {
+                     reList.setVisibility(View.GONE);
+                     linNo.setVisibility(View.VISIBLE);
+                     //获取推荐数据
+                     mainBanner();
+                 }
+                  break;
+            default:
+                break;
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         removeHandler(handler);
     }
 }

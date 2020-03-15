@@ -76,6 +76,10 @@ public interface HttpApi {
     Call<UserInfo> getUser(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
+    @POST(HttpConstant.GET_USER_INFO)
+    Call<UserInfo> getUserInfo(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
     @POST(HttpConstant.EDIT_USER)
     Call<BaseBean> editUser(@FieldMap Map<String, String> map);
 

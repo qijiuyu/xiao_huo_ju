@@ -312,9 +312,13 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * 播放视频
      */
     private void playVideo(){
+        if(TextUtils.isEmpty(videoBean.getVideourl())){
+            ToastUtil.showLong("视频地址出错");
+            return;
+        }
         holder.videoView.setHudView(holder.tableLayout);
         holder.videoView.setMediaController(controller);
-        holder.videoView.setVideoURI(Uri.parse("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4"));
+        holder.videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         holder.videoView.start();
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -479,6 +483,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }else{
             holder.imgColl.setImageResource(R.mipmap.coll_icon);
             holder.tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)-1));
+
+            //发送取消关注剧情的eventBus
+            EventBus.getDefault().post(new EventBusType(EventStatus.CANCLE_FOCUS_SERIAL,videoBean.getSerialId()));
         }
     }
 

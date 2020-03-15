@@ -220,6 +220,21 @@ public class HttpMethod extends BaseRequst {
         });
     }
 
+    /**
+     * 获取用户信息
+     */
+    public static void getUserInfo(final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        Http.getRetrofit().create(HttpApi.class).getUserInfo(map).enqueue(new Callback<UserInfo>() {
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.GET_USER_SUCCESS, response.body());
+            }
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
 
     /**
      * 修改用户信息

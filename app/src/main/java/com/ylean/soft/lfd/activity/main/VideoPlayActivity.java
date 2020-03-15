@@ -182,6 +182,10 @@ public class VideoPlayActivity extends BaseActivity {
      * 播放视频
      */
     private void startPlay(){
+        if(TextUtils.isEmpty(videoBean.getVideourl())){
+            ToastUtil.showLong("视频地址出错");
+            return;
+        }
         videoView.setMediaController(controller);
         videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         videoView.start();
@@ -434,6 +438,9 @@ public class VideoPlayActivity extends BaseActivity {
                       videoBean.setFollowSerial(false);
                       imgColl.setImageResource(R.mipmap.coll_icon);
                       tvFocusSerial.setText(String.valueOf(Integer.parseInt(serialNum)-1));
+
+                      //发送取消关注剧情的eventBus
+                      EventBus.getDefault().post(new EventBusType(EventStatus.CANCLE_FOCUS_SERIAL,videoBean.getSerialId()));
                   }
                   break;
             //点赞、取消点赞

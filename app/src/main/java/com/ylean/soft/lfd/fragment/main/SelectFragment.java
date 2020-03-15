@@ -107,6 +107,7 @@ public class SelectFragment extends BaseFragment {
     //旋转动画
     private ObjectAnimator rotation;
     private SelectFragmentPersenter selectFragmentPersenter;
+    private Handler handler=new Handler();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //注册eventBus
@@ -285,9 +286,6 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleHottest.setLayoutManager(layoutManager);
         recycleHottest.setAdapter(new MainHottestAdapter(mActivity,list));
-
-        //置顶
-        scrollView.scrollTo(0, 0);
     }
 
 
@@ -295,16 +293,13 @@ public class SelectFragment extends BaseFragment {
      * 显示猜你喜欢
      */
     private void showLook(List<HotTop.DataBean> list){
+        if(rotation!=null){
+            rotation.end();
+        }
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleLook.setLayoutManager(layoutManager);
         recycleLook.setAdapter(new MainLookAdapter(mActivity,list));
-        if(rotation!=null){
-            rotation.end();
-        }else{
-            //置顶
-            scrollView.scrollTo(0, 0);
-        }
     }
 
 
@@ -321,8 +316,12 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleProject.setLayoutManager(layoutManager);
         recycleProject.setAdapter(new MainProjectAdapter(mActivity,projectBean.getSerialList()));
-        //置顶
-        scrollView.scrollTo(0, 0);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },100);
     }
 
 
@@ -334,8 +333,12 @@ public class SelectFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleOnLine.setLayoutManager(layoutManager);
         recycleOnLine.setAdapter(new MainOnlineAdapter(mActivity,list));
-        //置顶
-        scrollView.scrollTo(0, 0);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },100);
     }
 
 
@@ -345,8 +348,12 @@ public class SelectFragment extends BaseFragment {
     private void showAuthor(List<Author.DataBean> list){
         recycleAuthor.setLayoutManager(new GridLayoutManager(mActivity, 4));
         recycleAuthor.setAdapter(new MainAuthorAdapter(mActivity,list));
-        //置顶
-        scrollView.scrollTo(0, 0);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },100);
     }
 
 
@@ -355,8 +362,12 @@ public class SelectFragment extends BaseFragment {
      */
     private void showBlues(List<Tag.TagBean> list){
         listBlues.setAdapter(new MainBluesAdapter(mActivity,list));
-        //置顶
-        scrollView.scrollTo(0, 0);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },100);
     }
 
 

@@ -28,15 +28,15 @@ public class FootLoadingView extends LinearLayout implements ILoadingLayout {
     @Override
     public void pullToRefresh() {
         mTitleTv.setVisibility(View.VISIBLE);
-        mTitleTv.setText(getResources().getString(
-                R.string.xscrollview_footer_hint_normal));
+//        mTitleTv.setText(getResources().getString(
+//                R.string.xscrollview_footer_hint_normal));
     }
 
     @Override
     public void releaseToRefresh() {
         mTitleTv.setVisibility(View.VISIBLE);
-        mTitleTv.setText(getResources().getString(
-                R.string.xscrollview_footer_hint_ready));
+//        mTitleTv.setText(getResources().getString(
+//                R.string.xscrollview_footer_hint_ready));
     }
 
     @Override
@@ -48,8 +48,8 @@ public class FootLoadingView extends LinearLayout implements ILoadingLayout {
     @Override
     public void normal() {
         mTitleTv.setVisibility(View.VISIBLE);
-        mTitleTv.setText(getResources().getString(
-                R.string.xscrollview_footer_hint_normal));
+//        mTitleTv.setText(getResources().getString(
+//                R.string.xscrollview_footer_hint_normal));
         mProgress.setVisibility(View.GONE);
     }
 
