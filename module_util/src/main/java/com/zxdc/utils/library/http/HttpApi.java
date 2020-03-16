@@ -49,7 +49,7 @@ public interface HttpApi {
 
     @FormUrlEncoded
     @POST(HttpConstant.REGISTER)
-    Call<BaseBean> register(@FieldMap Map<String, String> map);
+    Call<Login> register(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST(HttpConstant.SMS_LOGIN)

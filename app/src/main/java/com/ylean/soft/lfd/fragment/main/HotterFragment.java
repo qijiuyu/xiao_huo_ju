@@ -16,6 +16,7 @@ import com.ylean.soft.lfd.adapter.main.HotterFragmentAdapter;
 import com.zxdc.utils.library.base.BaseFragment;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -135,10 +136,10 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         TextView tvFocus=headView.findViewById(R.id.tv_focus);
         TextView tvDes=headView.findViewById(R.id.tv_des);
         //背景图片
-        Glide.with(this).load(dataBean.getImgurl()).into(imgHead);
+        Glide.with(this).load(HttpConstant.IP+dataBean.getImgurl()).into(imgHead);
         tvTitle.setHint(dataBean.getName());
         //用户头像
-        Glide.with(this).load(dataBean.getUserImg()).into(imgPic);
+        Glide.with(this).load(HttpConstant.IP+dataBean.getUserImg()).into(imgPic);
         tvName.setText(dataBean.getUserNickName());
         if(dataBean.isFollowUser()){
             tvFocus.setText("已关注");

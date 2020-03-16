@@ -24,6 +24,7 @@ import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.BitMapUtil;
 import com.zxdc.utils.library.util.DialogUtil;
@@ -182,7 +183,7 @@ public class UserInfoActivity extends BaseActivity {
         if(userBean==null){
             return;
         }
-        Glide.with(this).load(userBean.getImgurl()).error(R.mipmap.default_head).into(imgHead);
+        Glide.with(this).load(HttpConstant.IP+userBean.getImgurl()).error(R.mipmap.default_head).into(imgHead);
         tvName.setText(userBean.getNickname());
         //设置性别背景
         setSexBj(userBean.getSex());

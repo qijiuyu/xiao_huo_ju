@@ -15,6 +15,7 @@ import com.ylean.soft.lfd.activity.main.BluesListActivity;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.SerialVideo;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class BluesListAdapter extends RecyclerView.Adapter<BluesListAdapter.MyHo
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         SerialVideo.SerialVideoBean serialVideoBean=list.get(i);
         //背景图片
-        String imgUrl=serialVideoBean.getImgurl();
+        String imgUrl= HttpConstant.IP+serialVideoBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

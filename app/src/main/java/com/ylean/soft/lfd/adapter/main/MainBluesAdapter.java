@@ -18,6 +18,7 @@ import com.zxdc.utils.library.bean.Abvert;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 import org.greenrobot.eventbus.EventBus;
 import java.util.List;
@@ -64,7 +65,7 @@ public class MainBluesAdapter extends BaseAdapter {
         holder.tvName.setText(tagBean.getName());
         //显示广告图片
         if(tagBean.getBanner()!=null){
-            String imgUrl=tagBean.getBanner().getImgurl();
+            String imgUrl= HttpConstant.IP+tagBean.getBanner().getImgurl();
             holder.imgAbvert.setTag(R.id.imageid,imgUrl);
             if(holder.imgAbvert.getTag(R.id.imageid)!=null && imgUrl==holder.imgAbvert.getTag(R.id.imageid)){
                 Glide.with(activity).load(imgUrl).into(holder.imgAbvert);

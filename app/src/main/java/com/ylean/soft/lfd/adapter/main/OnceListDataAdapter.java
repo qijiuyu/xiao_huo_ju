@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 import java.util.List;
 public class OnceListDataAdapter extends RecyclerView.Adapter<OnceListDataAdapter.MyHolder> {
@@ -33,7 +34,7 @@ public class OnceListDataAdapter extends RecyclerView.Adapter<OnceListDataAdapte
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         Project.ListData listData=list.get(i);
         //图片
-        String imgUrl=listData.getImgurl();
+        String imgUrl= HttpConstant.IP+listData.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

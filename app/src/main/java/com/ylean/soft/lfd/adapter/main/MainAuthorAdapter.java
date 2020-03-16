@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.zxdc.utils.library.bean.Author;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -40,7 +41,7 @@ public class MainAuthorAdapter extends RecyclerView.Adapter<MainAuthorAdapter.My
             return;
         }
         holder.tvName.setText(dataBean.getNickname());
-        Glide.with(activity).load(dataBean.getImgurl()).into(holder.imgHead);
+        Glide.with(activity).load(HttpConstant.IP+dataBean.getImgurl()).into(holder.imgHead);
 
         /**
          * 进入作者详情

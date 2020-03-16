@@ -47,6 +47,7 @@ import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.MeasureListView;
 
@@ -273,7 +274,7 @@ public class SelectFragment extends BaseFragment {
                     .centerCrop()
                     .priority(Priority.HIGH) //优先级
                     .transform(new CornerTransform(10)); //圆角
-            Glide.with(context).load(dataBean.getImgurl()).apply(options).into(imageView);
+            Glide.with(context).load(HttpConstant.IP+dataBean.getImgurl()).apply(options).into(imageView);
         }
     }
 

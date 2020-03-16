@@ -31,6 +31,7 @@ import com.zxdc.utils.library.bean.Abvert;
 import com.zxdc.utils.library.bean.AbvertList;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
@@ -176,7 +177,7 @@ public class OtherFragment extends BaseFragment implements MyRefreshLayoutListen
                     .centerCrop()
                     .priority(Priority.HIGH) //优先级
                     .transform(new CornerTransform(10)); //圆角
-            Glide.with(context).load(abvert.getImgurl()).apply(options).into(imageView);
+            Glide.with(context).load(HttpConstant.IP+abvert.getImgurl()).apply(options).into(imageView);
 
             /**
              * 广告跳转

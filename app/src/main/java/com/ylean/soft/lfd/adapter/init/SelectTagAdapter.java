@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class SelectTagAdapter extends RecyclerView.Adapter<SelectTagAdapter.MyHo
         }
         holder.tvName.setHint(tagBean.getName());
         //背景图片
-        String imgUrl=tagBean.getImgurl();
+        String imgUrl= HttpConstant.IP+tagBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

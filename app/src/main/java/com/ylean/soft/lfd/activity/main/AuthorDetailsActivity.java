@@ -21,6 +21,7 @@ import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.LogUtils;
@@ -143,8 +144,10 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
                      if(baseBean.isSussess()){
                          if(detailsBean.isFollowUser()){
                              detailsBean.setFollowUser(false);
+                             detailsBean.setFollowCount(detailsBean.getFollowCount()-1);
                          }else{
                              detailsBean.setFollowUser(true);
+                             detailsBean.setFollowCount(detailsBean.getFollowCount()+1);
                          }
                          //展示用户信息
                          showAuthor(detailsBean);
@@ -171,7 +174,7 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
         if (detailsBean == null) {
             return;
         }
-        Glide.with(activity).load(detailsBean.getImgurl()).into(imgHead);
+        Glide.with(activity).load(HttpConstant.IP+detailsBean.getImgurl()).into(imgHead);
         tvFans.setText(String.valueOf(detailsBean.getFollowCount()));
         if (detailsBean.isFollowUser()) {
             tvFocus.setBackgroundResource(R.drawable.bg_author_focus);

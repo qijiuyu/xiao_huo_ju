@@ -67,8 +67,6 @@ public class FocusActivity extends BaseActivity implements MyRefreshLayoutListen
         //注册eventBus
         EventBus.getDefault().register(this);
         initView();
-        //加载数据
-        reList.startRefresh();
     }
 
 
@@ -235,6 +233,14 @@ public class FocusActivity extends BaseActivity implements MyRefreshLayoutListen
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(listAll.size()==0){
+            //加载数据
+            reList.startRefresh();
+        }
+    }
 
     @Override
     protected void onDestroy() {

@@ -25,6 +25,7 @@ import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.MyRefreshLayout;
@@ -229,7 +230,7 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
             return;
         }
         if(!TextUtils.isEmpty(userBean.getImgurl())){
-            Glide.with(this).load(userBean.getImgurl()).into(imgHead);
+            Glide.with(this).load(HttpConstant.IP+userBean.getImgurl()).into(imgHead);
         }
         tvFans.setText(String.valueOf(userBean.getFansCount()));
         tvFocus.setText(String.valueOf(userBean.getFollowCount()));

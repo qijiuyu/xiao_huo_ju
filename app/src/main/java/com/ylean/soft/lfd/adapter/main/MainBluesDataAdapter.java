@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class MainBluesDataAdapter extends RecyclerView.Adapter<MainBluesDataAdap
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         final Tag.ListData listData=list.get(0);
         //背景图片
-        String imgUrl=listData.getImgurl();
+        String imgUrl= HttpConstant.IP+listData.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

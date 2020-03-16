@@ -187,7 +187,7 @@ public class VideoPlayActivity extends BaseActivity {
             return;
         }
         videoView.setMediaController(controller);
-        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
+        videoView.setVideoURI(Uri.parse(HttpConstant.IP+videoBean.getVideourl()));
         videoView.start();
         //监听视频播放完毕
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -512,7 +512,7 @@ public class VideoPlayActivity extends BaseActivity {
             return;
         }
         tvTitle.setText(videoBean.getIntroduction());
-        Glide.with(activity).load(videoBean.getUserImg()).into(imgHead);
+        Glide.with(activity).load(HttpConstant.IP+videoBean.getUserImg()).into(imgHead);
         //是否关注用户
         if(videoBean.isFollowUser()){
             imgFocus.setVisibility(View.GONE);

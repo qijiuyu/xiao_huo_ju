@@ -12,11 +12,13 @@ import android.widget.TextView;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,17 +106,33 @@ public class ResetPassWordActivity extends BaseActivity {
             DialogUtil.closeProgress();
             switch (msg.what){
                 //注册回执
-                case HandlerConstant.EDIT_PWD_SUCCESS:
                 case HandlerConstant.REGISTER_SUCCESS:
-                    BaseBean baseBean= (BaseBean) msg.obj;
-                    if(baseBean==null){
-                        break;
-                    }
-                    if(baseBean.isSussess()){
-                        EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
-                        finish();
-                    }
-                    ToastUtil.showLong(baseBean.getDesc());
+                     Login login= (Login) msg.obj;
+                     if(login==null){
+                         break;
+                     }
+                     if(login.isSussess() && login.getData()!=null){
+                         //存储token
+                         SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
+                         //通知关闭上个页面
+                         EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
+                         //进入选择喜好的页面
+                         setClass(SelectTagActivity.class);
+                         finish();
+                     }
+                     ToastUtil.showLong(login.getDesc());
+                      break;
+                //修改密码回执
+                case HandlerConstant.EDIT_PWD_SUCCESS:
+                     BaseBean baseBean= (BaseBean) msg.obj;
+                     if(baseBean==null){
+                         break;
+                     }
+                     if(baseBean.isSussess()){
+                         EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
+                         finish();
+                     }
+                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());

@@ -12,6 +12,7 @@ import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,7 +58,7 @@ public class SelectBluesAdapter extends BaseAdapter {
         }
         SerialVideo.SerialVideoBean serialVideoBean=lis.get(position);
         //背景图片
-        String imgUrl=serialVideoBean.getImgurl();
+        String imgUrl= HttpConstant.IP+serialVideoBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

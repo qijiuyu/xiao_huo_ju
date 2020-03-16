@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.Focus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.CircleImageView;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class FocusPopleAdapter extends BaseAdapter {
         }
         Focus.FocusBean focusBean=list.get(position);
         //用户头像
-        String headUrl=focusBean.getImgurl();
+        String headUrl= HttpConstant.IP+focusBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid2,headUrl);
         if(holder.imgHead.getTag(R.id.imageid2)!=null && headUrl==holder.imgHead.getTag(R.id.imageid2)){
             Glide.with(activity).load(headUrl).into(holder.imgHead);

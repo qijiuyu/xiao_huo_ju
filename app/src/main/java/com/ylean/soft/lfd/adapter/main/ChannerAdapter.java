@@ -19,6 +19,8 @@ import com.ylean.soft.lfd.utils.AnimUtil;
 import com.ylean.soft.lfd.utils.channel.DataUtils;
 import com.ylean.soft.lfd.utils.channel.TouchInterface;
 import com.zxdc.utils.library.bean.Tag;
+import com.zxdc.utils.library.http.HttpConstant;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
         //名称
         holder.tvName.setText(tagBean.getName());
         //图片
-        Glide.with(activity).load(tagBean.getImgurl()).into(holder.imgTag);
+        Glide.with(activity).load(HttpConstant.IP+tagBean.getImgurl()).into(holder.imgTag);
 
         if(isJitter){
             AnimUtil.tada(holder.relTag);

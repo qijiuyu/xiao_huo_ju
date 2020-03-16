@@ -14,6 +14,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Project;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -38,14 +39,14 @@ public class MainProjectAdapter extends RecyclerView.Adapter<MainProjectAdapter.
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         Project.ListData listData=list.get(i);
         //图片
-        String imgUrl=listData.getImgurl();
+        String imgUrl= HttpConstant.IP+listData.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
         holder.tvBlues.setText("全"+listData.getEpisodeCount()+"集");
         //用户头像
-        String headUrl=listData.getUserImg();
+        String headUrl=HttpConstant.IP+listData.getUserImg();
         holder.imgAuthor.setTag(R.id.imageid2,headUrl);
         if(holder.imgAuthor.getTag(R.id.imageid2)!=null && headUrl==holder.imgAuthor.getTag(R.id.imageid2)){
             Glide.with(activity).load(headUrl).into(holder.imgAuthor);

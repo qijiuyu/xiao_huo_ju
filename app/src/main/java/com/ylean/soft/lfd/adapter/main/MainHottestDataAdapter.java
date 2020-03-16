@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -78,14 +79,14 @@ public class MainHottestDataAdapter extends BaseAdapter {
             holder.tvNum.setText(String.valueOf(index*3+position+1));
         }
         //背景图片
-        String imgUrl=dataBean.getImgurl();
+        String imgUrl= HttpConstant.IP+dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
         holder.tvTitle.setText(dataBean.getName());
         //用户头像
-        String headUrl=dataBean.getUserImg();
+        String headUrl=HttpConstant.IP+dataBean.getUserImg();
         holder.imgPic.setTag(R.id.imageid2,headUrl);
         if(holder.imgPic.getTag(R.id.imageid2)!=null && headUrl==holder.imgPic.getTag(R.id.imageid2)){
             Glide.with(activity).load(headUrl).into(holder.imgPic);

@@ -94,11 +94,11 @@ public class HttpMethod extends BaseRequst {
         map.put("code", code);
         map.put("password",password);
         map.put("phone",phone);
-        Http.getRetrofit().create(HttpApi.class).register(map).enqueue(new Callback<BaseBean>() {
-            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+        Http.getRetrofit().create(HttpApi.class).register(map).enqueue(new Callback<Login>() {
+            public void onResponse(Call<Login> call, Response<Login> response) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REGISTER_SUCCESS, response.body());
             }
-            public void onFailure(Call<BaseBean> call, Throwable t) {
+            public void onFailure(Call<Login> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

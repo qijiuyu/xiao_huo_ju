@@ -60,7 +60,6 @@ public class SelectTagActivity extends BaseActivity {
             case R.id.tv_skip:
             case R.id.tv_look:
                 finish();
-                setClass(TabActivity.class);
                 break;
             //选好了
             case R.id.tv_ok:

@@ -45,6 +45,7 @@ import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
@@ -318,7 +319,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }
         holder.videoView.setHudView(holder.tableLayout);
         holder.videoView.setMediaController(controller);
-        holder.videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
+        holder.videoView.setVideoURI(Uri.parse(HttpConstant.IP+videoBean.getVideourl()));
         holder.videoView.start();
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {

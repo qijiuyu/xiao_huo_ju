@@ -14,6 +14,7 @@ import com.ylean.soft.lfd.activity.main.CommentActivity;
 import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.MeasureListView;
@@ -64,7 +65,7 @@ public class CommentAdapter extends BaseAdapter {
 
         final Comment comment=list.get(position);
         //用户头像
-        String headUrl=comment.getUserImg();
+        String headUrl= HttpConstant.IP+comment.getUserImg();
         holder.imgHead.setTag(R.id.imageid,headUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(headUrl).into(holder.imgHead);

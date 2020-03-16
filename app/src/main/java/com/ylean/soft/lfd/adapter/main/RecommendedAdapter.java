@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.List;
@@ -34,9 +35,8 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         HotTop.DataBean dataBean=list.get(i);
         //背景图片
-        String imgUrl=dataBean.getImgurl();
+        String imgUrl= HttpConstant.IP+dataBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
-        holder.imgHead.setTag(R.id.tag1,dataBean);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
