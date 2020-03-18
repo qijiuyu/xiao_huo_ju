@@ -34,7 +34,7 @@ public class MainBluesDataAdapter extends RecyclerView.Adapter<MainBluesDataAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
-        final Tag.ListData listData=list.get(0);
+        final Tag.ListData listData=list.get(i);
         //背景图片
         String imgUrl= HttpConstant.IP+listData.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);

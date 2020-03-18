@@ -3,6 +3,7 @@ package com.zxdc.utils.library.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.view.Gravity;
@@ -13,6 +14,11 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import com.android.tu.loadingdialog.LoadingDailog;
 import com.zxdc.utils.library.R;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 弹框工具类
  */
@@ -83,4 +89,21 @@ public class DialogUtil {
         return mPopuwindow;
     }
 
+
+    public static ArrayList getWindowViews() {
+        try {
+            View rootView = null;
+            Class wmgClass = Class.forName("android.view.WindowManagerGlobal");
+            Object wmgInstnace = wmgClass.getMethod("getInstance").invoke(null, (Object[]) null);
+            Field mViewsField = wmgClass.getDeclaredField("mViews");
+            mViewsField.setAccessible(true);
+            ArrayList o = (ArrayList) mViewsField.get(wmgInstnace);
+            return o;
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

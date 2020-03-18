@@ -282,11 +282,24 @@ public class SelectFragment extends BaseFragment {
     /**
      * 显示今日最热/top50
      */
-    private void showHotter(List<HotTop.DataBean> list){
+    private void showHotter(List<HotTop.DataBean> listAll){
         LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycleHottest.setLayoutManager(layoutManager);
-        recycleHottest.setAdapter(new MainHottestAdapter(mActivity,list));
+        //解析为3个数据为一组
+        List<List<HotTop.DataBean>> arrayList=new ArrayList<>();
+        List<HotTop.DataBean> list=new ArrayList<>();
+        for (int index = 0,len=listAll.size(); index<len; index++) {
+             list.add(listAll.get(index));
+             if((index+1)%3==0){
+                 arrayList.add(list);
+                 list=new ArrayList<>();
+             }
+        }
+        if(list.size()>0){
+            arrayList.add(list);
+        }
+        recycleHottest.setAdapter(new MainHottestAdapter(mActivity,arrayList));
     }
 
 

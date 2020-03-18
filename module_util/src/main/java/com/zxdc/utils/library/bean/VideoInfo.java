@@ -35,6 +35,7 @@ public class VideoInfo extends BaseBean {
         private int userId;
         private String userImg;
         private int commentCount;
+        private int thumbCount;
 
         public int getEpisodeCount() {
             return episodeCount;
@@ -162,6 +163,14 @@ public class VideoInfo extends BaseBean {
 
         public void setCommentCount(int commentCount) {
             this.commentCount = commentCount;
+        }
+
+        public int getThumbCount() {
+            return thumbCount;
+        }
+
+        public void setThumbCount(int thumbCount) {
+            this.thumbCount = thumbCount;
         }
     }
 }

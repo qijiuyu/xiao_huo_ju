@@ -167,7 +167,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             }else{
                 holder.imgPraise.setImageResource(R.mipmap.no_praise);
             }
-            holder.tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+            holder.tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
             //是否关注剧集
             if(videoBean.isFollowSerial()){
                 holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
@@ -191,6 +191,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.imgColl.setOnClickListener(this);
             holder.relScreen.setOnClickListener(this);
             holder.imgFocus.setOnClickListener(this);
+
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.videoView.setVisibility(View.VISIBLE);
             //屏幕点击
@@ -199,6 +200,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             playVideo();
         }else{
             holder.videoView.setVisibility(View.GONE);
+            holder.imgPlay.setVisibility(View.GONE);
+            holder.linScreen.setVisibility(View.VISIBLE);
+            holder.relProgress.setVisibility(View.GONE);
         }
     }
 
@@ -358,6 +362,16 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     // 设置当前播放的位置
                     holder.videoView.seekTo(progress);
                 }
+            }
+        });
+
+        //监听错误
+        holder.videoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
+            public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+                if(i==-10000){
+                    ToastUtil.showLong("视频资源出错");
+                }
+                return true;
             }
         });
     }

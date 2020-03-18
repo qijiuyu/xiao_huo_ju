@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd;
 
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.umeng.commonsdk.UMConfigure;
@@ -7,6 +8,10 @@ import com.umeng.socialize.PlatformConfig;
 import com.zxdc.utils.library.base.BaseApplication;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import cn.jpush.android.api.JPushInterface;
 

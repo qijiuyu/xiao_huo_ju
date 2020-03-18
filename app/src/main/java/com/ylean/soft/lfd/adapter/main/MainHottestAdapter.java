@@ -18,8 +18,8 @@ import java.util.List;
 public class MainHottestAdapter extends RecyclerView.Adapter<MainHottestAdapter.MyHolder> {
 
     private Activity activity;
-    private List<HotTop.DataBean> list;
-    public MainHottestAdapter(Activity activity,List<HotTop.DataBean> list) {
+    private List<List<HotTop.DataBean>> list;
+    public MainHottestAdapter(Activity activity,List<List<HotTop.DataBean>> list) {
         this.activity = activity;
         this.list=list;
     }
@@ -32,13 +32,13 @@ public class MainHottestAdapter extends RecyclerView.Adapter<MainHottestAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-        MainHottestDataAdapter mainHottestDataAdapter=new MainHottestDataAdapter(activity,list,i);
+        MainHottestDataAdapter mainHottestDataAdapter=new MainHottestDataAdapter(activity,list.get(i),i);
         myHolder.listView.setAdapter(mainHottestDataAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return list==null ? 0 : getNum();
+        return list==null ? 0 : list.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {

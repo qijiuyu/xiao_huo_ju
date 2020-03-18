@@ -2,6 +2,7 @@ package com.ylean.soft.lfd.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,7 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
@@ -214,6 +216,16 @@ public class VideoPlayActivity extends BaseActivity {
                     videoView.seekTo(startTo);
                     seekbar.setProgress(startTo);
                 }
+            }
+        });
+
+        //监听错误
+        videoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
+            public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+                if(i==-10000){
+                    ToastUtil.showLong("视频资源出错");
+                }
+                return true;
             }
         });
     }
@@ -525,7 +537,7 @@ public class VideoPlayActivity extends BaseActivity {
         }else{
             imgPraise.setImageResource(R.mipmap.no_praise);
         }
-        tvPraise.setText(String.valueOf(videoBean.getEpisodeCount()));
+        tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
         //是否关注剧集
         if(videoBean.isFollowSerial()){
             imgColl.setImageResource(R.mipmap.coll_icon_yes);

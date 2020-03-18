@@ -13,6 +13,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.Browse;
 import com.zxdc.utils.library.bean.SerialVideo;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class LookHistoryAdapter extends BaseAdapter {
         }
         Browse.BrowseBean browseBean=list.get(position);
         //背景图片
-        String imgUrl=browseBean.getSerialImg();
+        String imgUrl= HttpConstant.IP+browseBean.getSerialImg();
         holder.imgHead.setTag(R.id.imageid,imgUrl);
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);

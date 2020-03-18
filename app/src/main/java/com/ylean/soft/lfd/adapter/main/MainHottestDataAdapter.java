@@ -34,7 +34,7 @@ public class MainHottestDataAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return showNum();
+        return list==null ? 0 : list.size();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MainHottestDataAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        HotTop.DataBean dataBean=list.get((index*3+position));
+        HotTop.DataBean dataBean=list.get(position);
         if(index==0){
             holder.imgNum.setVisibility(View.VISIBLE);
             holder.tvNum.setVisibility(View.GONE);
