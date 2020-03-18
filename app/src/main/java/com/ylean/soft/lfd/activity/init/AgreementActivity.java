@@ -18,6 +18,9 @@ import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,7 +35,7 @@ public class AgreementActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_content)
-    TextView tvContent;
+    HtmlTextView tvContent;
     //1：注册协议，2：用户协议，3：隐私协议，4：合作内容，5：关于我们
     private int type;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class AgreementActivity extends BaseActivity {
                      }
                      if(agreement.isSussess() && agreement.getData()!=null){
                          tvContent.setText(Html.fromHtml(agreement.getData().getContent()));
+                         tvContent.setHtml(agreement.getData().getContent(), new HtmlHttpImageGetter(tvContent));
                      }else{
                          ToastUtil.showLong(agreement.getDesc());
                      }

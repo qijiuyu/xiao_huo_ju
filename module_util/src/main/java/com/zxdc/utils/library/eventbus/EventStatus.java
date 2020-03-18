@@ -106,5 +106,8 @@ public class EventStatus {
     //取消剧情关注
     public static final int CANCLE_FOCUS_SERIAL=223;
 
+    //切换底部菜单
+    public static final int UPDATE_TAB_MENU=224;
+
 
 }

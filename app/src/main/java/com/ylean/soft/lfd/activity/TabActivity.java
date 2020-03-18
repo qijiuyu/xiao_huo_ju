@@ -19,11 +19,16 @@ import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
 import com.zxdc.utils.library.view.ClickLinearLayout;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -118,6 +123,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_main2:
                 updateTag(0);
                 tabhost.setCurrentTabByTag("推荐");
+                EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 break;
             //发现
             case R.id.lin_recommend:
@@ -131,6 +137,7 @@ public class TabActivity extends android.app.TabActivity {
                 if(MyApplication.isLogin()){
                     updateTag(2);
                     tabhost.setCurrentTabByTag("关注");
+                    EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
                     startActivity(intent);
                 }
@@ -141,6 +148,7 @@ public class TabActivity extends android.app.TabActivity {
                 if(MyApplication.isLogin()){
                     updateTag(3);
                     tabhost.setCurrentTabByTag("我的");
+                    EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
                     startActivity(intent);
                 }

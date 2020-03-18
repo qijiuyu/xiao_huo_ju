@@ -231,7 +231,7 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.img_select_blues,R.id.img_coll})
+    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.lin_select_blues,R.id.img_coll})
     public void onViewClicked(View view) {
         Intent intent=new Intent();
         switch (view.getId()) {
@@ -317,7 +317,7 @@ public class VideoPlayActivity extends BaseActivity {
                  }
                 break;
             //选集
-            case R.id.img_select_blues:
+            case R.id.lin_select_blues:
                  EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                  drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
@@ -347,15 +347,23 @@ public class VideoPlayActivity extends BaseActivity {
         }
         // 通知用户已经开始一个触摸拖动手势
         public void onStartTrackingTouch(SeekBar seekBar) {
+            handler.removeCallbacks(runnable);
         }
         // 通知用户触摸手势已经结束
         public void onStopTrackingTouch(SeekBar seekBar) {
             // 取得当前进度条的刻度
             int progress = seekBar.getProgress();
-            if (videoView.isPlaying()) {
-                // 设置当前播放的位置
-                videoView.seekTo(progress);
+            if(videoView.getDuration()<=0){
+                return;
             }
+            // 设置当前播放的位置
+            videoView.seekTo(progress);
+            seekBar.setProgress(videoView.getCurrentPosition());
+            if(!videoView.isPlaying()){
+                videoView.start();
+                imgPlay.setVisibility(View.GONE);
+            }
+            handler.post(runnable);
         }
     };
 

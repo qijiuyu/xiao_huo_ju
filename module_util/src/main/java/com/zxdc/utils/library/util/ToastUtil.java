@@ -45,11 +45,8 @@ public class ToastUtil {
         if(TextUtils.isEmpty(message)){
             return;
         }
-        if(message.toString().startsWith("系统错误")){
-            return;
-        }
         if (isShow){
-            Toast.makeText(BaseApplication.getContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(BaseApplication.getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 

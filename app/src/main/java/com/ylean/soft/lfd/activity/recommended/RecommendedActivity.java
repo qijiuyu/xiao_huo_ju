@@ -230,6 +230,11 @@ public class RecommendedActivity extends BaseActivity {
                 SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();
                 startShare(share_media);
                 break;
+            case EventStatus.UPDATE_TAB_MENU:
+                 if(foundAdapter!=null){
+                     foundAdapter.setVideoStatus();
+                 }
+                  break;
             default:
                 break;
 
@@ -293,6 +298,7 @@ public class RecommendedActivity extends BaseActivity {
             foundAdapter.setVideoStatus();
         }
     }
+
 
     @Override
     protected void onStop() {

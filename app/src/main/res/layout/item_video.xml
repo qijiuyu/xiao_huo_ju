@@ -258,16 +258,24 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/lin_select_blues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerVertical="true">
+
         <ImageView
-            android:id="@+id/img_select_blues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/select_blues"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="25dp"
-            android:layout_centerVertical="true"/>
+            android:padding="10dp"
+            android:src="@mipmap/select_blues"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
 

@@ -95,12 +95,12 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private ProgressBar progressBar;
         private TextView tvTitle,tvBlues,tvPraise,tvFocusSerial,tvComm,tvShare,tvTime;
         private CircleImageView imgHead;
-        private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen,imgSelectBlues;
+        private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen;
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
         private Love love;
         private RelativeLayout relProgress,relScreen;
-        private LinearLayout linScreen;
+        private LinearLayout linScreen,linSelectBlues;
         private EditText etScreen;
         public ViewHolder(View view) {
             super(view);
@@ -124,7 +124,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             tvTime=view.findViewById(R.id.tv_time);
             seekbar=view.findViewById(R.id.seekbar);
             listComm=view.findViewById(R.id.list_comm);
-            imgSelectBlues=view.findViewById(R.id.img_select_blues);
+            linSelectBlues=view.findViewById(R.id.lin_select_blues);
             love=view.findViewById(R.id.love);
             relProgress=view.findViewById(R.id.rel_progress);
             linScreen=view.findViewById(R.id.lin_screen);
@@ -187,7 +187,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.imgPraise.setOnClickListener(this);
             holder.imgComm.setOnClickListener(this);
             holder.imgShare.setOnClickListener(this);
-            holder.imgSelectBlues.setOnClickListener(this);
+            holder.linSelectBlues.setOnClickListener(this);
             holder.imgColl.setOnClickListener(this);
             holder.relScreen.setOnClickListener(this);
             holder.imgFocus.setOnClickListener(this);
@@ -303,7 +303,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 }
                   break;
             //选集
-            case R.id.img_select_blues:
+            case R.id.lin_select_blues:
                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
@@ -354,14 +354,22 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
             public void onStartTrackingTouch(SeekBar seekBar) {
+                handler.removeCallbacks(runnable);
             }
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // 取得当前进度条的刻度
                 int progress = seekBar.getProgress();
-                if (holder.videoView.isPlaying()) {
-                    // 设置当前播放的位置
-                    holder.videoView.seekTo(progress);
+                if(holder.videoView.getDuration()<=0){
+                    return;
                 }
+                // 设置当前播放的位置
+                holder.videoView.seekTo(progress);
+                seekBar.setProgress(holder.videoView.getCurrentPosition());
+                if(!holder.videoView.isPlaying()){
+                    holder.videoView.start();
+                    holder.imgPlay.setVisibility(View.GONE);
+                }
+                handler.post(runnable);
             }
         });
 

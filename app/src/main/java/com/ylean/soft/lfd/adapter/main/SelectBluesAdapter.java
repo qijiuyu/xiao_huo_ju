@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,14 @@ public class SelectBluesAdapter extends BaseAdapter {
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
-        holder.tvBlues.setText(serialVideoBean.getName());
+        String name=serialVideoBean.getName();
+        if(!TextUtils.isEmpty(name)){
+            String[] strings=name.split("：");
+            if(strings!=null && strings.length>0){
+                holder.tvBlues.setText(strings[0]);
+            }
+        }
+
 
         /**
          * 选择播放

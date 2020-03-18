@@ -21,14 +21,21 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="12dp"/>
 
-        <ImageView
-            android:id="@+id/img_close"
+        <LinearLayout
+            android:id="@+id/lin_bank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/close_comm"
             android:layout_alignParentRight="true"
             android:layout_marginRight="19dp"
-            android:layout_marginTop="17dp"/>
+            android:layout_marginTop="17dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/close_comm"/>
+
+        </LinearLayout>
 
         <com.zxdc.utils.library.view.MyRefreshLayout
             android:id="@+id/re_list"

@@ -106,10 +106,10 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
         etContent.setOnEditorActionListener(commListener);
     }
 
-    @OnClick({R.id.img_close, R.id.rel})
+    @OnClick({R.id.lin_bank, R.id.rel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.img_close:
+            case R.id.lin_bank:
             case R.id.rel:
                 finish();
                 break;

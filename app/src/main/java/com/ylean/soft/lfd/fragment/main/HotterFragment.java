@@ -137,7 +137,7 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         TextView tvDes=headView.findViewById(R.id.tv_des);
         //背景图片
         Glide.with(this).load(HttpConstant.IP+dataBean.getImgurl()).into(imgHead);
-        tvTitle.setHint(dataBean.getName());
+        tvTitle.setText(dataBean.getName());
         //用户头像
         Glide.with(this).load(HttpConstant.IP+dataBean.getUserImg()).into(imgPic);
         tvName.setText(dataBean.getUserNickName());

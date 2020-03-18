@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,13 @@ public class BluesListAdapter extends RecyclerView.Adapter<BluesListAdapter.MyHo
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
-        holder.tvBlues.setText(serialVideoBean.getName());
+        String name=serialVideoBean.getName();
+        if(!TextUtils.isEmpty(name)){
+            String[] strings=name.split("：");
+            if(strings!=null && strings.length>0){
+                holder.tvBlues.setText(strings[0]);
+            }
+        }
 
         /**
          * 进入视频详情页面
