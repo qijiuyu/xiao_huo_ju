@@ -179,7 +179,7 @@ public class HttpMethod extends BaseRequst {
         }
         Http.getRetrofit().create(HttpApi.class).threeLogin(map).enqueue(new Callback<Login>() {
             public void onResponse(Call<Login> call, Response<Login> response) {
-                BaseRequst.sendMessage(handler, HandlerConstant.PWD_LOGIN_SUCCESS, response.body());
+                BaseRequst.sendMessage(handler, HandlerConstant.THREE_LOGIN_SUCCESS, response.body());
             }
             public void onFailure(Call<Login> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
@@ -967,6 +967,23 @@ public class HttpMethod extends BaseRequst {
                 BaseRequst.sendMessage(handler, HandlerConstant.GET_ABVERT_SUCCESS, response.body());
             }
             public void onFailure(Call<AbvertList> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 预约
+     */
+    public static void bespoke(int serialid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("serialid",String.valueOf(serialid));
+        Http.getRetrofit().create(HttpApi.class).bespoke(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.BESPOKE_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
             }
         });

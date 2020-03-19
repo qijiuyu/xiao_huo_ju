@@ -109,5 +109,8 @@ public class EventStatus {
     //切换底部菜单
     public static final int UPDATE_TAB_MENU=224;
 
+    //我的页面，设置在顶部
+    public static final int USER_POSITION_TOP=225;
+
 
 }

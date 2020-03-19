@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.AgreementActivity;
 import com.ylean.soft.lfd.fragment.main.HotterFragment;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.StatusBarUtils;
@@ -68,7 +70,7 @@ public class MoreHotterActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.img_bank, R.id.tv_hotter, R.id.tv_top})
+    @OnClick({R.id.img_bank, R.id.tv_hotter, R.id.tv_top,R.id.tv_agreement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_bank:
@@ -86,6 +88,11 @@ public class MoreHotterActivity extends BaseActivity {
                 updateViewPager();
                 pager.setCurrentItem(1);
                 break;
+            case R.id.tv_agreement:
+                 Intent intent=new Intent(this,AgreementActivity.class);
+                 intent.putExtra("type",6);
+                 startActivity(intent);
+                  break;
             default:
                 break;
         }

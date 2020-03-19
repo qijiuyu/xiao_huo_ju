@@ -101,7 +101,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                          String nickname = jsonObject.getString("nickname");
                          String headimgurl = jsonObject.getString("headimgurl");
                          String unionid=jsonObject.getString("unionid");
-                         EventBus.getDefault().post(new EventBusType(EventStatus.WX_LOGIN,headimgurl+","+nickname+","+unionid));
+                         EventBus.getDefault().post(new EventBusType(EventStatus.WX_LOGIN,unionid+","+headimgurl+","+nickname));
                          finish();
                      } catch (JSONException e) {
                          e.printStackTrace();

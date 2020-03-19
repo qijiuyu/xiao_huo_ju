@@ -21,6 +21,8 @@ public class SPUtil {
     public final static String SEND_CODE="SEND_CODE";
     //登录的token
     public final static String TOKEN="TOKEN";
+    //用户id
+    public final static String USER_ID="USER_ID";
     //搜索的关键字
     public final static String SEARCH_KEY="SEARCH_KEY";
     private static SPUtil sharUtil = null;

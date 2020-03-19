@@ -105,5 +105,7 @@ public class HttpConstant {
 
     public static final String GET_USER_INFO="/api/app/user/getinfo";
 
+    public static final String BESPOKE="api/app/serial/appointment";
+
 
 }

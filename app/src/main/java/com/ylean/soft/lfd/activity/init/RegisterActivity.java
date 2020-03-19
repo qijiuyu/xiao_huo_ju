@@ -228,6 +228,8 @@ public class RegisterActivity extends BaseActivity {
             case EventStatus.CLOSE_PAGE:
                  finish();
                  break;
+            default:
+                break;
         }
     }
 

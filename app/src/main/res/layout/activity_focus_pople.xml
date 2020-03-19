@@ -21,7 +21,7 @@
             android:text="您暂无关注的用户"
             android:textSize="14sp"
             android:textColor="@color/color_999999"
-            android:drawableTop="@mipmap/no_data"
+            android:drawableTop="@mipmap/no_focus"
             android:drawablePadding="7dp"
             android:layout_gravity="center_horizontal"
             android:layout_centerInParent="true"/>

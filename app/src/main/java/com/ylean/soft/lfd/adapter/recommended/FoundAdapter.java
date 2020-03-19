@@ -150,7 +150,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             if(videoBean==null){
                 return;
             }
-            holder.tvTitle.setText("剧情："+videoBean.getIntroduction());
+            holder.tvTitle.setText(videoBean.getIntroduction());
             /**
              * 是否关注用户
              */
@@ -176,6 +176,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             }
             holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
             holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
+            holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
 
             //获取弹屏列表
             holder.listComm.setVisibility(View.GONE);

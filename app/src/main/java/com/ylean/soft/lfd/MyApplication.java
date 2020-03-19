@@ -43,11 +43,11 @@ public class MyApplication extends BaseApplication {
     private void initShare(){
         UMConfigure.setLogEnabled(true);
         //初始化
-        UMConfigure.init(this,"5dfc65a30cafb2cfa300053e","Android",UMConfigure.DEVICE_TYPE_PHONE,"");
+        UMConfigure.init(this,"5e7359a0978eea0774044e44","Android",UMConfigure.DEVICE_TYPE_PHONE,"");
         //微信
-        PlatformConfig.setWeixin("wx41f56978f20ce2fe", "696afe62e1a457cf0440cd30673b90d3");
+//        PlatformConfig.setWeixin("wx41f56978f20ce2fe", "696afe62e1a457cf0440cd30673b90d3");
         //QQ
-        PlatformConfig.setQQZone("101838160", "3192d2ae301f12f59cd63a99283baa6f");
+        PlatformConfig.setQQZone("101862530", "a3ced0c83f1f2f2e796c6a08efcffbbc");
 
         /**
          * 设置组件化的Log开关

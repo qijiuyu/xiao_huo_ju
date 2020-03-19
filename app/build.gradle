@@ -76,17 +76,12 @@ dependencies {
     //极光推送
     compile 'cn.jiguang.sdk:jpush:3.3.4'
     compile 'cn.jiguang.sdk:jcore:2.1.2'
-
     //ijkplayer视频
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
     compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'
-
     //弹屏
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
-
     compile 'org.sufficientlysecure:html-textview:3.8'
-
-
-
+    compile files('libs/utdid4all-1.1.5.3_proguard.jar')
 }

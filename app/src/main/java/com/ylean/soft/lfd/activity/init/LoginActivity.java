@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -21,14 +22,12 @@ import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.Constant;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import butterknife.BindView;
@@ -76,6 +75,8 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtils.transparencyBar(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initView();
@@ -204,7 +205,10 @@ public class LoginActivity extends BaseActivity {
                      return;
                  }
                  String[] str = msg.split(",");
-                 loginPersenter.wxLogin(str[0], str[1], str[2]);
+                 loginPersenter.threeLogin(str[0],"0", str[1], str[2]);
+                 break;
+            case EventStatus.CLOSE_PAGE:
+                 finish();
                  break;
             default:
                 break;
@@ -285,16 +289,13 @@ public class LoginActivity extends BaseActivity {
     /**
      * 监听QQ登录
      */
+    private String openId,userImg,nickName;
     private UMAuthListener umAuthListener = new UMAuthListener() {
         public void onStart(SHARE_MEDIA share_media) {
 
         }
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            LogUtils.e("++++++++++++++++++++=111");
-            String unionid = map.get("unionid");
-            String name = map.get("name");
-            String iconurl = map.get("iconurl");
-            String openid = map.get("openid");
+            openId = map.get("openid");
             umShareAPI.getPlatformInfo(LoginActivity.this, share_media,
                     new UMAuthListener() {
                         public void onError(SHARE_MEDIA arg0, int arg1, Throwable arg2) {
@@ -302,17 +303,9 @@ public class LoginActivity extends BaseActivity {
                         public void onStart(SHARE_MEDIA share_media) {
                         }
                         public void onComplete(SHARE_MEDIA arg0, int arg1, Map<String, String> data) {
-                            Set<String> set = data.keySet();
-                            for (String string : set) {
-                                // 获得头像图片的网络地址
-//                                if (string.equals("profile_image_url")) {
-//                                    image_url = data.get(string);
-//                                }
-//                                // 设置昵称
-//                                if (string.equals("screen_name")) {
-//                                    name = data.get(string);
-//                                }
-                            }
+                            userImg=data.get("profile_image_url");
+                            nickName=data.get("screen_name");
+                            loginPersenter.threeLogin(openId,"1",userImg,nickName);
                         }
                         @Override
                         public void onCancel(SHARE_MEDIA arg0, int arg1) {
@@ -321,7 +314,6 @@ public class LoginActivity extends BaseActivity {
                     });
         }
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-
         }
         public void onCancel(SHARE_MEDIA share_media, int i) {
 

@@ -111,7 +111,7 @@ public class ResetPassWordActivity extends BaseActivity {
                      if(login==null){
                          break;
                      }
-                     if(login.isSussess() && login.getData()!=null){
+                     if(login.isSussess()){
                          //存储token
                          SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
                          //通知关闭上个页面

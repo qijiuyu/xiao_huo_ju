@@ -98,6 +98,7 @@ public class LookHistoryFragment extends BaseFragment {
                           if(lookHistoryAdapter!=null){
                               lookHistoryAdapter.notifyDataSetChanged();
                           }
+                          tvClear.setVisibility(View.GONE);
                       }
                       ToastUtil.showLong(baseBean.getDesc());
                       break;

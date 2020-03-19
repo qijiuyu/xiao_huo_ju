@@ -25,6 +25,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.MoreAuthorActivity;
 import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
 import com.ylean.soft.lfd.activity.main.OnlineListActivity;
 import com.ylean.soft.lfd.activity.main.ProjectListActivity;
@@ -139,7 +140,7 @@ public class SelectFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_hottest, R.id.tv_top, R.id.tv_more_hottest,R.id.tv_more_project,R.id.tv_more_online,R.id.lin_like})
+    @OnClick({R.id.tv_hottest, R.id.tv_top, R.id.tv_more_hottest,R.id.tv_more_project,R.id.tv_more_online,R.id.lin_like,R.id.tv_more_author})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //今日最热
@@ -193,6 +194,10 @@ public class SelectFragment extends BaseFragment {
             case R.id.tv_more_online:
                  setClass(OnlineListActivity.class);
                  break;
+            //热门作者--查看更多
+            case R.id.tv_more_author:
+                  setClass(MoreAuthorActivity.class);
+                  break;
             default:
                 break;
         }

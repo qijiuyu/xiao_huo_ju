@@ -230,4 +230,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.GET_ABVERT)
     Call<AbvertList> getAbvert(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.BESPOKE)
+    Call<BaseBean> bespoke(@FieldMap Map<String, String> map);
 }

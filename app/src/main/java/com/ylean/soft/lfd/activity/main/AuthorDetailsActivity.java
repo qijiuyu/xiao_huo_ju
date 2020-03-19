@@ -1,6 +1,5 @@
 package com.ylean.soft.lfd.activity.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
@@ -24,7 +24,6 @@ import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -36,14 +35,16 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * 作者界面
  * Created by Administrator on 2020/2/7.
  */
-public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLayoutListener {
+public class AuthorDetailsActivity extends BaseActivity implements MyRefreshLayoutListener {
 
     @BindView(R.id.img_head)
     CircleImageView imgHead;
@@ -63,12 +64,12 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
     //作者对象
     private AuthorDetails.DetailsBean detailsBean;
     //数据集合
-    private List<HotTop.DataBean> listAll=new ArrayList<>();
+    private List<HotTop.DataBean> listAll = new ArrayList<>();
     //页码
-    private int page=1;
+    private int page = 1;
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtils.transparencyBar(this);
         setContentView(R.layout.activity_author);
         ButterKnife.bind(this);
         initView();
@@ -86,28 +87,39 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
         id = getIntent().getIntExtra("id", -1);
         //刷新加载
         reList.setMyRefreshLayoutListener(this);
-        authorDetailsAdapter = new AuthorDetailsAdapter(this,listAll);
+        authorDetailsAdapter = new AuthorDetailsAdapter(this, listAll);
         listView.setLayoutManager(new GridLayoutManager(this, 3));
         listView.setAdapter(authorDetailsAdapter);
     }
 
-    @OnClick(R.id.tv_focus)
-    public void onViewClicked() {
-        if(!MyApplication.isLogin()){
-            setClass(LoginActivity.class);
-            return;
+
+    @OnClick({R.id.img_bank, R.id.tv_focus})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.img_bank:
+                finish();
+                break;
+            case R.id.tv_focus:
+                if(!MyApplication.isLogin()){
+                    setClass(LoginActivity.class);
+                    return;
+                }
+                //关注、取消关注用户
+                if(detailsBean==null){
+                    return;
+                }
+                if(detailsBean.isFollowUser()){
+                    DialogUtil.showProgress(this, "取消中");
+                }else{
+                    DialogUtil.showProgress(this, "关注中");
+                }
+                followUser();
+                break;
+            default:
+                break;
         }
-        //关注、取消关注用户
-        if(detailsBean==null){
-            return;
-        }
-        if(detailsBean.isFollowUser()){
-            DialogUtil.showProgress(this, "取消中");
-        }else{
-            DialogUtil.showProgress(this, "关注中");
-        }
-        followUser();
     }
+
 
     private Handler handler = new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
@@ -137,23 +149,23 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
                     break;
                 //取消关注用户
                 case HandlerConstant.FOLLOW_SUCCESS:
-                     BaseBean baseBean= (BaseBean) msg.obj;
-                     if(baseBean==null){
-                         break;
-                     }
-                     if(baseBean.isSussess()){
-                         if(detailsBean.isFollowUser()){
-                             detailsBean.setFollowUser(false);
-                             detailsBean.setFollowCount(detailsBean.getFollowCount()-1);
-                         }else{
-                             detailsBean.setFollowUser(true);
-                             detailsBean.setFollowCount(detailsBean.getFollowCount()+1);
-                         }
-                         //展示用户信息
-                         showAuthor(detailsBean);
-                     }
-                      ToastUtil.showLong(baseBean.getDesc());
-                      break;
+                    BaseBean baseBean = (BaseBean) msg.obj;
+                    if (baseBean == null) {
+                        break;
+                    }
+                    if (baseBean.isSussess()) {
+                        if (detailsBean.isFollowUser()) {
+                            detailsBean.setFollowUser(false);
+                            detailsBean.setFollowCount(detailsBean.getFollowCount() - 1);
+                        } else {
+                            detailsBean.setFollowUser(true);
+                            detailsBean.setFollowCount(detailsBean.getFollowCount() + 1);
+                        }
+                        //展示用户信息
+                        showAuthor(detailsBean);
+                    }
+                    ToastUtil.showLong(baseBean.getDesc());
+                    break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -174,7 +186,7 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
         if (detailsBean == null) {
             return;
         }
-        Glide.with(activity).load(HttpConstant.IP+detailsBean.getImgurl()).into(imgHead);
+        Glide.with(activity).load(HttpConstant.IP + detailsBean.getImgurl()).into(imgHead);
         tvFans.setText(String.valueOf(detailsBean.getFollowCount()));
         if (detailsBean.isFollowUser()) {
             tvFocus.setBackgroundResource(R.drawable.bg_author_focus);
@@ -190,18 +202,18 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
     /**
      * 刷新界面数据
      */
-    private void refresh(HotTop hotTop){
-        if(hotTop==null){
+    private void refresh(HotTop hotTop) {
+        if (hotTop == null) {
             return;
         }
-        if(hotTop.isSussess()){
-            List<HotTop.DataBean> list=hotTop.getData();
+        if (hotTop.isSussess()) {
+            List<HotTop.DataBean> list = hotTop.getData();
             listAll.addAll(list);
             authorDetailsAdapter.notifyDataSetChanged();
-            if(list.size()< HttpMethod.size){
+            if (list.size() < HttpMethod.size) {
                 reList.setIsLoadingMoreEnabled(false);
             }
-        }else{
+        } else {
             ToastUtil.showLong(hotTop.getDesc());
         }
     }
@@ -209,22 +221,23 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
 
     /**
      * 下刷
+     *
      * @param view
      */
     public void onRefresh(View view) {
-        page=1;
-        HttpMethod.serialList(0,null,page,id, HandlerConstant.GET_SERIAL_LIST_SUCCESS1,handler);
+        page = 1;
+        HttpMethod.serialList(0, null, page, id, HandlerConstant.GET_SERIAL_LIST_SUCCESS1, handler);
     }
 
     /**
      * 上拉加载更多
+     *
      * @param view
      */
     public void onLoadMore(View view) {
         page++;
-        HttpMethod.serialList(0,null,page,id, HandlerConstant.GET_SERIAL_LIST_SUCCESS2,handler);
+        HttpMethod.serialList(0, null, page, id, HandlerConstant.GET_SERIAL_LIST_SUCCESS2, handler);
     }
-
 
 
     /**
@@ -247,13 +260,14 @@ public class AuthorDetailsActivity extends BaseActivity  implements MyRefreshLay
     protected void onDestroy() {
         super.onDestroy();
         removeHandler(handler);
-        if(detailsBean==null){
+        if (detailsBean == null) {
             return;
         }
-        if(!detailsBean.isFollowUser()){
-            EventBus.getDefault().post(new EventBusType(EventStatus.CANCLE_FOCUS_USER,id));
-        }else{
-            EventBus.getDefault().post(new EventBusType(EventStatus.FOCUS_USER,id));
+        if (!detailsBean.isFollowUser()) {
+            EventBus.getDefault().post(new EventBusType(EventStatus.CANCLE_FOCUS_USER, id));
+        } else {
+            EventBus.getDefault().post(new EventBusType(EventStatus.FOCUS_USER, id));
         }
     }
+
 }

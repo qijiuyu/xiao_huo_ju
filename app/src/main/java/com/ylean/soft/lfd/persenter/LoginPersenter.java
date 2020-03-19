@@ -1,9 +1,11 @@
 package com.ylean.soft.lfd.persenter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
+import com.ylean.soft.lfd.activity.init.BingMobileActivity;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Login;
@@ -23,6 +25,13 @@ import org.greenrobot.eventbus.EventBus;
 public class LoginPersenter {
 
     private LoginActivity activity;
+    /**
+     * openId：第三方openid
+     * userImg：第三方用户头像
+     * nickName：第三方昵称
+     * type：0，微信，   1，QQ
+     */
+    private String openId,userImg,nickName,type;
 
     public LoginPersenter(LoginActivity activity){
         this.activity=activity;
@@ -32,6 +41,7 @@ public class LoginPersenter {
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
             DialogUtil.closeProgress();
+            Login login;
             switch (msg.what){
                 //验证码回执
                 case HandlerConstant.GET_CODE_SUCCESS:
@@ -49,18 +59,47 @@ public class LoginPersenter {
                 //验证码/密码登录
                 case HandlerConstant.PWD_LOGIN_SUCCESS:
                 case HandlerConstant.SMS_LOGIN_SUCCESS:
-                     Login login= (Login) msg.obj;
+                     login= (Login) msg.obj;
                      if(login==null){
                          break;
                      }
                      if(login.isSussess() && login.getData()!=null){
                          //存储token
                          SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
+                         //存储用户id
+                         SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
                      }
                      break;
+                //第三方登录
+                case HandlerConstant.THREE_LOGIN_SUCCESS:
+                     login= (Login) msg.obj;
+                     if(login==null){
+                         break;
+                     }
+                     //去绑定手机号
+                     if(login.getCode()==-200){
+                         Intent intent=new Intent(activity, BingMobileActivity.class);
+                         intent.putExtra("type",type);
+                         intent.putExtra("openId",openId);
+                         intent.putExtra("userImg",userImg);
+                         intent.putExtra("nickName",nickName);
+                         activity.startActivity(intent);
+                         break;
+                     }
+                     //登录成功
+                     if(login.isSussess() && login.getData()!=null){
+                         //存储token
+                         SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
+                         //存储用户id
+                         SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
+                         activity.finish();
+                     }else{
+                         ToastUtil.showLong(login.getDesc());
+                     }
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -104,13 +143,14 @@ public class LoginPersenter {
 
 
     /**
-     * 微信登录
-     * @param headimgurl
-     * @param nickname
-     * @param unionid
+     * 第三方登录
      */
-    public void wxLogin(String headimgurl,String nickname,String unionid){
+    public void threeLogin(String openId,String type,String userImg,String nickName){
+        this.openId=openId;
+        this.type=type;
+        this.userImg=userImg;
+        this.nickName=nickName;
         DialogUtil.showProgress(activity,"登录中");
-        HttpMethod.threeLogin(unionid,"0","0",null,headimgurl,nickname,null,handler);
+        HttpMethod.threeLogin(openId,type,"0",null,userImg,nickName,null,handler);
     }
 }

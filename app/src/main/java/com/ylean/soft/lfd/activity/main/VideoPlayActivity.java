@@ -231,7 +231,7 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_bank,R.id.img_head, R.id.tv_blues, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.lin_select_blues,R.id.img_coll})
+    @OnClick({R.id.img_bank,R.id.img_head, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.lin_select_blues,R.id.img_coll})
     public void onViewClicked(View view) {
         Intent intent=new Intent();
         switch (view.getId()) {
@@ -247,9 +247,6 @@ public class VideoPlayActivity extends BaseActivity {
                  intent.putExtra("id",videoBean.getUserId());
                  startActivityForResult(intent,100);
                  break;
-            //选集
-            case R.id.tv_blues:
-                break;
             //关注用户
             case R.id.img_focus:
                 if(!MyApplication.isLogin()){
@@ -554,6 +551,7 @@ public class VideoPlayActivity extends BaseActivity {
         }
         tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
         tvComm.setText(String.valueOf(videoBean.getCommentCount()));
+        tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
     }
 
 

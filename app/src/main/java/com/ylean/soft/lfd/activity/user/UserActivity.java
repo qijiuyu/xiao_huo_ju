@@ -335,6 +335,10 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
             case EventStatus.USER_LOAD_MORE_SUCCESS:
                  scrollView.stopLoadMore();  // 停止加载
                 break;
+            case EventStatus.USER_POSITION_TOP:
+                 //置顶
+                 scrollView.scrollTo(0, 0);
+                  break;
             default:
                 break;
         }

@@ -36,7 +36,7 @@ public class AgreementActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_content)
     HtmlTextView tvContent;
-    //1：注册协议，2：用户协议，3：隐私协议，4：合作内容，5：关于我们
+    //1：注册协议，2：用户协议，3：隐私协议，4：合作内容，5：关于我们 ，6：榜单规则
     private int type;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +71,9 @@ public class AgreementActivity extends BaseActivity {
             case 4:
                 tvTitle.setText("合作内容");
                 break;
+            case 6:
+                tvTitle.setText("榜单规则");
+                 break;
             default:
                 break;
         }
