@@ -106,6 +106,9 @@ public class MyLikeFragment extends BaseFragment{
             if(listAll.size()==0){
                 tvNo.setVisibility(View.VISIBLE);
             }
+            if(page==1){
+                EventBus.getDefault().post(new EventBusType(EventStatus.USER_POSITION_TOP));
+            }
         } else {
             ToastUtil.showLong(hotTop.getDesc());
         }

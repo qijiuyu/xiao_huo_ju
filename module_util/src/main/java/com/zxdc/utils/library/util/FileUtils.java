@@ -25,7 +25,7 @@ public class FileUtils {
      * 获取sd卡路径
      */
     public static String getSdcardPath() {
-        String path = Environment.getExternalStorageDirectory() + File.separator + "dong_sheng_A6" + File.separator;
+        String path = Environment.getExternalStorageDirectory() + File.separator + "xiao_huo_ju" + File.separator;
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();

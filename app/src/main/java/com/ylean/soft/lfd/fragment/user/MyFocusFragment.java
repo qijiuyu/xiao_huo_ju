@@ -72,7 +72,6 @@ public class MyFocusFragment extends BaseFragment{
             EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE_SUCCESS));
             switch (msg.what){
                 case HandlerConstant.FOCUS_USER_SUCCESS1:
-                    listAll.clear();
                     refresh((Focus) msg.obj);
                     break;
                 case HandlerConstant.REQUST_ERROR:
@@ -100,6 +99,9 @@ public class MyFocusFragment extends BaseFragment{
             focusPopleAdapter.notifyDataSetChanged();
             if(listAll.size()==0){
                 tvNo.setVisibility(View.VISIBLE);
+            }
+            if(page==1){
+                EventBus.getDefault().post(new EventBusType(EventStatus.USER_POSITION_TOP));
             }
         }else{
             ToastUtil.showLong(focus.getDesc());

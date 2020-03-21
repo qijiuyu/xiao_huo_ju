@@ -14,15 +14,24 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
 import com.ylean.soft.lfd.adapter.main.HotterFragmentAdapter;
 import com.zxdc.utils.library.base.BaseFragment;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +47,7 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
     MyRefreshLayout reList;
     Unbinder unbinder;
     private View headView;
+    private TextView tvFocus;
     private HotterFragmentAdapter hotterFragmentAdapter;
     //数据集合
     private List<HotTop.DataBean> listAll=new ArrayList<>();
@@ -47,8 +57,11 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
     private boolean isVisibleToUser=false;
     //是否已添加头部view
     private boolean isAddHeadView=false;
+    private HotTop.DataBean dataBean ;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //注册eventBus
+        EventBus.getDefault().register(this);
     }
 
     View view;
@@ -66,6 +79,7 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
 
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
             switch (msg.what){
                 case HandlerConstant.GET_HOT_TOP_SUCCESS1:
                       reList.refreshComplete();
@@ -75,6 +89,27 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
                 case HandlerConstant.GET_HOT_TOP_SUCCESS2:
                       reList.loadMoreComplete();
                       refresh((HotTop) msg.obj);
+                      break;
+                //关注，或者取消关注
+                case HandlerConstant.FOLLOW_SUCCESS:
+                     BaseBean baseBean = (BaseBean) msg.obj;
+                     if (baseBean == null) {
+                         break;
+                     }
+                     if (baseBean.isSussess()) {
+                         if(dataBean.isFollowUser()){
+                             dataBean.setFollowUser(false);
+                         }else{
+                             dataBean.setFollowUser(true);
+                         }
+                         hotterFragmentAdapter.notifyDataSetChanged();
+                         if(listAll.get(0).isFollowUser()){
+                             tvFocus.setText("已关注");
+                         }else{
+                             tvFocus.setText("未关注");
+                         }
+                    }
+                    ToastUtil.showLong(baseBean.getDesc());
                       break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
@@ -126,14 +161,14 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
             return;
         }
         isAddHeadView=true;
-        HotTop.DataBean dataBean=listAll.get(0);
+        final HotTop.DataBean dataBean=listAll.get(0);
         headView = LayoutInflater.from(mActivity).inflate(R.layout.hotter_head, null);
         listView.addHeaderView(headView);
         OvalImageViews imgHead=headView.findViewById(R.id.img_head);
         TextView tvTitle=headView.findViewById(R.id.tv_title);
         CircleImageView imgPic=headView.findViewById(R.id.img_pic);
         TextView tvName=headView.findViewById(R.id.tv_name);
-        TextView tvFocus=headView.findViewById(R.id.tv_focus);
+        tvFocus=headView.findViewById(R.id.tv_focus);
         TextView tvDes=headView.findViewById(R.id.tv_des);
         //背景图片
         Glide.with(this).load(HttpConstant.IP+dataBean.getImgurl()).into(imgHead);
@@ -147,6 +182,37 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
             tvFocus.setText("未关注");
         }
         tvDes.setText("播放 "+dataBean.getPlayCount()+"w    更新至 第"+dataBean.getEpisodeCount()+"集");
+
+        /**
+         * 关注，或者取消关注
+         */
+        tvFocus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EventBus.getDefault().post(new EventBusType(EventStatus.HOT_PLAY_FOCUS,dataBean));
+            }
+        });
+    }
+
+
+    /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        if(!isVisibleToUser){
+            return;
+        }
+        switch (eventBusType.getStatus()) {
+            case EventStatus.HOT_PLAY_FOCUS:
+                dataBean= (HotTop.DataBean) eventBusType.getObject();
+                if(dataBean==null){
+                    return;
+                }
+                followUser(dataBean.getUserId());
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -182,6 +248,15 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         },200);
     }
 
+
+    /**
+     * 关注、取消关注用户
+     */
+    private void followUser(int id) {
+        DialogUtil.showProgress(mActivity,"操作中");
+        HttpMethod.follow(id, "0", HandlerConstant.FOLLOW_SUCCESS, handler);
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -195,5 +270,6 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 }

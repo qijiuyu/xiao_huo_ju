@@ -55,10 +55,10 @@ public class NewsAdapter extends BaseAdapter {
         News.NewsBean newsBean=list.get(position);
         holder.tvTitle.setText(newsBean.getTitle());
         if(newsBean.getType()==1){
-            String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
-            holder.tvDes.setText(Html.fromHtml(content));
+//            String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
+            holder.tvDes.setText(Html.fromHtml(newsBean.getContent()));
         }else{
-            holder.tvDes.setText(newsBean.getContent());
+            holder.tvDes.setText(Html.fromHtml(newsBean.getContent()));
         }
         holder.tvTime.setText(newsBean.getCreatetime());
 

@@ -133,22 +133,26 @@ public class VideoPlayPersenter {
         });
         view.findViewById(R.id.tv_wx).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.WEIXIN));
+                popupWindow.dismiss();
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 1));
             }
         });
         view.findViewById(R.id.tv_pyq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.WEIXIN_CIRCLE));
+                popupWindow.dismiss();
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 2));
             }
         });
         view.findViewById(R.id.tv_qq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QQ));
+                popupWindow.dismiss();
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 3));
             }
         });
         view.findViewById(R.id.tv_kj).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QZONE));
+                popupWindow.dismiss();
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 4));
             }
         });
     }

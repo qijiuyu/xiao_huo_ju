@@ -97,6 +97,7 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
     private UserPersenter userPersenter;
     //用户数据对象
     private UserInfo.UserBean userBean;
+    private Handler handler=new Handler();
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
@@ -217,6 +218,13 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
               }
         }
         pager.setCurrentItem(pageIndex);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },100);
     }
 
 

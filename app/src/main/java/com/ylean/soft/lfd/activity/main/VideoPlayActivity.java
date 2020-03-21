@@ -511,8 +511,14 @@ public class VideoPlayActivity extends BaseActivity {
                   break;
             //分享
             case EventStatus.SHARE_APP:
-                  SHARE_MEDIA share_media= (SHARE_MEDIA) eventBusType.getObject();
-                  startShare(share_media);
+                  if(videoBean==null || TextUtils.isEmpty(videoBean.getVideourl())){
+                      return;
+                  }
+                  int shareType= (int) eventBusType.getObject();
+                  Intent intent=new Intent(this,UploadVideoActivity.class);
+                  intent.putExtra("videoUrl",videoBean.getVideourl());
+                  intent.putExtra("shareType",shareType);
+                  startActivity(intent);
                   break;
             default:
                 break;
@@ -577,56 +583,6 @@ public class VideoPlayActivity extends BaseActivity {
             return false;
         }
     };
-
-
-    /**
-     * 分享
-     */
-    private void startShare(SHARE_MEDIA share_media) {
-        UMWeb web = new UMWeb("www.baidu.com");
-        web.setTitle("上市品质 邀您共鉴！");
-        web.setDescription("东易日盛20余年的努力与坚持，都只是为了做好家装这一件事！");
-        new ShareAction(activity).setPlatform(share_media)
-                .setCallback(umShareListener)
-                .withMedia(web)
-                .share();
-    }
-
-
-    private UMShareListener umShareListener = new UMShareListener() {
-        public void onStart(SHARE_MEDIA share_media) {
-        }
-
-        public void onResult(SHARE_MEDIA platform) {
-            if (platform.name().equals("WEIXIN_FAVORITE")) {
-                ToastUtil.showLong(activity.getString(R.string.share_success));
-            } else {
-                ToastUtil.showLong(activity.getString(R.string.share_success));
-            }
-        }
-
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            if (t.getMessage().indexOf("2008") != -1) {
-                if (platform.name().equals("WEIXIN") || platform.name().equals("WEIXIN_CIRCLE")) {
-                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_wechat));
-                } else if (platform.name().equals("QQ") || platform.name().equals("QZONE")) {
-                    ToastUtil.showLong(activity.getString(R.string.share_failed_install_qq));
-                }
-            }
-            ToastUtil.showLong(activity.getString(R.string.share_failed));
-        }
-
-        public void onCancel(SHARE_MEDIA platform) {
-            ToastUtil.showLong(activity.getString(R.string.share_canceled));
-        }
-    };
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
 
 
     @Override

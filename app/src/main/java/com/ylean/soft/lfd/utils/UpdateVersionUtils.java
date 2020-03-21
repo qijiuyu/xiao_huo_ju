@@ -29,6 +29,7 @@ import java.io.File;
 
 /**
  * 版本更新工具类
+ * http://dyrs.yl-mall.cn/upload/image/20200311/f0f62207-3778-41be-bb5b-dd890f1516a8.apk
  */
 public class UpdateVersionUtils {
     private Dialog dialog;

@@ -84,7 +84,6 @@ public class LookHistoryFragment extends BaseFragment {
             EventBus.getDefault().post(new EventBusType(EventStatus.USER_LOAD_MORE_SUCCESS));
             switch (msg.what){
                 case HandlerConstant.GET_BROWSE_SUCCESS:
-                    listAll.clear();
                     refresh((Browse) msg.obj);
                     break;
                 //一键清除
@@ -131,6 +130,9 @@ public class LookHistoryFragment extends BaseFragment {
             }else{
                 tvNo.setVisibility(View.GONE);
                 tvClear.setVisibility(View.VISIBLE);
+            }
+            if(page==1){
+                EventBus.getDefault().post(new EventBusType(EventStatus.USER_POSITION_TOP));
             }
         }else{
             ToastUtil.showLong(browse.getDesc());

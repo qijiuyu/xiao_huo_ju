@@ -13,9 +13,13 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -98,6 +102,18 @@ public class HotterFragmentAdapter extends BaseAdapter {
         holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+
+
+        /**
+         * 关注，或者取消关注
+         */
+        holder.tvFocus.setTag(dataBean);
+        holder.tvFocus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+                EventBus.getDefault().post(new EventBusType(EventStatus.HOT_PLAY_FOCUS,dataBean));
+            }
+        });
 
         /**
          * 进入视频详情页面

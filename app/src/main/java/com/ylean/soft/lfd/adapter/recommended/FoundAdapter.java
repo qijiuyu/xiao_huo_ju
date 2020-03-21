@@ -452,13 +452,18 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     /**
      * 暂停及开始
      */
-    public void setVideoStatus(){
+    public void setVideoStatus(boolean isPlay){
         if(holder!=null && holder.videoView!=null){
-            if(holder.videoView.isPlaying()){
-                holder.videoView.pause();
+            if(isPlay){
+                if(!holder.videoView.isPlaying()){
+                    holder.videoView.start();
+                    holder.imgPlay.setVisibility(View.GONE);
+
+                }
             }else{
-                holder.videoView.start();
-                holder.imgPlay.setVisibility(View.GONE);
+                if(holder.videoView.isPlaying()){
+                    holder.videoView.pause();
+                }
             }
         }
     }

@@ -112,5 +112,7 @@ public class EventStatus {
     //我的页面，设置在顶部
     public static final int USER_POSITION_TOP=225;
 
+    public static final int HOT_PLAY_FOCUS=226;
+
 
 }

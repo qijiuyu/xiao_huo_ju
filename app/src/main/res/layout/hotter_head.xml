@@ -68,7 +68,7 @@
                     android:layout_height="15dp"
                     android:background="@drawable/bg_hotter_focus"
                     android:text="关注"
-                    android:textSize="10sp"
+                    android:textSize="9sp"
                     android:textColor="@color/color_FFBC32"
                     android:gravity="center"
                     android:layout_marginLeft="12dp"/>

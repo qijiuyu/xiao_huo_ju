@@ -46,7 +46,6 @@ public class OnlineListActivity extends BaseActivity  implements MyRefreshLayout
         initView();
         //获取即将上线
         reList.startRefresh();
-        getOnline(HandlerConstant.GET_ONLINE_SUCCESS1);
     }
 
 
