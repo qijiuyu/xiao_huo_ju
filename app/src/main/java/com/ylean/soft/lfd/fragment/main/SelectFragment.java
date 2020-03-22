@@ -42,6 +42,7 @@ import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
 import com.zxdc.utils.library.base.BaseFragment;
+import com.zxdc.utils.library.bean.Abvert;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Project;
@@ -56,13 +57,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.R.id.candidatesArea;
 import static android.R.id.list;
 
 /**
@@ -108,6 +112,10 @@ public class SelectFragment extends BaseFragment {
     private Project.ProjectBean projectBean;
     //旋转动画
     private ObjectAnimator rotation;
+    //各个频道剧集的adapter
+    private MainBluesAdapter mainBluesAdapter;
+    //广告集合
+    private Map<Integer,List<Abvert>> abvertMap=new HashMap<>();
     private SelectFragmentPersenter selectFragmentPersenter;
     private Handler handler=new Handler();
     public void onCreate(Bundle savedInstanceState) {
@@ -236,6 +244,17 @@ public class SelectFragment extends BaseFragment {
             //显示各个频道的剧集
             case EventStatus.SHOW_MAIN_BLUES:
                   showBlues((List<Tag.TagBean>) eventBusType.getObject());
+
+                  //获取对应频道的广告
+                  selectFragmentPersenter.getAbvert();
+                  break;
+            //显示对应频道的广告
+            case EventStatus.CHANNEL_ABVERT:
+                  List<Abvert> abverts= (List<Abvert>) eventBusType.getObject();
+                  if(abverts.size()>0){
+                      abvertMap.put(abverts.get(0).getType(),abverts);
+                      mainBluesAdapter.notifyDataSetChanged();
+                  }
                   break;
             default:
                 break;
@@ -380,7 +399,8 @@ public class SelectFragment extends BaseFragment {
      * 显示各个频道的剧集
      */
     private void showBlues(List<Tag.TagBean> list){
-        listBlues.setAdapter(new MainBluesAdapter(mActivity,list));
+        mainBluesAdapter=new MainBluesAdapter(mActivity,list,abvertMap);
+        listBlues.setAdapter(mainBluesAdapter);
         handler.postDelayed(new Runnable() {
             public void run() {
                 //置顶

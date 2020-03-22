@@ -151,6 +151,7 @@ public class OtherFragment extends BaseFragment implements MyRefreshLayoutListen
             banner.update(list);
             return;
         }
+        banner.setVisibility(View.VISIBLE);
         //设置样式，里面有很多种样式可以自己都看看效果
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置轮播的动画效果,里面有很多种特效,可以都看看效果。

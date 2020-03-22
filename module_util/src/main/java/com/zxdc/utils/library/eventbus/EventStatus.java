@@ -114,5 +114,8 @@ public class EventStatus {
 
     public static final int HOT_PLAY_FOCUS=226;
 
+    //首页精选下各个频道对应的广告
+    public static final int CHANNEL_ABVERT=227;
+
 
 }

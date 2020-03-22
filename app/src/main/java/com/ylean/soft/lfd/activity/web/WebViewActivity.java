@@ -3,6 +3,7 @@ package com.ylean.soft.lfd.activity.web;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.WebView;
 
 import com.ylean.soft.lfd.R;
@@ -33,6 +34,15 @@ public class WebViewActivity extends BaseWebView {
         url = getIntent().getStringExtra("url");
         initWebView(webview);
         webview.loadUrl(url);
+        findViewById(R.id.img_bank).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (webview.canGoBack()) {
+                    webview.goBack();
+                } else {
+                    finish();
+                }
+            }
+        });
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

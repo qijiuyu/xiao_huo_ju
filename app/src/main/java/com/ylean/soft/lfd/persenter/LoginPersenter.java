@@ -68,6 +68,8 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
                          //存储用户id
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
+                         //是否通过第三方登录
+                         SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,false);
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
@@ -95,6 +97,8 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.TOKEN,login.getData().getToken());
                          //存储用户id
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
+                         //是否通过第三方登录
+                         SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,true);
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());

@@ -23,6 +23,8 @@ public class SPUtil {
     public final static String TOKEN="TOKEN";
     //用户id
     public final static String USER_ID="USER_ID";
+    //是否通过第三方登录
+    public final static String IS_THREE_LOGIN="IS_THREE_LOGIN";
     //搜索的关键字
     public final static String SEARCH_KEY="SEARCH_KEY";
     private static SPUtil sharUtil = null;

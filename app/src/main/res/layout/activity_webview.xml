@@ -5,6 +5,8 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
+   <include layout="@layout/head"/>
+
    <WebView
        android:id="@+id/webview"
        android:layout_width="match_parent"

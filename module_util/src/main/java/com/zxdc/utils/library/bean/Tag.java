@@ -1,6 +1,7 @@
 package com.zxdc.utils.library.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

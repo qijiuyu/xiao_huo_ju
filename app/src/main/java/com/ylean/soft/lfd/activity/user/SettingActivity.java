@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
@@ -38,6 +39,10 @@ public class SettingActivity extends BaseActivity {
     TextView tvQq;
     @BindView(R.id.tv_cache)
     TextView tvCache;
+    @BindView(R.id.rel_pwd)
+    RelativeLayout relPwd;
+    @BindView(R.id.view_pwd)
+    View viePwd;
     private Handler handler=new Handler();
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,11 @@ public class SettingActivity extends BaseActivity {
      * 初始化
      */
     private void initView(){
+        //如果是第三方登录，就隐藏修改密码
+        if(SPUtil.getInstance(this).getBoolean(SPUtil.IS_THREE_LOGIN)){
+            relPwd.setVisibility(View.GONE);
+            viePwd.setVisibility(View.GONE);
+        }
         try {
             tvCache.setText(DataCleanManager.getTotalCacheSize(this));
         } catch (Exception e) {

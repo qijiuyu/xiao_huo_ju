@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import com.zxdc.utils.library.bean.AbvertList;
 import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Project;
@@ -114,6 +115,20 @@ public class SelectFragmentPersenter {
                           ToastUtil.showLong(tag.getDesc());
                       }
                       break;
+                //获取对应频道的广告
+                case HandlerConstant.GET_ABVERT_SUCCESS:
+                      AbvertList abvertList= (AbvertList) msg.obj;
+                      if(abvertList==null){
+                          break;
+                      }
+                      if(abvertList.isSussess()){
+                          if(abvertList.getData()!=null){
+                              EventBus.getDefault().post(new EventBusType(EventStatus.CHANNEL_ABVERT,abvertList.getData()));
+                          }
+                      }else{
+                          ToastUtil.showLong(abvertList.getDesc());
+                      }
+                      break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
                     break;
@@ -175,5 +190,15 @@ public class SelectFragmentPersenter {
      */
     public void getProject(){
         HttpMethod.getProject(1,1,HandlerConstant.GET_PROJECT_SUCCESS1,handler);
+    }
+
+
+    /**
+     * 获取广告列表
+     */
+    public void getAbvert(){
+        HttpMethod.getAbvert("1",0,handler);
+        HttpMethod.getAbvert("2",0,handler);
+        HttpMethod.getAbvert("3",0,handler);
     }
 }
