@@ -196,20 +196,30 @@
             android:layout_marginBottom="15dp"
             android:gravity="center_vertical">
 
+            <ImageView
+                android:id="@+id/img_play2"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/play_icon"
+                android:layout_centerVertical="true"/>
+
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
 
             <SeekBar
                 android:id="@+id/seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:thumb="@drawable/seekbar_share"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/tv_time"
+                android:layout_toRightOf="@id/img_play2"
                 android:layout_marginRight="3dp"/>
 
         </RelativeLayout>

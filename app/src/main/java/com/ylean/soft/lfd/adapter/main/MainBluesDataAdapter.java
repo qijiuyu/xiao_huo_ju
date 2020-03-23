@@ -41,7 +41,7 @@ public class MainBluesDataAdapter extends RecyclerView.Adapter<MainBluesDataAdap
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
-        holder.tvSize.setHint(listData.getPlayCount()+"w");
+        holder.tvSize.setHint(listData.getPlayCount()+"");
         holder.tvTitle.setText(listData.getName());
         holder.tvNum.setText("第"+listData.getEpisodeCount()+"集");
 

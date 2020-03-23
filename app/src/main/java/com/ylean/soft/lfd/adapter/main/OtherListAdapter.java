@@ -82,7 +82,7 @@ public class OtherListAdapter extends BaseAdapter {
             }else{
                 holder.tvFocus.setText("未关注");
             }
-            holder.tvSize.setText(dataBean.getPlayCount()+"w");
+            holder.tvSize.setText(dataBean.getPlayCount()+"");
             holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
 
             /**

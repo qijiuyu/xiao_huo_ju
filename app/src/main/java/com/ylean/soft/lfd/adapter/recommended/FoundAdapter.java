@@ -70,11 +70,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     private Handler handler=new Handler();
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
-    private RecommendedPersenter recommendedPersenter;
-    public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean,RecommendedPersenter recommendedPersenter) {
+    public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean) {
         this.activity=activity;
         this.videoBean=videoBean;
-        this.recommendedPersenter=recommendedPersenter;
         //实例化视频控制器
         controller=new AndroidMediaController(activity, false);
         //实例化MVP控制器
@@ -84,7 +82,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     /**
      * 滑动停止后，返回当前的页码
      */
-    public void selectPosition(int currentPosition) {
+    public void selectPosition(VideoInfo.VideoBean videoBean,int currentPosition) {
+        this.videoBean=videoBean;
         this.currentPosition = currentPosition;
         //刷新
         notifyDataSetChanged();
@@ -94,9 +93,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private IjkVideoView videoView;
         private TableLayout tableLayout;
         private ProgressBar progressBar;
-        private TextView tvTitle,tvBlues,tvPraise,tvFocusSerial,tvComm,tvShare,tvTime;
+        private TextView tvTitle,tvBlues,tvPraise,tvFocusSerial,tvComm,tvTime;
         private CircleImageView imgHead;
-        private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen;
+        private ImageView imgFocus,imgPraise,imgColl,imgComm,imgShare,imgPlay,imgScreen,imgPlay2;
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
         private Love love;
@@ -119,7 +118,6 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             tvFocusSerial=view.findViewById(R.id.tv_focusserial);
             tvComm=view.findViewById(R.id.tv_comm);
             imgShare=view.findViewById(R.id.img_share);
-            tvShare=view.findViewById(R.id.tv_share);
             imgPlay=view.findViewById(R.id.img_play);
             imgScreen=view.findViewById(R.id.img_screen);
             tvTime=view.findViewById(R.id.tv_time);
@@ -131,6 +129,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             linScreen=view.findViewById(R.id.lin_screen);
             relScreen=view.findViewById(R.id.rel_screen);
             etScreen=view.findViewById(R.id.et_screen);
+            imgPlay2=view.findViewById(R.id.img_play2);
         }
     }
 
@@ -148,64 +147,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         this.holder=holder;
         if(holder.getPosition()==currentPosition){
-            if(videoBean==null){
-                return;
-            }
-            holder.tvTitle.setText(videoBean.getIntroduction());
-            /**
-             * 是否关注用户
-             */
-            if(videoBean.isFollowUser()){
-                holder.imgFocus.setVisibility(View.GONE);
-            }else{
-                holder.imgFocus.setVisibility(View.VISIBLE);
-            }
-            /**
-             * 是否点赞
-             */
-            if(videoBean.isThumbEpisode()){
-                holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-            }else{
-                holder.imgPraise.setImageResource(R.mipmap.no_praise);
-            }
-            holder.tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
-            //是否关注剧集
-            if(videoBean.isFollowSerial()){
-                holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
-            }else{
-                holder.imgColl.setImageResource(R.mipmap.coll_icon);
-            }
-            holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
-            holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
-            holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
-
-            //用户头像
-            String headUrl= HttpConstant.IP+videoBean.getUserImg();
-            holder.imgHead.setTag(R.id.imageid,headUrl);
-            if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
-                Glide.with(activity).load(headUrl).into(holder.imgHead);
-            }
-
-
-            //获取弹屏列表
-            holder.listComm.setVisibility(View.GONE);
-            getScreen();
-
-            //监听弹屏输入框
-            holder.etScreen.setOnEditorActionListener(screenListener);
-            holder.imgHead.setOnClickListener(this);
-            holder.imgPraise.setOnClickListener(this);
-            holder.imgComm.setOnClickListener(this);
-            holder.imgShare.setOnClickListener(this);
-            holder.linSelectBlues.setOnClickListener(this);
-            holder.imgColl.setOnClickListener(this);
-            holder.relScreen.setOnClickListener(this);
-            holder.imgFocus.setOnClickListener(this);
-
-            holder.progressBar.setVisibility(View.VISIBLE);
-            holder.videoView.setVisibility(View.VISIBLE);
-            //屏幕点击
-            holder.love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
+            //展示视频界面数据
+            showVideo();
             //播放视频
             playVideo();
         }else{
@@ -223,8 +166,6 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     public void onViewRecycled(@NonNull ViewHolder holder) {
         this.holder=holder;
-        //添加浏览记录
-        addBrowse();
         //释放资源
         removeVideo();
         super.onViewRecycled(holder);
@@ -233,6 +174,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
     @Override
     public void onClick(View v) {
+        if(videoBean==null){
+            return;
+        }
         Intent intent=new Intent();
         switch (v.getId()){
             //进入作者首页
@@ -243,17 +187,14 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 break;
             //关注/取消用户
             case R.id.img_focus:
-                 //先登录
-                 if(!MyApplication.isLogin()){
-                     intent.setClass(activity,LoginActivity.class);
-                     activity.startActivity(intent);
-                     return;
-                 }
-                 if(videoBean==null){
-                     return;
-                 }
-                 videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
-                  break;
+                //先登录
+                if(!MyApplication.isLogin()){
+                    intent.setClass(activity,LoginActivity.class);
+                    activity.startActivity(intent);
+                    return;
+                }
+                videoPlayPersenter.followUser("0",videoBean.getUserId(), HandlerConstant.FOLLOW_SUCCESS);
+                break;
             //点赞
             case R.id.img_praise:
                 //先登录
@@ -262,10 +203,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     activity.startActivity(intent);
                     return;
                 }
-                if(videoBean==null){
-                    return;
-                }
-                 videoPlayPersenter.thump(videoBean.getSerialId());
+                videoPlayPersenter.thump(videoBean.getSerialId());
                 break;
             //关注剧情
             case R.id.img_coll:
@@ -275,16 +213,10 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     activity.startActivity(intent);
                     return;
                 }
-                if(videoBean==null){
-                    return;
-                }
                 videoPlayPersenter.followUser("1",videoBean.getSerialId(), HandlerConstant.FOLLOW_SERIAL_SUCCESS);
-                 break;
+                break;
             //评论
             case R.id.img_comm:
-                if(videoBean==null){
-                    return;
-                }
                 intent.setClass(activity,CommentActivity.class);
                 intent.putExtra("videoBean",videoBean);
                 activity.startActivity(intent);
@@ -312,15 +244,91 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     holder.etScreen.setFocusable(true);
                     holder.etScreen.requestFocus();
                 }
-                  break;
+                break;
             //选集
             case R.id.lin_select_blues:
                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
+            //暂停/播放
+            case R.id.img_play2:
+                if(holder.videoView.isPlaying()){
+                    holder.videoView.pause();
+                    holder.imgPlay.setImageResource(R.mipmap.play_icon);
+                    holder.imgPlay2.setImageResource(R.mipmap.play_icon);
+                }else{
+                    holder.videoView.start();
+                    holder.imgPlay.setImageResource(R.mipmap.start_video);
+                    holder.imgPlay2.setImageResource(R.mipmap.start_video);
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 展示视频界面数据
+     */
+    private void showVideo(){
+        if(videoBean==null){
+            return;
+        }
+        holder.tvTitle.setText(videoBean.getIntroduction());
+        /**
+         * 是否关注用户
+         */
+        if(videoBean.isFollowUser()){
+            holder.imgFocus.setVisibility(View.GONE);
+        }else{
+            holder.imgFocus.setVisibility(View.VISIBLE);
+        }
+        /**
+         * 是否点赞
+         */
+        if(videoBean.isThumbEpisode()){
+            holder.imgPraise.setImageResource(R.mipmap.yes_praise);
+        }else{
+            holder.imgPraise.setImageResource(R.mipmap.no_praise);
+        }
+        holder.tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
+        //是否关注剧集
+        if(videoBean.isFollowSerial()){
+            holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
+        }else{
+            holder.imgColl.setImageResource(R.mipmap.coll_icon);
+        }
+        holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
+        holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
+        holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
+        holder.imgPlay.setVisibility(View.GONE);
+
+        //用户头像
+        String headUrl= HttpConstant.IP+videoBean.getUserImg();
+        holder.imgHead.setTag(R.id.imageid,headUrl);
+        if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
+            Glide.with(activity).load(headUrl).into(holder.imgHead);
+        }
+
+        //获取弹屏列表
+        getScreen();
+
+        //监听弹屏输入框
+        holder.etScreen.setOnEditorActionListener(screenListener);
+        holder.imgHead.setOnClickListener(this);
+        holder.imgPraise.setOnClickListener(this);
+        holder.imgComm.setOnClickListener(this);
+        holder.imgShare.setOnClickListener(this);
+        holder.linSelectBlues.setOnClickListener(this);
+        holder.imgColl.setOnClickListener(this);
+        holder.relScreen.setOnClickListener(this);
+        holder.imgFocus.setOnClickListener(this);
+        holder.imgPlay2.setOnClickListener(this);
+
+        holder.progressBar.setVisibility(View.VISIBLE);
+        holder.videoView.setVisibility(View.VISIBLE);
+        //屏幕点击
+        holder.love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
     }
 
 
@@ -328,6 +336,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * 播放视频
      */
     private void playVideo(){
+        if(videoBean==null){
+            return;
+        }
         if(TextUtils.isEmpty(videoBean.getVideourl())){
             ToastUtil.showLong("视频地址出错");
             return;
@@ -339,8 +350,6 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             public void onCompletion(IMediaPlayer iMediaPlayer) {
-                //添加浏览记录
-                addBrowse();
                 //滑动到指定位置播放下一个视频
                 activity.recyclerView.smoothScrollToPosition(currentPosition+1);
             }
@@ -442,9 +451,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             if(holder.videoView.isPlaying()){
                 holder.videoView.pause();
                 holder.imgPlay.setVisibility(View.VISIBLE);
+                holder.imgPlay2.setImageResource(R.mipmap.play_icon);
             }else{
                 holder.videoView.start();
                 holder.imgPlay.setVisibility(View.GONE);
+                holder.imgPlay2.setImageResource(R.mipmap.start_video);
             }
         }else{
             //底部布局切换
@@ -468,7 +479,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 if(!holder.videoView.isPlaying()){
                     holder.videoView.start();
                     holder.imgPlay.setVisibility(View.GONE);
-
+                    holder.imgPlay2.setImageResource(R.mipmap.start_video);
                 }
             }else{
                 if(holder.videoView.isPlaying()){
@@ -596,10 +607,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      * 获取弹屏列表
      */
     public void getScreen(){
+        holder.listComm.setVisibility(View.GONE);
         videoPlayPersenter.getScreen(videoBean.getId());
     }
 
-    public void setVideoBean(VideoInfo.VideoBean videoBean){
-        this.videoBean=videoBean;
-    }
 }

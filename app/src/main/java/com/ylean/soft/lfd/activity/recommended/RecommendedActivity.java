@@ -158,17 +158,19 @@ public class RecommendedActivity extends BaseActivity {
         switch (eventBusType.getStatus()) {
             //获取视频详情
             case EventStatus.FOUND_VIDEO_INFO:
-                  videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
-                  if(videoBean==null){
-                      ToastUtil.showLong("无法播放该视频");
-                      return;
+                  if(eventBusType.getObject()==null){
+                      videoBean=null;
+                  }else{
+                      videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
                   }
                   if(foundAdapter==null){
-                      foundAdapter=new FoundAdapter(this,videoBean,recommendedPersenter);
+                      foundAdapter=new FoundAdapter(this,videoBean);
                       recyclerView.setAdapter(foundAdapter);
                   }else{
-                      foundAdapter.setVideoBean(videoBean);
-                      foundAdapter.selectPosition(currentPosition);
+                      //添加浏览记录
+                      foundAdapter.addBrowse();
+                      //播放下个视频
+                      foundAdapter.selectPosition(videoBean,currentPosition);
                   }
                   break;
             //点赞、取消点赞

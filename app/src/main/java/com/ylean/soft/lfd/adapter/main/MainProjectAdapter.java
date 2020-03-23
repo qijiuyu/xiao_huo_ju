@@ -51,7 +51,7 @@ public class MainProjectAdapter extends RecyclerView.Adapter<MainProjectAdapter.
         if(holder.imgAuthor.getTag(R.id.imageid2)!=null && headUrl==holder.imgAuthor.getTag(R.id.imageid2)){
             Glide.with(activity).load(headUrl).into(holder.imgAuthor);
         }
-        holder.tvSize.setText(listData.getPlayCount()+"w");
+        holder.tvSize.setText(listData.getPlayCount()+"");
         holder.tvTitle.setText(listData.getName());
         holder.tvNum.setText("第"+listData.getEpisodeCount()+"集");
 

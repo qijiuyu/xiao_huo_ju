@@ -36,9 +36,8 @@ public class RecommendedPersenter {
                       if(videoInfo==null){
                           break;
                       }
-                      if(videoInfo.isSussess()){
-                          EventBus.getDefault().post(new EventBusType(EventStatus.FOUND_VIDEO_INFO,videoInfo.getData()));
-                      }else{
+                      EventBus.getDefault().post(new EventBusType(EventStatus.FOUND_VIDEO_INFO,videoInfo.getData()));
+                      if(!videoInfo.isSussess()){
                           ToastUtil.showLong(videoInfo.getDesc());
                       }
                       break;

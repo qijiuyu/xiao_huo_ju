@@ -115,6 +115,8 @@ public class VideoPlayActivity extends BaseActivity {
     ImageView imgColl;
     @BindView(R.id.tv_focus_serial)
     TextView tvFocusSerial;
+    @BindView(R.id.img_play2)
+    ImageView imgPlay2;
     //视频控制器
     private AndroidMediaController controller;
     private Handler handler=new Handler();
@@ -231,7 +233,7 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_bank,R.id.img_head, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.lin_select_blues,R.id.img_coll})
+    @OnClick({R.id.img_bank,R.id.img_head, R.id.img_focus, R.id.img_praise, R.id.img_comm, R.id.img_share, R.id.rel_screen, R.id.lin_select_blues,R.id.img_coll,R.id.img_play2})
     public void onViewClicked(View view) {
         Intent intent=new Intent();
         switch (view.getId()) {
@@ -318,6 +320,18 @@ public class VideoPlayActivity extends BaseActivity {
                  EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                  drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
+            //暂停/播放
+            case R.id.img_play2:
+                  if(videoView.isPlaying()){
+                      videoView.pause();
+                      imgPlay.setImageResource(R.mipmap.play_icon);
+                      imgPlay2.setImageResource(R.mipmap.play_icon);
+                  }else{
+                      videoView.start();
+                      imgPlay.setImageResource(R.mipmap.start_video);
+                      imgPlay2.setImageResource(R.mipmap.start_video);
+                  }
+                  break;
             default:
                 break;
         }
@@ -399,9 +413,11 @@ public class VideoPlayActivity extends BaseActivity {
             if(videoView.isPlaying()){
                 videoView.pause();
                 imgPlay.setVisibility(View.VISIBLE);
+                imgPlay2.setImageResource(R.mipmap.play_icon);
             }else{
                 videoView.start();
                 imgPlay.setVisibility(View.GONE);
+                imgPlay2.setImageResource(R.mipmap.start_video);
             }
         }else{
             //底部布局切换
@@ -557,6 +573,7 @@ public class VideoPlayActivity extends BaseActivity {
         tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
         tvComm.setText(String.valueOf(videoBean.getCommentCount()));
         tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
+        imgPlay.setVisibility(View.GONE);
     }
 
 
@@ -591,6 +608,7 @@ public class VideoPlayActivity extends BaseActivity {
         if(!videoView.isPlaying()){
             videoView.start();
             imgPlay.setVisibility(View.GONE);
+            imgPlay2.setImageResource(R.mipmap.start_video);
         }
     }
 
