@@ -70,6 +70,8 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          //是否通过第三方登录
                          SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,false);
+                         //存储手机号
+                         SPUtil.getInstance(activity).addString(SPUtil.MOBILE,login.getData().getMobile());
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
@@ -99,6 +101,8 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          //是否通过第三方登录
                          SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,true);
+                         //存储手机号
+                         SPUtil.getInstance(activity).addString(SPUtil.MOBILE,login.getData().getMobile());
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
@@ -154,6 +158,8 @@ public class LoginPersenter {
         this.type=type;
         this.userImg=userImg;
         this.nickName=nickName;
+        //存储openId
+        SPUtil.getInstance(activity).addString(SPUtil.OPEN_ID,openId);
         DialogUtil.showProgress(activity,"登录中");
         HttpMethod.threeLogin(openId,type,"0",null,userImg,nickName,null,handler);
     }

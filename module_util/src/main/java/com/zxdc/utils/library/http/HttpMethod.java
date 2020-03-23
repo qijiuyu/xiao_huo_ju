@@ -988,4 +988,22 @@ public class HttpMethod extends BaseRequst {
             }
         });
     }
+
+
+    /**
+     * 绑定/解绑第三方信息
+     */
+    public static void isBind(String type,String openid,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("type",type);
+        map.put("openid",openid);
+        Http.getRetrofit().create(HttpApi.class).isBind(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                BaseRequst.sendMessage(handler, HandlerConstant.IS_BIND_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
 }

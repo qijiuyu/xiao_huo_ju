@@ -234,4 +234,8 @@ public interface HttpApi {
     @FormUrlEncoded
     @POST(HttpConstant.BESPOKE)
     Call<BaseBean> bespoke(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST(HttpConstant.IS_BIND)
+    Call<BaseBean> isBind(@FieldMap Map<String, String> map);
 }

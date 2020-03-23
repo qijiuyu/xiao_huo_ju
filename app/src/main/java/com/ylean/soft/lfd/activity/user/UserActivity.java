@@ -140,10 +140,13 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
 
     @OnClick({R.id.img_setting, R.id.img_news, R.id.tv_edit, R.id.tv_works, R.id.tv_my_focus, R.id.tv_my_look})
     public void onViewClicked(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
             //设置
             case R.id.img_setting:
-                setClass(SettingActivity.class);
+                intent.setClass(this,SettingActivity.class);
+                intent.putExtra("userBean",userBean);
+                startActivity(intent);
                 break;
             //消息
             case R.id.img_news:
@@ -151,7 +154,7 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
                 break;
             //编辑个人资料
             case R.id.tv_edit:
-                Intent intent=new Intent(this,UserInfoActivity.class);
+                intent.setClass(this,UserInfoActivity.class);
                 intent.putExtra("userBean",userBean);
                 startActivity(intent);
                 break;

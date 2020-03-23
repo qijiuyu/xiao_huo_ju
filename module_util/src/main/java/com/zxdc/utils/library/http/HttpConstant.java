@@ -107,5 +107,7 @@ public class HttpConstant {
 
     public static final String BESPOKE="api/app/serial/appointment";
 
+    public static final String IS_BIND="api/app/user/bindthird";
+
 
 }

@@ -32,6 +32,8 @@ public class UserInfo extends BaseBean{
         private String nickname;
         private int sex;
         private int type;
+        private boolean bindQq;
+        private boolean bindWx;
 
         public int getId() {
             return id;
@@ -127,6 +129,22 @@ public class UserInfo extends BaseBean{
 
         public void setFollowCount(int followCount) {
             this.followCount = followCount;
+        }
+
+        public boolean isBindQq() {
+            return bindQq;
+        }
+
+        public void setBindQq(boolean bindQq) {
+            this.bindQq = bindQq;
+        }
+
+        public boolean isBindWx() {
+            return bindWx;
+        }
+
+        public void setBindWx(boolean bindWx) {
+            this.bindWx = bindWx;
         }
     }
 }
