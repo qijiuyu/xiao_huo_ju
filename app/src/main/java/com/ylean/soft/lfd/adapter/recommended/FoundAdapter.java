@@ -26,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
@@ -178,6 +179,14 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
             holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
 
+            //用户头像
+            String headUrl= HttpConstant.IP+videoBean.getUserImg();
+            holder.imgHead.setTag(R.id.imageid,headUrl);
+            if(holder.imgHead.getTag(R.id.imageid)!=null && headUrl==holder.imgHead.getTag(R.id.imageid)){
+                Glide.with(activity).load(headUrl).into(holder.imgHead);
+            }
+
+
             //获取弹屏列表
             holder.listComm.setVisibility(View.GONE);
             getScreen();
@@ -229,6 +238,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             //进入作者首页
             case R.id.img_head:
                 intent.setClass(activity,AuthorDetailsActivity.class);
+                intent.putExtra("id",videoBean.getUserId());
                 activity.startActivity(intent);
                 break;
             //关注/取消用户

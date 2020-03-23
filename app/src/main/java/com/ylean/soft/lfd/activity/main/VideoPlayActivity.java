@@ -526,7 +526,6 @@ public class VideoPlayActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 显示视频详情数据
      */
