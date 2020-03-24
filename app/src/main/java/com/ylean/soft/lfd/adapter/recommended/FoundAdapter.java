@@ -339,13 +339,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         if(videoBean==null){
             return;
         }
-        if(TextUtils.isEmpty(videoBean.getVideourl())){
-            ToastUtil.showLong("视频地址出错");
-            return;
-        }
         holder.videoView.setHudView(holder.tableLayout);
         holder.videoView.setMediaController(controller);
-        holder.videoView.setVideoURI(Uri.parse(HttpConstant.IP+videoBean.getVideourl()));
+        holder.videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         holder.videoView.start();
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {

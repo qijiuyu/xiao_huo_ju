@@ -187,11 +187,11 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private void startPlay(){
         if(TextUtils.isEmpty(videoBean.getVideourl())){
-            ToastUtil.showLong("视频地址出错");
+            ToastUtil.showLong("视频地址是空的");
             return;
         }
         videoView.setMediaController(controller);
-        videoView.setVideoURI(Uri.parse(HttpConstant.IP+videoBean.getVideourl()));
+        videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         videoView.start();
         //监听视频播放完毕
         videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {

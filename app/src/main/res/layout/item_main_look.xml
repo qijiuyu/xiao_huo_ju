@@ -22,6 +22,15 @@
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"/>
 
+            <com.zxdc.utils.library.view.CircleImageView
+                android:id="@+id/img_user"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:scaleType="centerCrop"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="7dp"/>
+
             <TextView
                 android:id="@+id/tv_size"
                 android:layout_width="wrap_content"

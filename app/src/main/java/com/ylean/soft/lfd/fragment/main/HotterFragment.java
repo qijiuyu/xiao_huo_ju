@@ -181,7 +181,7 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         }else{
             tvFocus.setText("未关注");
         }
-        tvDes.setText("播放 "+dataBean.getPlayCount()+"w    更新至 第"+dataBean.getEpisodeCount()+"集");
+        tvDes.setText("播放 "+dataBean.getPlayCountDesc()+"w    更新至 第"+dataBean.getEpisodeCount()+"集");
 
         /**
          * 关注，或者取消关注

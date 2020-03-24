@@ -53,6 +53,7 @@ public class Project  extends BaseBean {
         private int id;//剧集id
         private String imgurl;//剧集图片
         private int playCount;//总播放量
+        private String playCountDesc;
         private boolean followUser;//是否已关注用户
         private String userImg;//用户头像
         private int episodeCount;//已更新集数
@@ -157,6 +158,14 @@ public class Project  extends BaseBean {
 
         public void setUserId(int userId) {
             this.userId = userId;
+        }
+
+        public String getPlayCountDesc() {
+            return playCountDesc;
+        }
+
+        public void setPlayCountDesc(String playCountDesc) {
+            this.playCountDesc = playCountDesc;
         }
     }
 }

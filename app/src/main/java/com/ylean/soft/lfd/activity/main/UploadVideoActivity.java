@@ -163,7 +163,7 @@ public class UploadVideoActivity extends BaseActivity {
         }
         //开始下载
         DownLoad d = new DownLoad();
-        d.setDownPath(HttpConstant.IP + videoUrl);
+        d.setDownPath(videoUrl);
         d.setSavePath(savePath);
         HttpMethod.download(d, handler);
     }

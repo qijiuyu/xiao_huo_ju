@@ -44,7 +44,7 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.MyHolder> 
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
         holder.tvTitle.setText(dataBean.getName());
-        holder.tvSize.setText(dataBean.getPlayCount()+"w");
+        holder.tvSize.setText(dataBean.getPlayCountDesc());
         holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
 
 

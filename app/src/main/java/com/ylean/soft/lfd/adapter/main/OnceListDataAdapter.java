@@ -39,7 +39,7 @@ public class OnceListDataAdapter extends RecyclerView.Adapter<OnceListDataAdapte
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
-        holder.tvSize.setText(listData.getPlayCount()+"");
+        holder.tvSize.setText(listData.getPlayCountDesc());
         holder.tvTitle.setText(listData.getName());
         holder.tvNum.setText("第"+listData.getEpisodeCount()+"集");
 

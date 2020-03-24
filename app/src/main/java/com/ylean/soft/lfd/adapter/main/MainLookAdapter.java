@@ -15,6 +15,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import java.util.List;
@@ -43,7 +44,13 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
         if(holder.imgHead.getTag(R.id.imageid)!=null && imgUrl==holder.imgHead.getTag(R.id.imageid)){
             Glide.with(activity).load(imgUrl).into(holder.imgHead);
         }
-        holder.tvSize.setHint(dataBean.getPlayCount()+"");
+        //作者头像
+        String userImg= HttpConstant.IP+dataBean.getUserImg();
+        holder.imgUser.setTag(R.id.imageid2,userImg);
+        if(holder.imgUser.getTag(R.id.imageid2)!=null && userImg==holder.imgUser.getTag(R.id.imageid2)){
+            Glide.with(activity).load(userImg).into(holder.imgUser);
+        }
+        holder.tvSize.setHint(dataBean.getPlayCountDesc());
         holder.tvTitle.setText(dataBean.getName());
         holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
 
@@ -68,10 +75,12 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
 
     public class MyHolder extends RecyclerView.ViewHolder {
        OvalImageViews imgHead;
+        CircleImageView imgUser;
         TextView tvTitle,tvNum,tvSize;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             imgHead=itemView.findViewById(R.id.img_head);
+            imgUser=itemView.findViewById(R.id.img_user);
             tvTitle=itemView.findViewById(R.id.tv_title);
             tvNum=itemView.findViewById(R.id.tv_num);
             tvSize=itemView.findViewById(R.id.tv_size);
