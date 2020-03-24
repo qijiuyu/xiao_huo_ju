@@ -563,15 +563,15 @@ public class VideoPlayActivity extends BaseActivity {
         }else{
             imgPraise.setImageResource(R.mipmap.no_praise);
         }
-        tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
+        tvPraise.setText(String.valueOf(videoBean.getThumbCountDesc()));
         //是否关注剧集
         if(videoBean.isFollowSerial()){
             imgColl.setImageResource(R.mipmap.coll_icon_yes);
         }else{
             imgColl.setImageResource(R.mipmap.coll_icon);
         }
-        tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
-        tvComm.setText(String.valueOf(videoBean.getCommentCount()));
+        tvFocusSerial.setText(String.valueOf(videoBean.getFollowCountDesc()));
+        tvComm.setText(String.valueOf(videoBean.getCommentCountDesc()));
         tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
         imgPlay.setVisibility(View.GONE);
     }

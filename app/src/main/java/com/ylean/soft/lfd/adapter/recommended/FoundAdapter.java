@@ -291,15 +291,15 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }else{
             holder.imgPraise.setImageResource(R.mipmap.no_praise);
         }
-        holder.tvPraise.setText(String.valueOf(videoBean.getThumbCount()));
+        holder.tvPraise.setText(String.valueOf(videoBean.getThumbCountDesc()));
         //是否关注剧集
         if(videoBean.isFollowSerial()){
             holder.imgColl.setImageResource(R.mipmap.coll_icon_yes);
         }else{
             holder.imgColl.setImageResource(R.mipmap.coll_icon);
         }
-        holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCount()));
-        holder.tvComm.setText(String.valueOf(videoBean.getCommentCount()));
+        holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCountDesc()));
+        holder.tvComm.setText(String.valueOf(videoBean.getCommentCountDesc()));
         holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
         holder.imgPlay.setVisibility(View.GONE);
 

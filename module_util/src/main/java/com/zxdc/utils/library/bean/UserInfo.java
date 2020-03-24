@@ -25,6 +25,8 @@ public class UserInfo extends BaseBean{
         private String code;
         private int constellation;
         private int fansCount;
+        private String fansCountDesc;
+        private String followCountDesc;
         private int followCount;
         private String imgurl;
         private String introduction;
@@ -145,6 +147,22 @@ public class UserInfo extends BaseBean{
 
         public void setBindWx(boolean bindWx) {
             this.bindWx = bindWx;
+        }
+
+        public String getFollowCountDesc() {
+            return followCountDesc;
+        }
+
+        public void setFollowCountDesc(String followCountDesc) {
+            this.followCountDesc = followCountDesc;
+        }
+
+        public String getFansCountDesc() {
+            return fansCountDesc;
+        }
+
+        public void setFansCountDesc(String fansCountDesc) {
+            this.fansCountDesc = fansCountDesc;
         }
     }
 }
