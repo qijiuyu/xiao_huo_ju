@@ -147,10 +147,10 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         this.holder=holder;
         if(holder.getPosition()==currentPosition){
-            //展示视频界面数据
-            showVideo();
             //播放视频
             playVideo();
+            //展示视频界面数据
+            showVideo();
         }else{
             holder.videoView.setVisibility(View.GONE);
             holder.imgPlay.setVisibility(View.GONE);
@@ -247,18 +247,18 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 break;
             //选集
             case R.id.lin_select_blues:
-                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
+                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.FUND_SELECT_BLUES));
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             //暂停/播放
             case R.id.img_play2:
                 if(holder.videoView.isPlaying()){
                     holder.videoView.pause();
-                    holder.imgPlay.setImageResource(R.mipmap.play_icon);
+                    holder.imgPlay.setVisibility(View.VISIBLE);
                     holder.imgPlay2.setImageResource(R.mipmap.play_icon);
                 }else{
                     holder.videoView.start();
-                    holder.imgPlay.setImageResource(R.mipmap.start_video);
+                    holder.imgPlay.setVisibility(View.GONE);
                     holder.imgPlay2.setImageResource(R.mipmap.start_video);
                 }
                 break;
@@ -300,7 +300,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         }
         holder.tvFocusSerial.setText(String.valueOf(videoBean.getFollowCountDesc()));
         holder.tvComm.setText(String.valueOf(videoBean.getCommentCountDesc()));
-        holder.tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
+        holder.tvBlues.setText("当前："+videoBean.getCurrentEpisode()+"集");
         holder.imgPlay.setVisibility(View.GONE);
 
         //用户头像
@@ -346,8 +346,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         //监听视频播放完毕
         holder.videoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             public void onCompletion(IMediaPlayer iMediaPlayer) {
-                //滑动到指定位置播放下一个视频
-                activity.recyclerView.smoothScrollToPosition(currentPosition+1);
+                holder.videoView.seekTo(0);
+                holder.seekbar.setProgress(0);
+                holder.videoView.start();
             }
         });
 

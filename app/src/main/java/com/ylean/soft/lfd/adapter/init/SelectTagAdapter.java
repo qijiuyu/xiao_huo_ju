@@ -42,7 +42,7 @@ public class SelectTagAdapter extends RecyclerView.Adapter<SelectTagAdapter.MyHo
         if(tagBean==null){
             return;
         }
-        holder.tvName.setHint(tagBean.getName());
+        holder.tvName.setText(tagBean.getName());
         //背景图片
         String imgUrl= HttpConstant.IP+tagBean.getImgurl();
         holder.imgHead.setTag(R.id.imageid,imgUrl);

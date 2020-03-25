@@ -925,11 +925,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             IRenderView.AR_ASPECT_FIT_PARENT,
             IRenderView.AR_ASPECT_FILL_PARENT,
             IRenderView.AR_ASPECT_WRAP_CONTENT,
-             IRenderView.AR_MATCH_PARENT,
+//             IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
     private int mCurrentAspectRatioIndex = 0;
-    private int mCurrentAspectRatio = s_allAspectRatio[1];
+    private int mCurrentAspectRatio = s_allAspectRatio[0];
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;
@@ -1085,6 +1085,12 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
 
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+
+                    ijkMediaPlayer.setOption(1, "analyzemaxduration", 100L);
+                    ijkMediaPlayer.setOption(1, "probesize", 10240L);
+                    ijkMediaPlayer.setOption(1, "flush_packets", 1L);
+                    ijkMediaPlayer.setOption(4, "packet-buffering", 0L);
+                    ijkMediaPlayer.setOption(4, "framedrop", 1L);
                 }
                 mediaPlayer = ijkMediaPlayer;
             }

@@ -190,6 +190,7 @@ public class VideoPlayActivity extends BaseActivity {
             ToastUtil.showLong("视频地址是空的");
             return;
         }
+        pbProgressbar.setVisibility(View.VISIBLE);
         videoView.setMediaController(controller);
         videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
         videoView.start();
@@ -317,18 +318,18 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //选集
             case R.id.lin_select_blues:
-                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
+                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
                  drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             //暂停/播放
             case R.id.img_play2:
                   if(videoView.isPlaying()){
                       videoView.pause();
-                      imgPlay.setImageResource(R.mipmap.play_icon);
+                      imgPlay.setVisibility(View.VISIBLE);
                       imgPlay2.setImageResource(R.mipmap.play_icon);
                   }else{
                       videoView.start();
-                      imgPlay.setImageResource(R.mipmap.start_video);
+                      imgPlay.setVisibility(View.GONE);
                       imgPlay2.setImageResource(R.mipmap.start_video);
                   }
                   break;
@@ -508,7 +509,11 @@ public class VideoPlayActivity extends BaseActivity {
                   drawerLayout.closeDrawer(Gravity.RIGHT);
                  break;
             //选择单集视频播放
-            case EventStatus.SELECT_SINGLE_PLAY:
+            case EventStatus.PLAY_SELECT_BLUES:
+                 //添加浏览记录
+                 if(MyApplication.isLogin()){
+                     videoPlayPersenter.addBrowse(videoBean.getId(),videoView.getCurrentPosition()/1000);
+                 }
                   drawerLayout.closeDrawer(Gravity.RIGHT);
                   singleId= (int) eventBusType.getObject();
                   serialId=0;
@@ -572,7 +577,7 @@ public class VideoPlayActivity extends BaseActivity {
         }
         tvFocusSerial.setText(String.valueOf(videoBean.getFollowCountDesc()));
         tvComm.setText(String.valueOf(videoBean.getCommentCountDesc()));
-        tvBlues.setText("当前："+videoBean.getEpisodeCount()+"集");
+        tvBlues.setText("当前："+videoBean.getCurrentEpisode()+"集");
         imgPlay.setVisibility(View.GONE);
     }
 
@@ -625,7 +630,7 @@ public class VideoPlayActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //添加浏览记录
-        if(videoBean!=null){
+        if(videoBean!=null && MyApplication.isLogin()){
             videoPlayPersenter.addBrowse(videoBean.getId(),videoView.getCurrentPosition()/1000);
         }
         EventBus.getDefault().unregister(this);

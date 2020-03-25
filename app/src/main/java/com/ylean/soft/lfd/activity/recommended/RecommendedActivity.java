@@ -19,8 +19,10 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMWeb;
+import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.UploadVideoActivity;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.adapter.recommended.FoundAdapter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.zxdc.utils.library.base.BaseActivity;
@@ -33,6 +35,7 @@ import com.zxdc.utils.library.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,6 +61,10 @@ public class RecommendedActivity extends BaseActivity {
     //视频对象
     private VideoInfo.VideoBean videoBean;
     private RecommendedPersenter recommendedPersenter;
+    //视频集合
+    private List<VideoInfo.VideoBean> videoList=new ArrayList<>();
+    //查询次数
+    private int loadNum;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended);
@@ -88,10 +95,6 @@ public class RecommendedActivity extends BaseActivity {
                     if (positions == (Integer.MAX_VALUE-1)) {
                         if (currentPosition != positions) {
                             currentPosition = positions;
-                            if(videoBean!=null){
-                                //获取视频数据
-                                recommendedPersenter.foundVideo(videoBean.getNextEpisodeId());
-                            }
                         }
                     }
                 }
@@ -105,9 +108,23 @@ public class RecommendedActivity extends BaseActivity {
                 if (isStopScroll == true) {
                     if (currentPosition != positions) {
                         currentPosition = positions;
-                        if(videoBean!=null){
-                            //获取视频数据
-                            recommendedPersenter.foundVideo(videoBean.getPrevEpisodeId());
+                        //添加浏览记录
+                       if(MyApplication.isLogin()){
+                          foundAdapter.addBrowse();
+                       }
+                       //如果视频集合不够了，就继续加载
+                       if(currentPosition==videoList.size()-1){
+                           foundAdapter=null;
+                           recommendedPersenter.foundVideo(0);
+                           return;
+                       }
+
+                        //加载下个/上个视频
+                        videoBean=videoList.get(currentPosition);
+                        foundAdapter.selectPosition(videoBean,currentPosition);
+
+                        if(currentPosition==videoList.size()-3){
+                            recommendedPersenter.foundVideo(0);
                         }
                     }
                 }
@@ -155,22 +172,15 @@ public class RecommendedActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(EventBusType eventBusType) {
+        Intent intent=new Intent();
         switch (eventBusType.getStatus()) {
             //获取视频详情
             case EventStatus.FOUND_VIDEO_INFO:
-                  if(eventBusType.getObject()==null){
-                      videoBean=null;
-                  }else{
-                      videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
-                  }
+                  videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
+                  videoList.add(videoBean);
                   if(foundAdapter==null){
                       foundAdapter=new FoundAdapter(this,videoBean);
                       recyclerView.setAdapter(foundAdapter);
-                  }else{
-                      //添加浏览记录
-                      foundAdapter.addBrowse();
-                      //播放下个视频
-                      foundAdapter.selectPosition(videoBean,currentPosition);
                   }
                   break;
             //点赞、取消点赞
@@ -205,10 +215,17 @@ public class RecommendedActivity extends BaseActivity {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
                 break;
             //选择单集视频播放
-            case EventStatus.SELECT_SINGLE_PLAY:
-                  drawerLayout.closeDrawer(Gravity.RIGHT);
+            case EventStatus.FUND_SELECT_BLUES:
                   int singleId= (int) eventBusType.getObject();
-                  recommendedPersenter.videoInfo(singleId);
+                  //添加浏览记录
+                  if(MyApplication.isLogin()){
+                      foundAdapter.addBrowse();
+                  }
+
+                  //播放选中的单集视频
+                  intent.setClass(this, VideoPlayActivity.class);
+                  intent.putExtra("singleId",singleId);
+                  startActivity(intent);
                   break;
             //关注、取消关注用户
             case EventStatus.IS_FOLLOW:
@@ -235,7 +252,7 @@ public class RecommendedActivity extends BaseActivity {
                     return;
                 }
                 int shareType= (int) eventBusType.getObject();
-                Intent intent=new Intent(this,UploadVideoActivity.class);
+                intent.setClass(this, UploadVideoActivity.class);
                 intent.putExtra("videoUrl",videoBean.getVideourl());
                 intent.putExtra("shareType",shareType);
                 startActivity(intent);

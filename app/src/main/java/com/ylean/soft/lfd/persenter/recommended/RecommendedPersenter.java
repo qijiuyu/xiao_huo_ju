@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.EventBus;
 public class RecommendedPersenter {
 
     private RecommendedActivity activity;
+    //加载次数
+    private int loadNum;
     public RecommendedPersenter(RecommendedActivity activity){
         this.activity=activity;
     }
@@ -31,13 +33,21 @@ public class RecommendedPersenter {
             switch (msg.what){
                 //获取视频对象
                 case HandlerConstant.FOUND_VIDEO_SUCCESS:
-                case HandlerConstant.GET_VIDEO_INFO_SUCCESS:
                       final VideoInfo videoInfo= (VideoInfo) msg.obj;
                       if(videoInfo==null){
                           break;
                       }
-                      EventBus.getDefault().post(new EventBusType(EventStatus.FOUND_VIDEO_INFO,videoInfo.getData()));
-                      if(!videoInfo.isSussess()){
+                      if(videoInfo.isSussess()){
+                          if(videoInfo.getData()!=null){
+                              EventBus.getDefault().post(new EventBusType(EventStatus.FOUND_VIDEO_INFO,videoInfo.getData()));
+                              loadNum++;
+                              if(loadNum<4){
+                                  foundVideo(0);
+                              }else{
+                                  loadNum=0;
+                              }
+                          }
+                      }else{
                           ToastUtil.showLong(videoInfo.getDesc());
                       }
                       break;
@@ -56,22 +66,12 @@ public class RecommendedPersenter {
      * 获取视频数据
      */
     public void foundVideo(int episodeid){
-        if(MyApplication.isLogin()){
-            HttpMethod.foundVideo(null,episodeid,handler);
-        }else{
+        String DEVICE_ID=null;
+        if(!MyApplication.isLogin()){
             TelephonyManager tm = (TelephonyManager)activity.getSystemService(activity.TELEPHONY_SERVICE);
-            String DEVICE_ID = tm.getDeviceId();
-            HttpMethod.foundVideo(DEVICE_ID,episodeid,handler);
+            DEVICE_ID = tm.getDeviceId();
         }
-    }
-
-
-    /**
-     * 获取视频详情
-     */
-    public void videoInfo(int singleId){
-        DialogUtil.showProgress(activity,"视频加载中");
-        HttpMethod.videoInfo(singleId,0,handler);
+        HttpMethod.foundVideo(DEVICE_ID,episodeid,handler);
     }
 
 }

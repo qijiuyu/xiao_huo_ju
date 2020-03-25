@@ -50,7 +50,7 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
         if(holder.imgUser.getTag(R.id.imageid2)!=null && userImg==holder.imgUser.getTag(R.id.imageid2)){
             Glide.with(activity).load(userImg).into(holder.imgUser);
         }
-        holder.tvSize.setHint(dataBean.getPlayCountDesc());
+        holder.tvSize.setText(dataBean.getPlayCountDesc());
         holder.tvTitle.setText(dataBean.getName());
         holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
 

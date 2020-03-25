@@ -91,9 +91,6 @@ public class EventStatus {
    //播放页面查看剧集列表
    public static final int SELECT_BLUES=209;
 
-    //选择单集视频播放
-    public static final int SELECT_SINGLE_PLAY=210;
-
     //二级回复
     public static final int REPLY_REPLY=211;
 
@@ -116,6 +113,11 @@ public class EventStatus {
 
     //首页精选下各个频道对应的广告
     public static final int CHANNEL_ABVERT=227;
+
+   //发现视频页面查看剧集列表
+   public static final int FUND_SELECT_BLUES=228;
+
+    public static final int PLAY_SELECT_BLUES=229;
 
 
 }

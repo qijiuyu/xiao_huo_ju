@@ -52,7 +52,7 @@ public class ChannerAdapter extends RecyclerView.Adapter<MyViewHolder> implement
         //名称
         holder.tvName.setText(tagBean.getName());
         //图片
-        Glide.with(activity).load(HttpConstant.IP+tagBean.getImgurl()).into(holder.imgTag);
+        Glide.with(activity).load(HttpConstant.IP+tagBean.getIcon()).into(holder.imgTag);
 
         if(isJitter){
             AnimUtil.tada(holder.relTag);

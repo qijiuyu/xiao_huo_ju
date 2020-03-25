@@ -26,6 +26,7 @@ public class Tag extends BaseBean {
         private String imgurl;
         private String name;
         private int id;
+        private String icon;
         private List<ListData> serialList;
 
         public TagBean(){};
@@ -72,6 +73,14 @@ public class Tag extends BaseBean {
 
         public void setSerialList(List<ListData> serialList) {
             this.serialList = serialList;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
     }
 

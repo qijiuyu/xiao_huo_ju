@@ -20,14 +20,24 @@ public class Version extends BaseBean {
 
     public static class VersionBean implements Serializable{
 
-        private int version;
+        private String oldversion;
+        private String version;
         private String url;
 
-        public int getVersion() {
+
+        public String getOldversion() {
+            return oldversion;
+        }
+
+        public void setOldversion(String oldversion) {
+            this.oldversion = oldversion;
+        }
+
+        public String getVersion() {
             return version;
         }
 
-        public void setVersion(int version) {
+        public void setVersion(String version) {
             this.version = version;
         }
 

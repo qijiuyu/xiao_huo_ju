@@ -14,6 +14,7 @@ import com.zxdc.utils.library.bean.SerialVideo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.OvalImageViews;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,10 +28,12 @@ public class SelectBluesAdapter extends BaseAdapter {
 
     private Activity activity;
     private List<SerialVideo.SerialVideoBean> lis;
-    public SelectBluesAdapter(Activity activity,List<SerialVideo.SerialVideoBean> lis) {
+    private int status;
+    public SelectBluesAdapter(Activity activity,List<SerialVideo.SerialVideoBean> lis,int status) {
         super();
         this.activity = activity;
         this.lis=lis;
+        this.status=status;
     }
 
     @Override
@@ -80,7 +83,8 @@ public class SelectBluesAdapter extends BaseAdapter {
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int id= (int) v.getTag(R.id.tag1);
-                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_SINGLE_PLAY,id));
+                LogUtils.e(status+"++++++++++++++++++++++++++++++++++");
+                EventBus.getDefault().post(new EventBusType(status,id));
             }
         });
         return view;

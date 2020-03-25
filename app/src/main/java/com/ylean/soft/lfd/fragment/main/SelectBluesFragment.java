@@ -40,6 +40,12 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
     private SelectBluesAdapter selectBluesAdapter;
     //剧情id
     private int serialId;
+    /**
+     * EventStatus.SELECT_BLUES：播放页面进入
+     * EventStatus.FUND_SELECT_BLUES：发现视频页面进入
+     *
+     */
+    private int status;
     private List<SerialVideo.SerialVideoBean> listAll = new ArrayList<>();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +61,6 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
         //刷新加载
         reList.setMyRefreshLayoutListener(this);
         reList.setPullDownRefreshEnable(false);
-        selectBluesAdapter=new SelectBluesAdapter(mActivity,listAll);
-        listView.setAdapter(selectBluesAdapter);
 
         //点击空白处
         view.findViewById(R.id.rel).setOnClickListener(new View.OnClickListener() {
@@ -101,7 +105,12 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
         if (serialVideo.isSussess()) {
             List<SerialVideo.SerialVideoBean> list = serialVideo.getData();
             listAll.addAll(list);
-            selectBluesAdapter.notifyDataSetChanged();
+            if(selectBluesAdapter==null){
+                selectBluesAdapter=new SelectBluesAdapter(mActivity,listAll,status);
+                listView.setAdapter(selectBluesAdapter);
+            }else{
+                selectBluesAdapter.notifyDataSetChanged();
+            }
             if (list.size() < HttpMethod.size) {
                 reList.setIsLoadingMoreEnabled(false);
             }
@@ -118,6 +127,7 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
      */
     public void onRefresh(View view) {
         page = 1;
+        listAll.clear();
         HttpMethod.getSerialVideo(0, page, serialId, HandlerConstant.GET_SERIAL_VIDEO_SUCCESS1, handler);
     }
 
@@ -141,10 +151,7 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
         switch (eventBusType.getStatus()) {
             //开始查询剧集列表
             case EventStatus.SELECT_BLUES:
-                  page=1;
-                  listAll.clear();
-                  selectBluesAdapter.notifyDataSetChanged();
-
+                  status= (int) eventBusType.getObject2();
                   serialId= (int) eventBusType.getObject();
                   //获取专题列表
                   reList.startRefresh();

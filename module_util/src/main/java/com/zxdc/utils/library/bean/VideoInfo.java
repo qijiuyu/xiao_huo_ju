@@ -39,6 +39,7 @@ public class VideoInfo extends BaseBean {
         private String commentCountDesc;
         private String followCountDesc;
         private String thumbCountDesc;
+        private int currentEpisode;
 
         public int getEpisodeCount() {
             return episodeCount;
@@ -198,6 +199,14 @@ public class VideoInfo extends BaseBean {
 
         public void setThumbCountDesc(String thumbCountDesc) {
             this.thumbCountDesc = thumbCountDesc;
+        }
+
+        public int getCurrentEpisode() {
+            return currentEpisode;
+        }
+
+        public void setCurrentEpisode(int currentEpisode) {
+            this.currentEpisode = currentEpisode;
         }
     }
 }

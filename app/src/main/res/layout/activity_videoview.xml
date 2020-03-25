@@ -200,7 +200,7 @@
                 android:id="@+id/img_play2"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@mipmap/play_icon"
+                android:src="@mipmap/start_video"
                 android:layout_centerVertical="true"/>
 
             <TextView

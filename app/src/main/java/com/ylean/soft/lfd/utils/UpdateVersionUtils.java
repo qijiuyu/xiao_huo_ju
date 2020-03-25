@@ -60,7 +60,7 @@ public class UpdateVersionUtils {
                     }
                     if(version.isSussess() && version.getData()!=null){
                         //判断是否需要更新
-                        if (version.getData().getVersion()> Util.getVersionCode(mContext)) {
+                        if(!Util.getVersionName(mContext).equals(version.getData().getVersion())){
                             View view = LayoutInflater.from(mContext).inflate(R.layout.version_pop, null);
                             TextView tvCalcle =view.findViewById(R.id.tv_cancle);
                             TextView tvConfirm =view.findViewById(R.id.tv_confirm);
