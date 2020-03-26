@@ -83,7 +83,6 @@ public class SelectBluesAdapter extends BaseAdapter {
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int id= (int) v.getTag(R.id.tag1);
-                LogUtils.e(status+"++++++++++++++++++++++++++++++++++");
                 EventBus.getDefault().post(new EventBusType(status,id));
             }
         });

@@ -40,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
+import com.zxdc.utils.library.util.LogUtils;
 
 import java.util.Locale;
 
@@ -64,6 +65,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private LinearLayout tabsContainer;
 	private ViewPager pager;
+	private int indicatorWidth;
 
 	private int tabCount;
 
@@ -163,6 +165,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		shouldExpand = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, shouldExpand);
 		scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, scrollOffset);
 		textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
+
+		indicatorWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, indicatorWidth, dm);
+
+		indicatorWidth = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsIndicatorWidth, indicatorWidth);
+
 
 		a.recycle();
 
@@ -349,7 +356,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			lineRight = (currentPositionOffset * nextTabRight + (1f - currentPositionOffset) * lineRight);
 		}
 
-		canvas.drawRect(lineLeft, height - indicatorHeight, lineRight, height, rectPaint);
+//		canvas.drawRect(lineLeft, height - indicatorHeight, lineRight, height, rectPaint);
+
+		//进度条自定义宽度
+		canvas.drawRect(lineLeft + (lineRight-lineLeft-indicatorWidth)/2, height - indicatorHeight, lineRight-(lineRight-lineLeft-indicatorWidth)/2, height, rectPaint);
 
 		// draw divider
 

@@ -58,7 +58,6 @@ public class VideoPlayPersenter {
                       if(baseBean.isSussess()){
                           EventBus.getDefault().post(new EventBusType(EventStatus.IS_FOLLOW));
                       }
-                      ToastUtil.showLong(baseBean.getDesc());
                       break;
                 //关注、取消关注剧集
                 case HandlerConstant.FOLLOW_SERIAL_SUCCESS:
@@ -69,7 +68,6 @@ public class VideoPlayPersenter {
                      if(baseBean.isSussess()){
                          EventBus.getDefault().post(new EventBusType(EventStatus.FOCUS_SERIAL));
                      }
-                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 //点赞、取消点赞
                 case HandlerConstant.THUMP_SUCCESS:
@@ -80,7 +78,6 @@ public class VideoPlayPersenter {
                      if(baseBean.isSussess()){
                          EventBus.getDefault().post(new EventBusType(EventStatus.IS_THUMP));
                      }
-                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 //发送弹屏
                 case HandlerConstant.SEND_SCREEN_SUCCESS:
@@ -99,7 +96,7 @@ public class VideoPlayPersenter {
                       if(screen==null){
                           break;
                       }
-                      if(screen.isSussess() && screen.getData()!=null && screen.getData().size()!=0){
+                      if(screen.isSussess()){
                           EventBus.getDefault().post(new EventBusType(EventStatus.GET_SCREEEN,screen.getData()));
                       }
                       break;

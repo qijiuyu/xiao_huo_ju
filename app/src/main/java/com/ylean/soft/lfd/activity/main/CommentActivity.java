@@ -143,7 +143,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                          videoBean.setCommentCount(videoBean.getCommentCount()+1);
                          tvTotal.setText(videoBean.getCommentCount()+"条评论");
                      }
-                     ToastUtil.showLong(addComment.getDesc());
                     break;
                 //发送回复回执
                 case HandlerConstant.REPLY_SUCCESS:
@@ -159,7 +158,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                           comment.getReplyList().add(0,addReply.getData());
                           commentAdapter.notifyDataSetChanged();
                       }
-                      ToastUtil.showLong(addReply.getDesc());
                       break;
                 //获取回复列表
                 case HandlerConstant.GET_REPLY_LIST_SUCCESS:
@@ -191,7 +189,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                          }
                          commentAdapter.notifyDataSetChanged();
                      }
-                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 //回复点赞
                 case HandlerConstant.REPLY_PRISE_SUCCESS:
@@ -209,7 +206,6 @@ public class CommentActivity extends BaseActivity implements MyRefreshLayoutList
                          }
                          commentAdapter.notifyDataSetChanged();
                      }
-                     ToastUtil.showLong(baseBean.getDesc());
                       break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());

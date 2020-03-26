@@ -190,6 +190,7 @@ public class VideoPlayActivity extends BaseActivity {
             ToastUtil.showLong("视频地址是空的");
             return;
         }
+        videoView.setVisibility(View.GONE);
         pbProgressbar.setVisibility(View.VISIBLE);
         videoView.setMediaController(controller);
         videoView.setVideoURI(Uri.parse(videoBean.getVideourl()));
@@ -205,6 +206,7 @@ public class VideoPlayActivity extends BaseActivity {
         //监听视频加载完成
         videoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
             public void onPrepared(IMediaPlayer iMediaPlayer) {
+                videoView.setVisibility(View.VISIBLE);
                 //显示视频播放时长
                 videoPlayPersenter.showVideoTime(videoView, tvTime);
                 //设置播放进度条的最大值
@@ -270,7 +272,7 @@ public class VideoPlayActivity extends BaseActivity {
                 if(videoBean==null){
                     return;
                 }
-                videoPlayPersenter.thump(videoBean.getSerialId());
+                videoPlayPersenter.thump(videoBean.getId());
                 break;
             //关注剧集
             case R.id.img_coll:
@@ -443,10 +445,10 @@ public class VideoPlayActivity extends BaseActivity {
             //显示视频详情
             case EventStatus.SHOW_VIDEO_INFO:
                   videoBean= (VideoInfo.VideoBean) eventBusType.getObject();
-                  //显示视频详情数据
-                  showVideoInfo();
                   //播放视频
                   startPlay();
+                  //显示视频详情数据
+                  showVideoInfo();
                   //获取弹屏列表
                   videoPlayPersenter.getScreen(videoBean.getId());
                   break;

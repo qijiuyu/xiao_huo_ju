@@ -334,9 +334,7 @@ public class SelectFragment extends BaseFragment {
         if(rotation!=null){
             rotation.end();
         }
-        LinearLayoutManager layoutManager=new LinearLayoutManager(mActivity);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recycleLook.setLayoutManager(layoutManager);
+        recycleLook.setLayoutManager(new GridLayoutManager(mActivity, 3));
         recycleLook.setAdapter(new MainLookAdapter(mActivity,list));
     }
 
@@ -410,7 +408,6 @@ public class SelectFragment extends BaseFragment {
     }
 
 
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
     }

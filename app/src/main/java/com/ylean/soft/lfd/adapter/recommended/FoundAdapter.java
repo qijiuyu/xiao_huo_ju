@@ -203,7 +203,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     activity.startActivity(intent);
                     return;
                 }
-                videoPlayPersenter.thump(videoBean.getSerialId());
+                videoPlayPersenter.thump(videoBean.getId());
                 break;
             //关注剧情
             case R.id.img_coll:
