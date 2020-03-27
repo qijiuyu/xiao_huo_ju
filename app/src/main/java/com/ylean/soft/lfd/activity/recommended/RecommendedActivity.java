@@ -163,7 +163,19 @@ public class RecommendedActivity extends BaseActivity {
         // 设置遮盖主要内容的布颜色
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            public void onDrawerStateChanged(int arg0) {
+            }
+            public void onDrawerSlide(View arg0, float arg1) {
+            }
+            public void onDrawerOpened(View arg0) {
+                if(videoBean!=null){
+                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
+                }
+            }
+            public void onDrawerClosed(View arg0) {
+            }
+        });
     }
 
 

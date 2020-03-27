@@ -2,7 +2,6 @@ package com.ylean.soft.lfd.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +13,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -26,11 +26,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMWeb;
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
@@ -42,15 +37,12 @@ import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
 import com.zxdc.utils.library.base.BaseActivity;
-import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.DialogUtil;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -117,6 +109,8 @@ public class VideoPlayActivity extends BaseActivity {
     TextView tvFocusSerial;
     @BindView(R.id.img_play2)
     ImageView imgPlay2;
+    @BindView(R.id.lin_play)
+    LinearLayout linPlay;
     //视频控制器
     private AndroidMediaController controller;
     private Handler handler=new Handler();
@@ -178,7 +172,22 @@ public class VideoPlayActivity extends BaseActivity {
         // 设置遮盖主要内容的布颜色
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            public void onDrawerStateChanged(int arg0) {
+            }
+            public void onDrawerSlide(View arg0, float arg1) {
+            }
+
+            public void onDrawerOpened(View arg0) {
+                if(videoBean!=null){
+                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
+                }
+            }
+
+            public void onDrawerClosed(View arg0) {
+            }
+        });
     }
 
 
@@ -387,8 +396,8 @@ public class VideoPlayActivity extends BaseActivity {
      */
     private MyOnTouchListener.MyClickCallBack myClickCallBack=new MyOnTouchListener.MyClickCallBack() {
         //单击
-        public void oneClick(MotionEvent event) {
-            clickVideo(event);
+        public void oneClick(MotionEvent event,float x) {
+            clickVideo(event,x);
         }
         //双击
         public void doubleClick(MotionEvent event) {
@@ -408,13 +417,17 @@ public class VideoPlayActivity extends BaseActivity {
     /**
      * 视频点击
      */
-    private void clickVideo(MotionEvent event){
+    private void clickVideo(MotionEvent event,float x){
+        if(x-event.getX()>100){
+            return;
+        }
         int deviceHeight=Util.getDeviceWH(this,2);
         int point=deviceHeight/3;
         if(event.getY()>point && event.getY()<(point*2)){
             //播放/暂停
             if(videoView.isPlaying()){
                 videoView.pause();
+                imgPlay.setAnimation(AnimationUtils.loadAnimation(this, R.anim.play_anim));
                 imgPlay.setVisibility(View.VISIBLE);
                 imgPlay2.setImageResource(R.mipmap.play_icon);
             }else{
@@ -428,10 +441,12 @@ public class VideoPlayActivity extends BaseActivity {
                 showBottom=2;
                 relProgress.setVisibility(View.VISIBLE);
                 linScreen.setVisibility(View.GONE);
+                linPlay.setVisibility(View.GONE);
             }else{
                 showBottom=1;
                 relProgress.setVisibility(View.GONE);
                 linScreen.setVisibility(View.VISIBLE);
+                linPlay.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -531,17 +546,6 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.FOCUS_USER:
                  videoBean.setFollowUser(true);
                  imgFocus.setVisibility(View.GONE);
-                  break;
-            //分享
-            case EventStatus.SHARE_APP:
-                  if(videoBean==null || TextUtils.isEmpty(videoBean.getVideourl())){
-                      return;
-                  }
-                  int shareType= (int) eventBusType.getObject();
-                  Intent intent=new Intent(this,UploadVideoActivity.class);
-                  intent.putExtra("videoUrl",videoBean.getVideourl());
-                  intent.putExtra("shareType",shareType);
-                  startActivity(intent);
                   break;
             default:
                 break;

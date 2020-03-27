@@ -152,7 +152,11 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
             //开始查询剧集列表
             case EventStatus.SELECT_BLUES:
                   status= (int) eventBusType.getObject2();
-                  serialId= (int) eventBusType.getObject();
+                  int id= (int) eventBusType.getObject();
+                  if(id==serialId && listAll.size()>0){
+                      return;
+                  }
+                  serialId=id;
                   //获取专题列表
                   reList.startRefresh();
                   break;

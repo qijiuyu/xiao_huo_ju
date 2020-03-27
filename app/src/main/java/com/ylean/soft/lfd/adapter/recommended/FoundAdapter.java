@@ -100,7 +100,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private AutoPollRecyclerView listComm;
         private Love love;
         private RelativeLayout relProgress,relScreen;
-        private LinearLayout linScreen,linSelectBlues;
+        private LinearLayout linScreen,linSelectBlues,linPlay;
         private EditText etScreen;
         public ViewHolder(View view) {
             super(view);
@@ -130,6 +130,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             relScreen=view.findViewById(R.id.rel_screen);
             etScreen=view.findViewById(R.id.et_screen);
             imgPlay2=view.findViewById(R.id.img_play2);
+            linPlay=view.findViewById(R.id.lin_play);
         }
     }
 
@@ -420,8 +421,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
      */
     private MyOnTouchListener.MyClickCallBack myClickCallBack=new MyOnTouchListener.MyClickCallBack() {
         //单击
-        public void oneClick(MotionEvent event) {
-            clickVideo(event);
+        public void oneClick(MotionEvent event,float x) {
+            clickVideo(event,x);
         }
         //双击
         public void doubleClick(MotionEvent event) {
@@ -440,13 +441,17 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     /**
      * 视频点击
      */
-    private void clickVideo(MotionEvent event){
+    private void clickVideo(MotionEvent event,float x){
+        if(x-event.getX()>100){
+            return;
+        }
         int deviceHeight= Util.getDeviceWH(activity,2);
         int point=deviceHeight/3;
         if(event.getY()>point && event.getY()<(point*2)){
             //播放/暂停
             if(holder.videoView.isPlaying()){
                 holder.videoView.pause();
+                holder.imgPlay.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.play_anim));
                 holder.imgPlay.setVisibility(View.VISIBLE);
                 holder.imgPlay2.setImageResource(R.mipmap.play_icon);
             }else{
@@ -459,9 +464,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             if(holder.linScreen.getVisibility()==View.VISIBLE){
                 holder.linScreen.setVisibility(View.GONE);
                 holder.relProgress.setVisibility(View.VISIBLE);
+                holder.linPlay.setVisibility(View.GONE);
             }else{
                 holder.linScreen.setVisibility(View.VISIBLE);
                 holder.relProgress.setVisibility(View.GONE);
+                holder.linPlay.setVisibility(View.VISIBLE);
             }
         }
     }

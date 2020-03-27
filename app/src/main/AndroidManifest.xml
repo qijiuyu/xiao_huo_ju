@@ -66,7 +66,7 @@
         <activity android:name=".activity.recommended.RecommendedActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.focus.FocusActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.UserActivity"  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.main.VideoPlayActivity"  android:screenOrientation="portrait"  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.main.VideoPlayActivity"  android:screenOrientation="portrait"  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.main.MoreHotterActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.main.ProjectListActivity"  android:screenOrientation="portrait"  android:launchMode="singleTop"/>
         <activity android:name=".activity.main.OnceListActivity"  android:screenOrientation="portrait" android:launchMode="singleTop"/>
@@ -85,7 +85,7 @@
         <activity android:name=".activity.init.BingMobileActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.AbountActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.FeedBackActivity"  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.main.CommentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.main.CommentActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"  android:screenOrientation="portrait"  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.main.UploadVideoActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.web.WebViewActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.user.HelpListActivity"  android:screenOrientation="portrait"/>

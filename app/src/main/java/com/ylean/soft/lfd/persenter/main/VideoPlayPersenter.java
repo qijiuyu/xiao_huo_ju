@@ -6,6 +6,8 @@ import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -114,42 +116,61 @@ public class VideoPlayPersenter {
     /**
      * 展示分享弹框
      */
+    Animation animation=null;
     public void showShareDialog(){
-        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_share, null);
+        final View view = LayoutInflater.from(activity).inflate(R.layout.dialog_share, null);
         final PopupWindow popupWindow = DialogUtil.showPopWindow(view);
         popupWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        animation=new TranslateAnimation(0,0,500,0);
+        animation.setDuration(500);
+        animation.setFillAfter(true);
+        view.startAnimation(animation);
+
         view.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-        view.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                popupWindow.dismiss();
+                closeShare(view,popupWindow);
             }
         });
         view.findViewById(R.id.tv_wx).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                popupWindow.dismiss();
+                closeShare(view,popupWindow);
                 EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 1));
             }
         });
         view.findViewById(R.id.tv_pyq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                popupWindow.dismiss();
+                closeShare(view,popupWindow);
                 EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 2));
             }
         });
         view.findViewById(R.id.tv_qq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                popupWindow.dismiss();
+                closeShare(view,popupWindow);
                 EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 3));
             }
         });
         view.findViewById(R.id.tv_kj).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                popupWindow.dismiss();
+                closeShare(view,popupWindow);
                 EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 4));
+            }
+        });
+    }
+
+
+    private void closeShare(View view, final PopupWindow popupWindow){
+        animation=new TranslateAnimation(0,0,0,500);
+        animation.setDuration(500);
+        animation.setFillAfter(true);
+        view.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                popupWindow.dismiss();
+            }
+            public void onAnimationRepeat(Animation animation) {
+
             }
         });
     }

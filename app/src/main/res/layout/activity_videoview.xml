@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,7 +49,7 @@
             android:layout_gravity="center"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
-        
+
         <ImageView
             android:id="@+id/img_play"
             android:visibility="gone"
@@ -81,6 +82,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/lin_play"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"

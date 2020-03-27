@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.view.Gravity;
@@ -78,7 +79,7 @@ public class DialogUtil {
         PopupWindow mPopuwindow = new PopupWindow(view,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        ColorDrawable cd = new ColorDrawable();
+        ColorDrawable cd = new ColorDrawable(Color.TRANSPARENT);
         mPopuwindow.setBackgroundDrawable(cd);
         mPopuwindow.setOutsideTouchable(true);
         mPopuwindow.setFocusable(true);
