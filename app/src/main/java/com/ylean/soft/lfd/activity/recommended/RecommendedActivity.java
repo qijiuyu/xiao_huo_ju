@@ -163,6 +163,8 @@ public class RecommendedActivity extends BaseActivity {
         // 设置遮盖主要内容的布颜色
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        //关闭手势滑动
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }

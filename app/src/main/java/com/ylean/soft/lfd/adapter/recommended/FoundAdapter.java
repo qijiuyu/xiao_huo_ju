@@ -282,6 +282,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         if(videoBean.isFollowUser()){
             holder.imgFocus.setVisibility(View.GONE);
         }else{
+            holder.imgFocus.setImageResource(R.mipmap.add_focus);
             holder.imgFocus.setVisibility(View.VISIBLE);
         }
         /**
@@ -561,8 +562,14 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void isFocusUser(VideoInfo.VideoBean videoBean){
         this.videoBean=videoBean;
         if(videoBean.isFollowUser()){
-            holder.imgFocus.setVisibility(View.GONE);
+            holder.imgFocus.setImageResource(R.mipmap.ok);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    holder.imgFocus.setVisibility(View.GONE);
+                }
+            },1000);
         }else{
+            holder.imgFocus.setImageResource(R.mipmap.add_focus);
             holder.imgFocus.setVisibility(View.VISIBLE);
         }
     }

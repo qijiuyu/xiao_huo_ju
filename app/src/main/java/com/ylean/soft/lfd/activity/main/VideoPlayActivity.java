@@ -471,9 +471,15 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.IS_FOLLOW:
                   if(imgFocus.getVisibility()==View.VISIBLE){
                       videoBean.setFollowUser(true);
-                      imgFocus.setVisibility(View.GONE);
+                      imgFocus.setImageResource(R.mipmap.ok);
+                      handler.postDelayed(new Runnable() {
+                          public void run() {
+                              imgFocus.setVisibility(View.GONE);
+                          }
+                      },1000);
                   }else{
                       videoBean.setFollowUser(false);
+                      imgFocus.setImageResource(R.mipmap.add_focus);
                       imgFocus.setVisibility(View.VISIBLE);
                   }
                   break;
@@ -540,6 +546,7 @@ public class VideoPlayActivity extends BaseActivity {
             //取消用户关注
             case EventStatus.CANCLE_FOCUS_USER:
                  videoBean.setFollowUser(false);
+                 imgFocus.setImageResource(R.mipmap.add_focus);
                  imgFocus.setVisibility(View.VISIBLE);
                   break;
             //关注用户

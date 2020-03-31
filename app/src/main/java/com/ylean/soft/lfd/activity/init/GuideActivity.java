@@ -33,6 +33,7 @@ public class GuideActivity extends BaseActivity {
             R.mipmap.guide_1,
             R.mipmap.guide_2,
             R.mipmap.guide_3,
+            R.mipmap.guide_4
     };
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +46,14 @@ public class GuideActivity extends BaseActivity {
         //初始化导航页面
         for (int i = 0; i < images.length; i++) {
             ImageView iv = new ImageView(this);
-//            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             iv.setImageResource(images[i]);
             imageViews.add(iv);
             iv.setTag(i);
             iv.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     int index= (int) v.getTag();
-                    if(index==2){
+                    if(index==3){
                         setClass(TabActivity.class);
                         finish();
                     }

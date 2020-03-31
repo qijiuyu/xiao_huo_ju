@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">小火剧</string>
+    <string name="app_name">小火剧视频</string>
     <string name="xscrollview_header_hint_normal">下拉刷新</string>
     <string name="xscrollview_header_hint_ready">松开刷新</string>
     <string name="xscrollview_header_hint_loading">加载数据...</string>
