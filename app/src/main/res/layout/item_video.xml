@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -83,7 +84,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp">
+        android:layout_marginBottom="80dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -189,7 +190,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="55dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -227,7 +228,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="70dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         android:background="@drawable/main_search_bg">
 
         <RelativeLayout
@@ -256,12 +257,12 @@
         <EditText
             android:id="@+id/et_screen"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:hint="发个弹幕冒个泡～"
-            android:textColor="@color/color_666666"
+            android:textColor="@android:color/white"
             android:textSize="13sp"
             android:imeOptions="actionSend"
             android:singleLine="true"
@@ -277,7 +278,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         android:layout_centerVertical="true">
 
         <ImageView

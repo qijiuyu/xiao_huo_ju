@@ -26,12 +26,18 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
+import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
@@ -43,12 +49,14 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.BindView;
@@ -111,6 +119,8 @@ public class VideoPlayActivity extends BaseActivity {
     ImageView imgPlay2;
     @BindView(R.id.lin_play)
     LinearLayout linPlay;
+    @BindView(R.id.rel)
+    RelativeLayout rel;
     //视频控制器
     private AndroidMediaController controller;
     private Handler handler=new Handler();
@@ -137,6 +147,8 @@ public class VideoPlayActivity extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
         initView();
+        //监听软键盘打开还是关闭
+        setListenerFotEditText(rel);
         rightMenu();
         //获取视频详情
         videoPlayPersenter.videoInfo(singleId,serialId);
@@ -324,7 +336,6 @@ public class VideoPlayActivity extends BaseActivity {
                      etScreen.setHint("发个弹幕冒个泡～");
                      etScreen.setFocusableInTouchMode(true);
                      etScreen.setFocusable(true);
-                     etScreen.requestFocus();
                  }
                 break;
             //选集
@@ -612,11 +623,86 @@ public class VideoPlayActivity extends BaseActivity {
                     }
                     videoPlayPersenter.sendScreen(content,videoBean);
                     etScreen.setText(null);
+                    v.clearFocus();
                 }
             }
             return false;
         }
     };
+
+
+    /**
+     * 监听软键盘打开还是关闭
+     * @param view
+     */
+    private void setListenerFotEditText(View view) {
+        SoftKeyboardStateHelper softKeyboardStateHelper = new SoftKeyboardStateHelper(view);
+        softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                etScreen.setCursorVisible(true);
+            }
+            public void onSoftKeyboardClosed() {
+                etScreen.setCursorVisible(false);
+                etScreen.setText(null);
+            }
+        });
+    }
+
+
+    /**
+     * 分享
+     */
+    public void startShare(SHARE_MEDIA share_media) {
+        String url = null;
+        try {
+            url= com.ylean.soft.lfd.utils.URLEncoder.encode(videoBean.getVideourl(), "utf-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share");
+        web.setTitle("小火剧");
+        web.setDescription("提供小视频的娱乐平台");
+        new ShareAction(this).setPlatform(share_media)
+                .setCallback(umShareListener)
+                .withMedia(web)
+                .share();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        public void onResult(SHARE_MEDIA platform) {
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                ToastUtil.showLong(getString(R.string.share_success));
+            } else {
+                ToastUtil.showLong(getString(R.string.share_success));
+            }
+        }
+
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (t.getMessage().indexOf("2008") != -1) {
+                if (platform.name().equals("WEIXIN") || platform.name().equals("WEIXIN_CIRCLE")) {
+                    ToastUtil.showLong(getString(R.string.share_failed_install_wechat));
+                } else if (platform.name().equals("QQ") || platform.name().equals("QZONE")) {
+                    ToastUtil.showLong(getString(R.string.share_failed_install_qq));
+                }
+            }
+            ToastUtil.showLong(getString(R.string.share_failed));
+        }
+
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtil.showLong(getString(R.string.share_canceled));
+        }
+    };
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
 
 
     @Override

@@ -8,6 +8,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black">
@@ -268,7 +269,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:hint="发个弹幕冒个泡～"
-                android:textColor="@color/color_666666"
+                android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:imeOptions="actionSend"
                 android:singleLine="true"

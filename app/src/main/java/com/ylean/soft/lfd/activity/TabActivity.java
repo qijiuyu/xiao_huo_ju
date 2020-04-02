@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -18,11 +19,16 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
+import com.ylean.soft.lfd.utils.KeyboardPatch;
+import com.ylean.soft.lfd.utils.KeyboardUtil;
+import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
+import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
 import com.zxdc.utils.library.view.ClickLinearLayout;
@@ -62,20 +68,30 @@ public class TabActivity extends android.app.TabActivity {
     ClickLinearLayout linFocus;
     @BindView(R.id.lin_user)
     ClickLinearLayout linUser;
+    @BindView(R.id.rel)
+    RelativeLayout rel;
     // 按两次退出
     protected long exitTime = 0;
     private List<TextView> tvList = new ArrayList<>();
     private List<ImageView> imgList = new ArrayList<>();
     private List<ClickLinearLayout> relClick = new ArrayList<>();
+    private View contentView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab);
+//        StatusBarUtils.transparencyBar(this);
+//        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+        contentView = getLayoutInflater().inflate(R.layout.activity_tab, null);
+        setContentView(contentView);
+//        new KeyboardUtil(this, contentView);
         ButterKnife.bind(this);
         initView();
 
         //查询最新版本
         new UpdateVersionUtils().getVersion(this);
     }
+
+
 
 
     /**
@@ -122,6 +138,8 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_main:
             case R.id.lin_main2:
                 updateTag(0);
+//                StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+//                new KeyboardUtil(this, contentView);
                 tabhost.setCurrentTabByTag("推荐");
                 EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 break;
@@ -129,6 +147,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_recommend:
             case R.id.lin_recommend2:
                 updateTag(1);
+//                StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                 tabhost.setCurrentTabByTag("发现");
                 break;
             //关注
@@ -136,6 +155,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_focus2:
                 if(MyApplication.isLogin()){
                     updateTag(2);
+//                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                     tabhost.setCurrentTabByTag("关注");
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
@@ -147,6 +167,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_user2:
                 if(MyApplication.isLogin()){
                     updateTag(3);
+//                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                     tabhost.setCurrentTabByTag("我的");
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
@@ -175,6 +196,7 @@ public class TabActivity extends android.app.TabActivity {
             }
         }
     }
+
 
     /**
      * 连续点击两次返回退出

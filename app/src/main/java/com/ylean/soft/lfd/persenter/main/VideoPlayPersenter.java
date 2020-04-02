@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
@@ -134,25 +135,41 @@ public class VideoPlayPersenter {
         view.findViewById(R.id.tv_wx).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 closeShare(view,popupWindow);
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 1));
+                if(activity instanceof VideoPlayActivity){
+                    ((VideoPlayActivity)activity).startShare(SHARE_MEDIA.WEIXIN);
+                    return;
+                }
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP,  SHARE_MEDIA.WEIXIN));
             }
         });
         view.findViewById(R.id.tv_pyq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 closeShare(view,popupWindow);
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 2));
+                if(activity instanceof VideoPlayActivity){
+                    ((VideoPlayActivity)activity).startShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                    return;
+                }
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.WEIXIN_CIRCLE));
             }
         });
         view.findViewById(R.id.tv_qq).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 closeShare(view,popupWindow);
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 3));
+                if(activity instanceof VideoPlayActivity){
+                    ((VideoPlayActivity)activity).startShare(SHARE_MEDIA.QQ);
+                    return;
+                }
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QQ));
             }
         });
         view.findViewById(R.id.tv_kj).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 closeShare(view,popupWindow);
-                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, 4));
+                if(activity instanceof VideoPlayActivity){
+                    ((VideoPlayActivity)activity).startShare(SHARE_MEDIA.QZONE);
+                    return;
+                }
+                EventBus.getDefault().post(new EventBusType(EventStatus.SHARE_APP, SHARE_MEDIA.QZONE));
             }
         });
     }

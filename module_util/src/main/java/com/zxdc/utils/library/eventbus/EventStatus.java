@@ -119,5 +119,4 @@ public class EventStatus {
 
     public static final int PLAY_SELECT_BLUES=229;
 
-
 }

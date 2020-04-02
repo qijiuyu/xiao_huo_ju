@@ -2,6 +2,7 @@ package com.ylean.soft.lfd.adapter.recommended;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -37,6 +39,7 @@ import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
+import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
@@ -99,7 +102,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         private SeekBar seekbar;
         private AutoPollRecyclerView listComm;
         private Love love;
-        private RelativeLayout relProgress,relScreen;
+        private RelativeLayout relProgress,relScreen,rel;
         private LinearLayout linScreen,linSelectBlues,linPlay;
         private EditText etScreen;
         public ViewHolder(View view) {
@@ -131,6 +134,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
             etScreen=view.findViewById(R.id.et_screen);
             imgPlay2=view.findViewById(R.id.img_play2);
             linPlay=view.findViewById(R.id.lin_play);
+            rel=view.findViewById(R.id.rel);
         }
     }
 
@@ -146,8 +150,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        this.holder=holder;
         if(holder.getPosition()==currentPosition){
+//            holder.setIsRecyclable(false);
+            this.holder=holder;
             //播放视频
             playVideo();
             //展示视频界面数据
@@ -243,7 +248,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                     holder.etScreen.setHint("发个弹幕冒个泡～");
                     holder.etScreen.setFocusableInTouchMode(true);
                     holder.etScreen.setFocusable(true);
-                    holder.etScreen.requestFocus();
+//                    holder.etScreen.requestFocus();
                 }
                 break;
             //选集
@@ -331,6 +336,9 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         holder.videoView.setVisibility(View.VISIBLE);
         //屏幕点击
         holder.love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
+
+        //监听软键盘打开还是关闭
+        setListenerFotEditText(holder.rel);
     }
 
 
@@ -592,6 +600,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                         return false;
                     }
                     v.setText(null);
+                    v.setCursorVisible(false);
                     videoPlayPersenter.sendScreen(content,videoBean);
                 }
             }
@@ -620,6 +629,24 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void getScreen(){
         holder.listComm.setVisibility(View.GONE);
         videoPlayPersenter.getScreen(videoBean.getId());
+    }
+
+    /**
+     * 监听软键盘打开还是关闭
+     * @param view
+     */
+    private void setListenerFotEditText(View view) {
+        SoftKeyboardStateHelper softKeyboardStateHelper = new SoftKeyboardStateHelper(view);
+        softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+            }
+            public void onSoftKeyboardClosed() {
+                holder.etScreen.setText(null);
+                holder.etScreen.setCursorVisible(false);
+//                holder.etScreen.setFocusable(false);
+//                holder. etScreen.setFocusableInTouchMode(false);
+            }
+        });
     }
 
 }

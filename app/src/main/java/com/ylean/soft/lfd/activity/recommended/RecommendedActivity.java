@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -25,6 +26,9 @@ import com.ylean.soft.lfd.activity.main.UploadVideoActivity;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.adapter.recommended.FoundAdapter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
+import com.ylean.soft.lfd.utils.KeyboardPatch;
+import com.ylean.soft.lfd.utils.KeyboardUtil;
+import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
@@ -35,6 +39,7 @@ import com.zxdc.utils.library.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +57,10 @@ public class RecommendedActivity extends BaseActivity {
     public DrawerLayout drawerLayout;
     @BindView(R.id.listView)
     public RecyclerView recyclerView;
+    @BindView(R.id.rel)
+    RelativeLayout rel;
     //当前滑动的页码,防止没滑动过去重新加载视频
-    private int currentPosition = -1;
+    public int currentPosition = -1;
     //滑动停止后为true
     private boolean isStopScroll = true;
     //视频列表适配器
@@ -68,6 +75,7 @@ public class RecommendedActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended);
+
         ButterKnife.bind(this);
         //注册eventBus
         EventBus.getDefault().register(this);
@@ -265,11 +273,7 @@ public class RecommendedActivity extends BaseActivity {
                 if(videoBean==null || TextUtils.isEmpty(videoBean.getVideourl())){
                     return;
                 }
-                int shareType= (int) eventBusType.getObject();
-                intent.setClass(this, UploadVideoActivity.class);
-                intent.putExtra("videoUrl",videoBean.getVideourl());
-                intent.putExtra("shareType",shareType);
-                startActivity(intent);
+                startShare((SHARE_MEDIA) eventBusType.getObject());
                 break;
             case EventStatus.UPDATE_TAB_MENU:
                  if(foundAdapter!=null){
@@ -280,6 +284,61 @@ public class RecommendedActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+
+    /**
+     * 分享
+     */
+    public void startShare(SHARE_MEDIA share_media) {
+        String url = null;
+        try {
+            url= com.ylean.soft.lfd.utils.URLEncoder.encode(videoBean.getVideourl(), "utf-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share");
+        web.setTitle("小火剧");
+        web.setDescription("提供小视频的娱乐平台");
+        new ShareAction(this).setPlatform(share_media)
+                .setCallback(umShareListener)
+                .withMedia(web)
+                .share();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        public void onResult(SHARE_MEDIA platform) {
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                ToastUtil.showLong(getString(R.string.share_success));
+            } else {
+                ToastUtil.showLong(getString(R.string.share_success));
+            }
+        }
+
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (t.getMessage().indexOf("2008") != -1) {
+                if (platform.name().equals("WEIXIN") || platform.name().equals("WEIXIN_CIRCLE")) {
+                    ToastUtil.showLong(getString(R.string.share_failed_install_wechat));
+                } else if (platform.name().equals("QQ") || platform.name().equals("QZONE")) {
+                    ToastUtil.showLong(getString(R.string.share_failed_install_qq));
+                }
+            }
+            ToastUtil.showLong(getString(R.string.share_failed));
+        }
+
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtil.showLong(getString(R.string.share_canceled));
+        }
+    };
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
 

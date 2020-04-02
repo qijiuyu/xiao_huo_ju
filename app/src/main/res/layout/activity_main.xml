@@ -45,7 +45,7 @@
             android:layout_height="40dp"
             android:background="@color/transparent"
             android:layout_toLeftOf="@+id/img_menu"
-            app:pstsIndicatorWidth="20dp"
+            app:pstsIndicatorWidth="7dp"
             android:layout_marginRight="10dp"/>
 
         <ImageView
