@@ -158,6 +158,13 @@ public class LookHistoryFragment extends BaseFragment {
                     getBrowse();
                 }
                 break;
+            //加载数据
+            case EventStatus.USER_CLEAR_DATA:
+                if(listAll.size()>0){
+                    listAll.clear();
+                    getBrowse();
+                }
+                break;
             default:
                 break;
         }

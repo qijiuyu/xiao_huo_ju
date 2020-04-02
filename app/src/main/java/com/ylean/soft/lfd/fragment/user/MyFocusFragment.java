@@ -127,6 +127,13 @@ public class MyFocusFragment extends BaseFragment{
                     focusUser();
                 }
                 break;
+            //加载数据
+            case EventStatus.USER_CLEAR_DATA:
+                if(listAll.size()>0){
+                    listAll.clear();
+                    focusUser();
+                }
+                break;
             default:
                 break;
         }

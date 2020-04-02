@@ -133,6 +133,13 @@ public class MyLikeFragment extends BaseFragment{
                      mylike();
                  }
                   break;
+            //加载数据
+            case EventStatus.USER_CLEAR_DATA:
+                  if(listAll.size()>0){
+                      listAll.clear();
+                      mylike();
+                  }
+                  break;
             default:
                 break;
         }

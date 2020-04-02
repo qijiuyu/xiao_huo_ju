@@ -170,6 +170,7 @@ public class TabActivity extends android.app.TabActivity {
 //                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                     tabhost.setCurrentTabByTag("我的");
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
+                    EventBus.getDefault().post(new EventBusType(EventStatus.USER_CLEAR_DATA));
                 }else{
                     startActivity(intent);
                 }
