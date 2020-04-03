@@ -29,6 +29,7 @@ import com.ylean.soft.lfd.activity.main.MoreAuthorActivity;
 import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
 import com.ylean.soft.lfd.activity.main.OnlineListActivity;
 import com.ylean.soft.lfd.activity.main.ProjectListActivity;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.adapter.main.MainAuthorAdapter;
 import com.ylean.soft.lfd.adapter.main.MainBluesAdapter;
 import com.ylean.soft.lfd.adapter.main.MainHottestAdapter;
@@ -52,6 +53,8 @@ import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.MeasureListView;
+import com.zxdc.utils.library.view.MyRefreshLayout;
+import com.zxdc.utils.library.view.MyRefreshLayoutListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,8 +75,10 @@ import static android.R.id.list;
 /**
  * 精选
  */
-public class SelectFragment extends BaseFragment {
+public class SelectFragment extends BaseFragment implements MyRefreshLayoutListener {
 
+    @BindView(R.id.re_list)
+    public MyRefreshLayout reList;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
     @BindView(R.id.banner)
@@ -124,26 +129,17 @@ public class SelectFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         //实例化MVP
         selectFragmentPersenter=new SelectFragmentPersenter(mActivity);
-        //获取banner
-        selectFragmentPersenter.mainBanner();
-        //获取热播和精选TOP剧集列表
-        selectFragmentPersenter.getHot_Top(hot_top);
-        //获取猜你喜欢的数据
-        selectFragmentPersenter.guessLike();
-        //获取专题列表
-        selectFragmentPersenter.getProject();
-        //获取即将上线的数据
-        selectFragmentPersenter.getOnline();
-        //获取热门作者
-        selectFragmentPersenter.hotAuthor();
-        //获取频道剧集列表
-        selectFragmentPersenter.channel();
     }
 
     View view;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_select, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        reList.setMyRefreshLayoutListener(this);
+        reList.setIsLoadingMoreEnabled(false);
+        //加载数据
+        reList.startRefresh();
         return view;
     }
 
@@ -299,6 +295,16 @@ public class SelectFragment extends BaseFragment {
                     .priority(Priority.HIGH) //优先级
                     .transform(new CornerTransform(10)); //圆角
             Glide.with(context).load(HttpConstant.IP+dataBean.getImgurl()).apply(options).into(imageView);
+
+            imageView.setTag(R.id.tag1,dataBean);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                    Intent intent=new Intent(mActivity, VideoPlayActivity.class);
+                    intent.putExtra("serialId",dataBean.getId());
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -408,8 +414,34 @@ public class SelectFragment extends BaseFragment {
     }
 
 
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
+    @Override
+    public void onRefresh(View view) {
+        //获取banner
+        selectFragmentPersenter.mainBanner();
+        //获取热播和精选TOP剧集列表
+        selectFragmentPersenter.getHot_Top(hot_top);
+        //获取猜你喜欢的数据
+        selectFragmentPersenter.guessLike();
+        //获取专题列表
+        selectFragmentPersenter.getProject();
+        //获取即将上线的数据
+        selectFragmentPersenter.getOnline();
+        //获取热门作者
+        selectFragmentPersenter.hotAuthor();
+        //获取频道剧集列表
+        selectFragmentPersenter.channel();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                reList.refreshComplete();
+                //置顶
+                scrollView.scrollTo(0, 0);
+            }
+        },1200);
+    }
+
+    @Override
+    public void onLoadMore(View view) {
+
     }
 
 

@@ -12,6 +12,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.TabActivity;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.SPUtil;
+import com.zxdc.utils.library.util.StatusBarUtils;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class GuideActivity extends BaseActivity {
     };
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtils.transparencyBar(this);
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
 

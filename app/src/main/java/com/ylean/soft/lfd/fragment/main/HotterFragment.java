@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
 import com.ylean.soft.lfd.adapter.main.HotterFragmentAdapter;
+import com.ylean.soft.lfd.view.HotOvalImageView;
 import com.zxdc.utils.library.base.BaseFragment;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
@@ -164,7 +165,7 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         final HotTop.DataBean dataBean=listAll.get(0);
         headView = LayoutInflater.from(mActivity).inflate(R.layout.hotter_head, null);
         listView.addHeaderView(headView);
-        OvalImageViews imgHead=headView.findViewById(R.id.img_head);
+        HotOvalImageView imgHead=headView.findViewById(R.id.img_head);
         TextView tvTitle=headView.findViewById(R.id.tv_title);
         CircleImageView imgPic=headView.findViewById(R.id.img_pic);
         TextView tvName=headView.findViewById(R.id.tv_name);

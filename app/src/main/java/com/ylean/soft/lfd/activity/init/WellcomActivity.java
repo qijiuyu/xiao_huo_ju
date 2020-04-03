@@ -11,6 +11,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.TabActivity;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.SPUtil;
+import com.zxdc.utils.library.util.StatusBarUtils;
 
 /**
  * Created by Administrator on 2020/2/8.
@@ -21,7 +22,8 @@ public class WellcomActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
+        StatusBarUtils.transparencyBar(this);
         setContentView(R.layout.activity_wellcome);
         initView();
     }
