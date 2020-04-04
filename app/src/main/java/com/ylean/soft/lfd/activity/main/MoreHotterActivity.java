@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.activity.main;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -126,9 +127,17 @@ public class MoreHotterActivity extends BaseActivity {
         if(pageIndex==0){
             viewHot.setVisibility(View.VISIBLE);
             viewTop.setVisibility(View.GONE);
+            tvHotter.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            tvTop.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            tvHotter.setTextSize(17);
+            tvTop.setTextSize(16);
         }else{
             viewHot.setVisibility(View.GONE);
             viewTop.setVisibility(View.VISIBLE);
+            tvTop.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            tvHotter.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            tvTop.setTextSize(17);
+            tvHotter.setTextSize(16);
         }
     }
 }

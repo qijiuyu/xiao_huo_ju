@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:text="热播排行"
             android:textSize="17sp"
             android:textColor="@android:color/white"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="精选20"
-            android:textSize="17sp"
+            android:textSize="16sp"
             android:textColor="@android:color/white"
             android:gravity="center_horizontal"/>
 

@@ -16,6 +16,26 @@ public class AnimUtil {
          tada(view, 1f);
     }
 
+    public static void animY(View view){
+        PropertyValuesHolder pvhScaleY = PropertyValuesHolder.ofKeyframe(View.SCALE_Y,
+                Keyframe.ofFloat(0f, 1f),
+                Keyframe.ofFloat(.1f, .9f),
+                Keyframe.ofFloat(.2f, .9f),
+                Keyframe.ofFloat(.3f, 1.1f),
+                Keyframe.ofFloat(.4f, 1.1f),
+                Keyframe.ofFloat(.5f, 1.1f),
+                Keyframe.ofFloat(.6f, 1.1f),
+                Keyframe.ofFloat(.7f, 1.1f),
+                Keyframe.ofFloat(.8f, 1.1f),
+                Keyframe.ofFloat(.9f, 1.1f),
+                Keyframe.ofFloat(1f, 1f)
+        );
+        ObjectAnimator animator=ObjectAnimator.ofPropertyValuesHolder(view, pvhScaleY).
+                setDuration(1000);
+        animator.setRepeatCount(ValueAnimator.RESTART);
+        animator.start();
+    }
+
     public static void tada(View view, float shakeFactor) {
 
         PropertyValuesHolder pvhScaleX = PropertyValuesHolder.ofKeyframe(View.SCALE_X,

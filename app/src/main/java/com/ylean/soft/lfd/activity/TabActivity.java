@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -19,6 +20,7 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
+import com.ylean.soft.lfd.utils.AnimUtil;
 import com.ylean.soft.lfd.utils.KeyboardPatch;
 import com.ylean.soft.lfd.utils.KeyboardUtil;
 import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
@@ -189,6 +191,8 @@ public class TabActivity extends android.app.TabActivity {
             if (i == type) {
                 imgList.get(i).setVisibility(View.INVISIBLE);
                 relClick.get(i).setVisibility(View.VISIBLE);
+                //跳动的动画
+                relClick.get(i).setAnimation(AnimationUtils.loadAnimation(this, R.anim.play_anim));
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
             } else {
                 imgList.get(i).setVisibility(View.VISIBLE);

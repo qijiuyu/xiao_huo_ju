@@ -188,7 +188,7 @@ public class VideoPlayActivity extends BaseActivity {
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }
-            public void onDrawerSlide(View arg0, float arg1) {
+            public void onDrawerSlide(View drawerView, float slideOffset) {
             }
 
             public void onDrawerOpened(View arg0) {
@@ -200,6 +200,7 @@ public class VideoPlayActivity extends BaseActivity {
             public void onDrawerClosed(View arg0) {
             }
         });
+
     }
 
 

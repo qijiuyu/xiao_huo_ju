@@ -19,8 +19,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="95.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@mipmap/bg_hotter">
+            android:layout_alignParentBottom="true">
+
+            <com.ylean.soft.lfd.view.HotOvalImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/bg_hotter"
+                android:scaleType="centerCrop"/>
 
             <ImageView
                 android:layout_width="wrap_content"
