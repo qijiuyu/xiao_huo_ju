@@ -106,12 +106,13 @@ public class MainActivity extends BaseActivity {
                 TypedValue.COMPLEX_UNIT_DIP, 3, dm));
         // 设置Tab标题文字的大小
         tabs.setTextSize((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 16, dm));
+                TypedValue.COMPLEX_UNIT_SP, 15, dm));
         // 设置Tab Indicator的颜色
         tabs.setIndicatorColorResource(android.R.color.white);
         // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
         tabs.setTextColorResource(android.R.color.white);
         tabs.setSelectedTextColorResource(android.R.color.white);
+        tabs.setSelectTextSize(18);
         tabs.setTypeface(null, Typeface.BOLD);
         // 取消点击Tab时的背景色
         tabs.setTabBackground(0);
