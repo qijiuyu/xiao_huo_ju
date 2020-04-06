@@ -1,7 +1,10 @@
 package com.ylean.soft.lfd.persenter.recommended;
 
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.telephony.TelephonyManager;
 
 import com.ylean.soft.lfd.MyApplication;
@@ -16,6 +19,8 @@ import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.lang.reflect.Field;
 
 public class RecommendedPersenter {
 
@@ -72,6 +77,34 @@ public class RecommendedPersenter {
             DEVICE_ID = tm.getDeviceId();
         }
         HttpMethod.foundVideo(DEVICE_ID,episodeid,handler);
+    }
+
+
+    /**
+     * 设置侧滑菜单可以全屏滑动
+     * @param drawerLayout
+     */
+    public void setDrawerLeftEdgeSize (DrawerLayout drawerLayout) {
+        try {
+            // 找到 ViewDragHelper 并设置 Accessible 为true
+            Field leftDraggerField =
+                    drawerLayout.getClass().getDeclaredField("mRightDragger");//Right
+            leftDraggerField.setAccessible(true);
+            ViewDragHelper leftDragger = (ViewDragHelper) leftDraggerField.get(drawerLayout);
+
+            // 找到 edgeSizeField 并设置 Accessible 为true
+            Field edgeSizeField = leftDragger.getClass().getDeclaredField("mEdgeSize");
+            edgeSizeField.setAccessible(true);
+            int edgeSize = edgeSizeField.getInt(leftDragger);
+
+            // 设置新的边缘大小
+            Point displaySize = new Point();
+            activity.getWindowManager().getDefaultDisplay().getSize(displaySize);
+            edgeSizeField.setInt(leftDragger, Math.max(edgeSize, (int) (displaySize.x *1)));
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
     }
 
 }

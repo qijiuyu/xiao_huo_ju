@@ -172,7 +172,8 @@ public class RecommendedActivity extends BaseActivity {
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        //关闭手势滑动
+        //设置侧滑菜单可以全屏滑动
+        recommendedPersenter. setDrawerLeftEdgeSize(drawerLayout);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }

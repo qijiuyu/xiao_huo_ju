@@ -82,7 +82,7 @@ public class TabActivity extends android.app.TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        StatusBarUtils.transparencyBar(this);
-//        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
         contentView = getLayoutInflater().inflate(R.layout.activity_tab, null);
         setContentView(contentView);
 //        new KeyboardUtil(this, contentView);
@@ -140,7 +140,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_main:
             case R.id.lin_main2:
                 updateTag(0);
-//                StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+                StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
 //                new KeyboardUtil(this, contentView);
                 tabhost.setCurrentTabByTag("推荐");
                 EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
@@ -149,7 +149,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_recommend:
             case R.id.lin_recommend2:
                 updateTag(1);
-//                StatusBarUtils.setStatusBarColor(this,android.R.color.black);
+                StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                 tabhost.setCurrentTabByTag("发现");
                 break;
             //关注
@@ -157,7 +157,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_focus2:
                 if(MyApplication.isLogin()){
                     updateTag(2);
-//                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
+                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                     tabhost.setCurrentTabByTag("关注");
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
@@ -169,7 +169,7 @@ public class TabActivity extends android.app.TabActivity {
             case R.id.lin_user2:
                 if(MyApplication.isLogin()){
                     updateTag(3);
-//                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
+                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
                     tabhost.setCurrentTabByTag("我的");
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                     EventBus.getDefault().post(new EventBusType(EventStatus.USER_CLEAR_DATA));

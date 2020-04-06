@@ -437,7 +437,8 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         public void doubleClick(MotionEvent event) {
             holder.love.addLoveView(event.getX(),event.getY());
             holder.love.addLoveView(event.getX(),event.getY());
-            if(videoBean!=null && videoBean.isThumbEpisode()){
+            if(videoBean!=null && !videoBean.isThumbEpisode()){
+                videoBean.setThumbEpisode(true);
                 holder.imgPraise.setImageResource(R.mipmap.yes_praise);
                 holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
                 String praiseNum=holder.tvPraise.getText().toString().trim();

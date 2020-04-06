@@ -2,11 +2,13 @@ package com.ylean.soft.lfd.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -56,6 +58,7 @@ import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -185,6 +188,8 @@ public class VideoPlayActivity extends BaseActivity {
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         //关闭手势滑动
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        //设置侧滑菜单可以全屏滑动
+        videoPlayPersenter. setDrawerLeftEdgeSize(drawerLayout);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }
@@ -200,7 +205,6 @@ public class VideoPlayActivity extends BaseActivity {
             public void onDrawerClosed(View arg0) {
             }
         });
-
     }
 
 
