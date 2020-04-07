@@ -192,7 +192,7 @@ public class TabActivity extends android.app.TabActivity {
                 imgList.get(i).setVisibility(View.INVISIBLE);
                 relClick.get(i).setVisibility(View.VISIBLE);
                 //跳动的动画
-                relClick.get(i).setAnimation(AnimationUtils.loadAnimation(this, R.anim.play_anim));
+                relClick.get(i).setAnimation(AnimationUtils.loadAnimation(this, R.anim.tab_anim));
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
             } else {
                 imgList.get(i).setVisibility(View.VISIBLE);
