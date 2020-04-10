@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -493,9 +494,19 @@ public class VideoPlayActivity extends BaseActivity {
                       animation.start();
                       handler.postDelayed(new Runnable() {
                           public void run() {
-                              imgFocus.setVisibility(View.GONE);
+                              Animation animation = AnimationUtils.loadAnimation(VideoPlayActivity.this, R.anim.scale_focus);
+                              imgFocus.startAnimation(animation);
+                              animation.setAnimationListener(new Animation.AnimationListener() {
+                                  public void onAnimationStart(Animation animation) {
+                                  }
+                                  public void onAnimationEnd(Animation animation) {
+                                      imgFocus.setVisibility(View.GONE);
+                                  }
+                                  public void onAnimationRepeat(Animation animation) {
+                                  }
+                              });
                           }
-                      },1700);
+                      },1500);
                   }else{
                       videoBean.setFollowUser(false);
                       imgFocus.setImageResource(R.drawable.anim_focus);

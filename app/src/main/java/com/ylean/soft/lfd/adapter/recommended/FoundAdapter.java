@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +36,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.main.CommentActivity;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
@@ -74,6 +76,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     private Handler handler=new Handler();
     //视频详情对象
     private VideoInfo.VideoBean videoBean;
+    private Animation animation;
     public FoundAdapter(RecommendedActivity activity,VideoInfo.VideoBean videoBean) {
         this.activity=activity;
         this.videoBean=videoBean;
@@ -81,6 +84,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         controller=new AndroidMediaController(activity, false);
         //实例化MVP控制器
         videoPlayPersenter=new VideoPlayPersenter(activity);
+        animation = AnimationUtils.loadAnimation(activity, R.anim.scale_focus);
     }
 
     /**
@@ -572,13 +576,22 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void isFocusUser(VideoInfo.VideoBean videoBean){
         this.videoBean=videoBean;
         if(videoBean.isFollowUser()){
-            AnimationDrawable animation = (AnimationDrawable) holder.imgFocus.getDrawable();
-            animation.start();
+            AnimationDrawable animationDrawable = (AnimationDrawable) holder.imgFocus.getDrawable();
+            animationDrawable.start();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    holder.imgFocus.setVisibility(View.GONE);
+                    holder.imgFocus.startAnimation(animation);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        public void onAnimationStart(Animation animation) {
+                        }
+                        public void onAnimationEnd(Animation animation) {
+                            holder.imgFocus.setVisibility(View.GONE);
+                        }
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
                 }
-            },1700);
+            },1500);
         }else{
             holder.imgFocus.setImageResource(R.drawable.anim_focus);
             holder.imgFocus.setVisibility(View.VISIBLE);
