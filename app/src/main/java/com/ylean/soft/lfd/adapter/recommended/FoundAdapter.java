@@ -3,6 +3,7 @@ package com.ylean.soft.lfd.adapter.recommended;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -287,7 +288,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         if(videoBean.isFollowUser()){
             holder.imgFocus.setVisibility(View.GONE);
         }else{
-            holder.imgFocus.setImageResource(R.mipmap.add_focus);
+            holder.imgFocus.setImageResource(R.drawable.anim_focus);
             holder.imgFocus.setVisibility(View.VISIBLE);
         }
         /**
@@ -571,14 +572,15 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
     public void isFocusUser(VideoInfo.VideoBean videoBean){
         this.videoBean=videoBean;
         if(videoBean.isFollowUser()){
-            holder.imgFocus.setImageResource(R.mipmap.ok);
+            AnimationDrawable animation = (AnimationDrawable) holder.imgFocus.getDrawable();
+            animation.start();
             handler.postDelayed(new Runnable() {
                 public void run() {
                     holder.imgFocus.setVisibility(View.GONE);
                 }
-            },1000);
+            },1700);
         }else{
-            holder.imgFocus.setImageResource(R.mipmap.add_focus);
+            holder.imgFocus.setImageResource(R.drawable.anim_focus);
             holder.imgFocus.setVisibility(View.VISIBLE);
         }
     }

@@ -3,6 +3,7 @@ package com.ylean.soft.lfd.activity.main;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -487,15 +489,16 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.IS_FOLLOW:
                   if(imgFocus.getVisibility()==View.VISIBLE){
                       videoBean.setFollowUser(true);
-                      imgFocus.setImageResource(R.mipmap.ok);
+                      AnimationDrawable animation = (AnimationDrawable) imgFocus.getDrawable();
+                      animation.start();
                       handler.postDelayed(new Runnable() {
                           public void run() {
                               imgFocus.setVisibility(View.GONE);
                           }
-                      },1000);
+                      },1700);
                   }else{
                       videoBean.setFollowUser(false);
-                      imgFocus.setImageResource(R.mipmap.add_focus);
+                      imgFocus.setImageResource(R.drawable.anim_focus);
                       imgFocus.setVisibility(View.VISIBLE);
                   }
                   break;
@@ -562,7 +565,7 @@ public class VideoPlayActivity extends BaseActivity {
             //取消用户关注
             case EventStatus.CANCLE_FOCUS_USER:
                  videoBean.setFollowUser(false);
-                 imgFocus.setImageResource(R.mipmap.add_focus);
+                 imgFocus.setImageResource(R.drawable.anim_focus);
                  imgFocus.setVisibility(View.VISIBLE);
                   break;
             //关注用户

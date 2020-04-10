@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -139,26 +140,34 @@ public class TabActivity extends android.app.TabActivity {
             //推荐
             case R.id.lin_main:
             case R.id.lin_main2:
-                updateTag(0);
+                if(tabhost.getCurrentTab()==0){
+                    return;
+                }
                 StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
-//                new KeyboardUtil(this, contentView);
-                tabhost.setCurrentTabByTag("推荐");
+                tabhost.setCurrentTab(0);
+                updateTag(0);
                 EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 break;
             //发现
             case R.id.lin_recommend:
             case R.id.lin_recommend2:
-                updateTag(1);
+                if(tabhost.getCurrentTab()==1){
+                    return;
+                }
                 StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                tabhost.setCurrentTabByTag("发现");
+                tabhost.setCurrentTab(1);
+                updateTag(1);
                 break;
             //关注
             case R.id.lin_focus:
             case R.id.lin_focus2:
+                if(tabhost.getCurrentTab()==2){
+                    return;
+                }
                 if(MyApplication.isLogin()){
-                    updateTag(2);
                     StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                    tabhost.setCurrentTabByTag("关注");
+                    tabhost.setCurrentTab(2);
+                    updateTag(2);
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
                     startActivity(intent);
@@ -167,10 +176,13 @@ public class TabActivity extends android.app.TabActivity {
             //我的
             case R.id.lin_user:
             case R.id.lin_user2:
+                if(tabhost.getCurrentTab()==3){
+                    return;
+                }
                 if(MyApplication.isLogin()){
-                    updateTag(3);
                     StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                    tabhost.setCurrentTabByTag("我的");
+                    tabhost.setCurrentTab(3);
+                    updateTag(3);
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                     EventBus.getDefault().post(new EventBusType(EventStatus.USER_CLEAR_DATA));
                 }else{
@@ -186,14 +198,21 @@ public class TabActivity extends android.app.TabActivity {
     /**
      * 切换tab时，更新图片和文字颜色
      */
+    private Handler handler=new Handler();
     private void updateTag(int type) {
         for (int i = 0; i < 4; i++) {
             if (i == type) {
                 imgList.get(i).setVisibility(View.INVISIBLE);
                 relClick.get(i).setVisibility(View.VISIBLE);
-                //跳动的动画
-                relClick.get(i).setAnimation(AnimationUtils.loadAnimation(this, R.anim.tab_anim));
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
+                //跳动的动画
+                final ClickLinearLayout linClick=relClick.get(i);
+                handler.post(new Runnable() {
+                    public void run() {
+                        Animation animation = AnimationUtils.loadAnimation(TabActivity.this, R.anim.tab_anim);
+                        linClick.startAnimation(animation);
+                    }
+                });
             } else {
                 imgList.get(i).setVisibility(View.VISIBLE);
                 relClick.get(i).setVisibility(View.INVISIBLE);

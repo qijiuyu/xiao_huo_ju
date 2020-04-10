@@ -100,7 +100,7 @@
                 android:id="@+id/img_focus"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@mipmap/add_focus"
+                android:src="@drawable/anim_focus"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"/>
 

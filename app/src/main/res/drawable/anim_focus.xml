@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <!--oneshot：控制播放次数 true:播放一次，false:重复不停的播放-->
+    <!--duration：每张图片持续时长-->
+    <item
+        android:drawable="@mipmap/anim_a"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_b"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_c"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_d"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_e"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_f"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_g"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_h"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_i"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_j"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_k"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_l"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_m"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/anim_n"
+        android:duration="100" />
+</animation-list>
