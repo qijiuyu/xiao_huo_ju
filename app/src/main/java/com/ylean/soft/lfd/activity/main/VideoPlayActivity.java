@@ -2,21 +2,18 @@ package com.ylean.soft.lfd.activity.main;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -30,7 +27,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -47,6 +43,7 @@ import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
 import com.ylean.soft.lfd.view.AutoPollRecyclerView;
 import com.ylean.soft.lfd.view.Love;
+import com.ylean.soft.lfd.view.NewDrawerLayout;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
@@ -54,15 +51,12 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.BindView;
@@ -80,7 +74,7 @@ public class VideoPlayActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
+    NewDrawerLayout drawerLayout;
     @BindView(R.id.hud_view)
     TableLayout hubView;
     @BindView(R.id.videoView)
@@ -192,11 +186,23 @@ public class VideoPlayActivity extends BaseActivity {
         //关闭手势滑动
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         //设置侧滑菜单可以全屏滑动
-        videoPlayPersenter. setDrawerLeftEdgeSize(drawerLayout);
-        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        videoPlayPersenter.setDrawerLeftEdgeSize(drawerLayout);
+        drawerLayout.setDrawerListener(new NewDrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                View content = drawerLayout.getChildAt(0);
+                View menu = drawerView;
+                float scale = 1-slideOffset;//1~0
+                float leftScale = (float) (1-0.01*scale);
+                float rightScale = (float) (0.7f+0.3*scale);//0.7~1
+                menu.setScaleX(leftScale);//1~0.7
+                menu.setScaleY(leftScale);//1~0.7
+
+
+                content.setScaleX(rightScale);
+                content.setScaleY(rightScale);
+                content.setTranslationX(-(menu.getMeasuredWidth()*slideOffset)/2);//0~width
             }
 
             public void onDrawerOpened(View arg0) {

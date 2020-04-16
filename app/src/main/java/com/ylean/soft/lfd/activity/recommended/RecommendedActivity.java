@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
@@ -29,6 +30,7 @@ import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.ylean.soft.lfd.utils.KeyboardPatch;
 import com.ylean.soft.lfd.utils.KeyboardUtil;
 import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
+import com.ylean.soft.lfd.view.NewDrawerLayout;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
@@ -54,7 +56,7 @@ import butterknife.ButterKnife;
 public class RecommendedActivity extends BaseActivity {
 
     @BindView(R.id.drawer_layout)
-    public DrawerLayout drawerLayout;
+    public NewDrawerLayout drawerLayout;
     @BindView(R.id.listView)
     public RecyclerView recyclerView;
     @BindView(R.id.rel)
@@ -174,10 +176,22 @@ public class RecommendedActivity extends BaseActivity {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         //设置侧滑菜单可以全屏滑动
         recommendedPersenter. setDrawerLeftEdgeSize(drawerLayout);
-        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        drawerLayout.setDrawerListener(new NewDrawerLayout.DrawerListener() {
             public void onDrawerStateChanged(int arg0) {
             }
-            public void onDrawerSlide(View arg0, float arg1) {
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                View content = drawerLayout.getChildAt(0);
+                View menu = drawerView;
+                float scale = 1-slideOffset;//1~0
+                float leftScale = (float) (1-0.01*scale);
+                float rightScale = (float) (0.7f+0.3*scale);//0.7~1
+                menu.setScaleX(leftScale);//1~0.7
+                menu.setScaleY(leftScale);//1~0.7
+
+
+                content.setScaleX(rightScale);
+                content.setScaleY(rightScale);
+                content.setTranslationX(-(menu.getMeasuredWidth()*slideOffset)/2);//0~width
             }
             public void onDrawerOpened(View arg0) {
                 if(videoBean!=null){

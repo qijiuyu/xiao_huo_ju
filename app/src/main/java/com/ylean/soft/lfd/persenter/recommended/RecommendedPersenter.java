@@ -9,12 +9,14 @@ import android.telephony.TelephonyManager;
 
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
+import com.ylean.soft.lfd.view.NewDrawerLayout;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 
@@ -84,7 +86,7 @@ public class RecommendedPersenter {
      * 设置侧滑菜单可以全屏滑动
      * @param drawerLayout
      */
-    public void setDrawerLeftEdgeSize (DrawerLayout drawerLayout) {
+    public void setDrawerLeftEdgeSize (NewDrawerLayout drawerLayout) {
         try {
             // 找到 ViewDragHelper 并设置 Accessible 为true
             Field leftDraggerField =

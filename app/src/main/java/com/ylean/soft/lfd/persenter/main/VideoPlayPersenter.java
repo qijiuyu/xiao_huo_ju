@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,8 +17,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.utils.ijkplayer.media.IjkVideoView;
+import com.ylean.soft.lfd.view.NewDrawerLayout;
 import com.zxdc.utils.library.bean.BaseBean;
-import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
@@ -269,7 +268,7 @@ public class VideoPlayPersenter {
      * 设置侧滑菜单可以全屏滑动
      * @param drawerLayout
      */
-    public void setDrawerLeftEdgeSize (DrawerLayout drawerLayout) {
+    public void setDrawerLeftEdgeSize (NewDrawerLayout drawerLayout) {
         try {
             // 找到 ViewDragHelper 并设置 Accessible 为true
             Field leftDraggerField =
