@@ -130,13 +130,13 @@ public class MoreHotterActivity extends BaseActivity {
             tvHotter.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             tvTop.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             tvHotter.setTextSize(18);
-            tvTop.setTextSize(18);
+            tvTop.setTextSize(15);
         }else{
             viewHot.setVisibility(View.GONE);
             viewTop.setVisibility(View.VISIBLE);
             tvTop.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             tvHotter.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-            tvTop.setTextSize(17);
+            tvTop.setTextSize(18);
             tvHotter.setTextSize(15);
         }
     }

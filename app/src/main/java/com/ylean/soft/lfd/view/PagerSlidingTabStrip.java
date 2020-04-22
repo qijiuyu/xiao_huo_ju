@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -359,8 +360,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 //		canvas.drawRect(lineLeft, height - indicatorHeight, lineRight, height, rectPaint);
 
 		//进度条自定义宽度
-		canvas.drawRect(lineLeft + (lineRight-lineLeft-indicatorWidth)/2, height - indicatorHeight, lineRight-(lineRight-lineLeft-indicatorWidth)/2, height, rectPaint);
-
+		RectF rectF = new RectF(lineLeft + (lineRight-lineLeft-indicatorWidth)/2, height - indicatorHeight, lineRight-(lineRight-lineLeft-indicatorWidth)/2, height);
+//		canvas.drawRect(lineLeft + (lineRight-lineLeft-indicatorWidth)/2, height - indicatorHeight, lineRight-(lineRight-lineLeft-indicatorWidth)/2, height, rectPaint);
+		canvas.drawRoundRect(rectF, 10, 10, rectPaint);
 		// draw divider
 
 		dividerPaint.setColor(dividerColor);

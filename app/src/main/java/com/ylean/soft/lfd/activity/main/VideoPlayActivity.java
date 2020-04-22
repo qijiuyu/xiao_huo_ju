@@ -173,6 +173,14 @@ public class VideoPlayActivity extends BaseActivity {
         love.setOnTouchListener(new MyOnTouchListener(myClickCallBack));
         //监听弹屏输入框
         etScreen.setOnEditorActionListener(screenListener);
+        //解决SeekBar与DrawerLayout混合使用冲突问题
+        seekbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                drawerLayout.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 
 

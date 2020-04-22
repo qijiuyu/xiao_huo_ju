@@ -344,6 +344,15 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
 
         //监听软键盘打开还是关闭
         setListenerFotEditText(holder.rel);
+
+        //解决SeekBar与DrawerLayout混合使用冲突问题
+        holder.seekbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                activity.drawerLayout.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 
 
