@@ -38,7 +38,7 @@ public class GuideActivity extends BaseActivity {
     };
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtils.transparencyBar(this);
+        StatusBarUtils.setTranslucentStatus(this);
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
 

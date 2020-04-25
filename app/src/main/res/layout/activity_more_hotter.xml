@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="精选20"
+            android:text="精选TOP20"
             android:textSize="15sp"
             android:textColor="@android:color/white"
             android:gravity="center_horizontal"/>

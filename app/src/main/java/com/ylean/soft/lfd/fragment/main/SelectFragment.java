@@ -436,7 +436,7 @@ public class SelectFragment extends BaseFragment implements MyRefreshLayoutListe
                 //置顶
                 scrollView.scrollTo(0, 0);
             }
-        },1200);
+        },900);
     }
 
     @Override

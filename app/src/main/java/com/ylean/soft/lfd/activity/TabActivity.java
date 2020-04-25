@@ -83,7 +83,8 @@ public class TabActivity extends android.app.TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        StatusBarUtils.transparencyBar(this);
-        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+//        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
+        StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
         contentView = getLayoutInflater().inflate(R.layout.activity_tab, null);
         setContentView(contentView);
 //        new KeyboardUtil(this, contentView);
@@ -133,6 +134,7 @@ public class TabActivity extends android.app.TabActivity {
         });
     }
 
+    int type;
     @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user,R.id.lin_main2, R.id.lin_recommend2, R.id.lin_focus2, R.id.lin_user2})
     public void onViewClicked(View view) {
         Intent intent=new Intent(this, LoginActivity.class);
@@ -140,33 +142,21 @@ public class TabActivity extends android.app.TabActivity {
             //推荐
             case R.id.lin_main:
             case R.id.lin_main2:
-                if(tabhost.getCurrentTab()==0){
-                    return;
-                }
-                StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
-                tabhost.setCurrentTab(0);
+                StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
                 updateTag(0);
                 EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 break;
             //发现
             case R.id.lin_recommend:
             case R.id.lin_recommend2:
-                if(tabhost.getCurrentTab()==1){
-                    return;
-                }
-                StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                tabhost.setCurrentTab(1);
+                StatusBarUtils.setStatusBarMode(this,false,android.R.color.black);
                 updateTag(1);
                 break;
             //关注
             case R.id.lin_focus:
             case R.id.lin_focus2:
-                if(tabhost.getCurrentTab()==2){
-                    return;
-                }
                 if(MyApplication.isLogin()){
-                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                    tabhost.setCurrentTab(2);
+                    StatusBarUtils.setStatusBarMode(this,true,android.R.color.white);
                     updateTag(2);
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 }else{
@@ -176,12 +166,8 @@ public class TabActivity extends android.app.TabActivity {
             //我的
             case R.id.lin_user:
             case R.id.lin_user2:
-                if(tabhost.getCurrentTab()==3){
-                    return;
-                }
                 if(MyApplication.isLogin()){
-                    StatusBarUtils.setStatusBarColor(this,android.R.color.black);
-                    tabhost.setCurrentTab(3);
+                    StatusBarUtils.setStatusBarMode(this,true,R.color.color_f5f5f5);
                     updateTag(3);
                     EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                     EventBus.getDefault().post(new EventBusType(EventStatus.USER_CLEAR_DATA));
@@ -206,19 +192,20 @@ public class TabActivity extends android.app.TabActivity {
                 relClick.get(i).setVisibility(View.VISIBLE);
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
                 //跳动的动画
-                final ClickLinearLayout linClick=relClick.get(i);
-                handler.post(new Runnable() {
-                    public void run() {
-                        Animation animation = AnimationUtils.loadAnimation(TabActivity.this, R.anim.tab_anim);
-                        linClick.startAnimation(animation);
-                    }
-                });
+//                final ClickLinearLayout linClick=relClick.get(i);
+//                handler.post(new Runnable() {
+//                    public void run() {
+//                        Animation animation = AnimationUtils.loadAnimation(TabActivity.this, R.anim.tab_anim);
+//                        linClick.startAnimation(animation);
+//                    }
+//                });
             } else {
                 imgList.get(i).setVisibility(View.VISIBLE);
                 relClick.get(i).setVisibility(View.INVISIBLE);
                 tvList.get(i).setTextColor(getResources().getColor(R.color.color_999999));
             }
         }
+        tabhost.setCurrentTab(type);
     }
 
 

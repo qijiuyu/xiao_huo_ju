@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:background="@android:color/white">
 
     <com.zxdc.utils.library.view.MyRefreshLayout
         android:id="@+id/re_list"
@@ -87,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/view1"
                             android:textStyle="bold"
-                            android:text="精选20"
+                            android:text="精选TOP20"
                             android:textSize="16sp"
                             android:textColor="@color/color_666666"/>
 

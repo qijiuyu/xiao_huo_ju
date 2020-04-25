@@ -23,7 +23,7 @@ public class WellcomActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
-        StatusBarUtils.transparencyBar(this);
+        StatusBarUtils.setTranslucentStatus(this);
         setContentView(R.layout.activity_wellcome);
         initView();
     }

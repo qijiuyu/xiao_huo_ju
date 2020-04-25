@@ -1,6 +1,7 @@
 package com.zxdc.utils.library.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.zxdc.utils.library.util.LogUtils;
@@ -30,7 +31,7 @@ public class MyRefreshLayout extends BGARefreshLayout {
     @Override
     public void onFinishInflate() {
         super.onFinishInflate();
-        setRefreshViewHolder(new BGANormalRefreshViewHolder(getContext(), true));
+        setRefreshViewHolder(new BGAYaTangRefreshViewHolder(getContext(), true));
         setDelegate(new BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
@@ -64,7 +65,11 @@ public class MyRefreshLayout extends BGARefreshLayout {
      * 开始刷新
      */
     public void startRefresh(){
-        beginRefreshing();
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                beginRefreshing();
+            }
+        },400);
     }
 
     /**
