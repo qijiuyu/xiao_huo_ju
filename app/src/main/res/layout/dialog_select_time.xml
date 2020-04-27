@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="确定"
                 android:textSize="15sp"
-                android:textColor="@color/color_FF6732"
+                android:textColor="@color/color_FFBC32"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"/>

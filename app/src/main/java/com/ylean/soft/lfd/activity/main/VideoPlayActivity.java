@@ -436,12 +436,11 @@ public class VideoPlayActivity extends BaseActivity {
         public void doubleClick(MotionEvent event) {
             love.addLoveView(event.getX(),event.getY());
             love.addLoveView(event.getX(),event.getY());
+            if(!MyApplication.isLogin()){
+                return;
+            }
             if(videoBean!=null && !videoBean.isThumbEpisode()){
-                videoBean.setThumbEpisode(true);
-                imgPraise.setImageResource(R.mipmap.yes_praise);
-                imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                String praiseNum=tvPraise.getText().toString().trim();
-                tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
+                videoPlayPersenter.thump(videoBean.getId());
             }
         }
     };

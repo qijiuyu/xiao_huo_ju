@@ -47,7 +47,7 @@
             android:id="@+id/pb_progressbar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:progressDrawable="@drawable/bg_progressbar"
+            android:indeterminateDrawable="@drawable/bg_progress"
             android:layout_gravity="center"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />

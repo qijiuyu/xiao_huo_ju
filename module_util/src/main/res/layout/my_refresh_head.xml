@@ -15,7 +15,7 @@
             android:id="@+id/progress"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
             android:indeterminateDrawable="@mipmap/ic_drop_down_dermas_refreshing"/>
 

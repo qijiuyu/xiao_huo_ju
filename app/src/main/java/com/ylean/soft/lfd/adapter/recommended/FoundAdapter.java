@@ -451,12 +451,11 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
         public void doubleClick(MotionEvent event) {
             holder.love.addLoveView(event.getX(),event.getY());
             holder.love.addLoveView(event.getX(),event.getY());
+            if(!MyApplication.isLogin()){
+                return;
+            }
             if(videoBean!=null && !videoBean.isThumbEpisode()){
-                videoBean.setThumbEpisode(true);
-                holder.imgPraise.setImageResource(R.mipmap.yes_praise);
-                holder.imgPraise.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.guide_scale));
-                String praiseNum=holder.tvPraise.getText().toString().trim();
-                holder.tvPraise.setText(String.valueOf(Integer.parseInt(praiseNum)+1));
+                videoPlayPersenter.thump(videoBean.getId());
             }
         }
     };
