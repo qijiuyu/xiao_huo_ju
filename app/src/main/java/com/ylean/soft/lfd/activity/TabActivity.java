@@ -1,14 +1,10 @@
 package com.ylean.soft.lfd.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -21,16 +17,11 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
-import com.ylean.soft.lfd.utils.AnimUtil;
-import com.ylean.soft.lfd.utils.KeyboardPatch;
-import com.ylean.soft.lfd.utils.KeyboardUtil;
-import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
@@ -40,6 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,11 +65,12 @@ public class TabActivity extends android.app.TabActivity {
     ClickLinearLayout linUser;
     @BindView(R.id.rel)
     RelativeLayout rel;
+    private int[] notClick = new int[]{R.mipmap.tab_1_false, R.mipmap.tab_2_false, R.mipmap.tab_3_false, R.mipmap.tab_4_false};
+    private int[] yesClick = new int[]{R.mipmap.tab_1_true, R.mipmap.tab_2_true, R.mipmap.tab_3_true, R.mipmap.tab_4_true};
     // 按两次退出
     protected long exitTime = 0;
     private List<TextView> tvList = new ArrayList<>();
     private List<ImageView> imgList = new ArrayList<>();
-    private List<ClickLinearLayout> relClick = new ArrayList<>();
     private View contentView;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +78,7 @@ public class TabActivity extends android.app.TabActivity {
 //        StatusBarUtils.transparencyBar(this);
 //        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
         StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
-        contentView = getLayoutInflater().inflate(R.layout.activity_tab, null);
+        contentView = getLayoutInflater().inflate(R.layout.activity_tab_two, null);
         setContentView(contentView);
 //        new KeyboardUtil(this, contentView);
         ButterKnife.bind(this);
@@ -110,10 +103,6 @@ public class TabActivity extends android.app.TabActivity {
         tvList.add(tvRecommend);
         tvList.add(tvFocus);
         tvList.add(tvUser);
-        relClick.add(linMain);
-        relClick.add(linRecommend);
-        relClick.add(linFocus);
-        relClick.add(linUser);
         tabhost = this.getTabHost();
         TabHost.TabSpec spec;
         spec = tabhost.newTabSpec("推荐").setIndicator("推荐").setContent(new Intent(this, MainActivity.class));
@@ -135,26 +124,23 @@ public class TabActivity extends android.app.TabActivity {
     }
 
     int type;
-    @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user,R.id.lin_main2, R.id.lin_recommend2, R.id.lin_focus2, R.id.lin_user2})
+    @OnClick({R.id.lin_main, R.id.lin_recommend, R.id.lin_focus, R.id.lin_user})
     public void onViewClicked(View view) {
         Intent intent=new Intent(this, LoginActivity.class);
         switch (view.getId()) {
             //推荐
             case R.id.lin_main:
-            case R.id.lin_main2:
                 StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
                 updateTag(0);
                 EventBus.getDefault().post(new EventBusType(EventStatus.UPDATE_TAB_MENU));
                 break;
             //发现
             case R.id.lin_recommend:
-            case R.id.lin_recommend2:
                 StatusBarUtils.setStatusBarMode(this,false,android.R.color.black);
                 updateTag(1);
                 break;
             //关注
             case R.id.lin_focus:
-            case R.id.lin_focus2:
                 if(MyApplication.isLogin()){
                     StatusBarUtils.setStatusBarMode(this,true,android.R.color.white);
                     updateTag(2);
@@ -165,7 +151,6 @@ public class TabActivity extends android.app.TabActivity {
                 break;
             //我的
             case R.id.lin_user:
-            case R.id.lin_user2:
                 if(MyApplication.isLogin()){
                     StatusBarUtils.setStatusBarMode(this,true,R.color.color_f5f5f5);
                     updateTag(3);
@@ -188,21 +173,9 @@ public class TabActivity extends android.app.TabActivity {
     private void updateTag(int type) {
         for (int i = 0; i < 4; i++) {
             if (i == type) {
-                imgList.get(i).setVisibility(View.INVISIBLE);
-                relClick.get(i).setVisibility(View.VISIBLE);
-                tvList.get(i).setTextColor(getResources().getColor(R.color.color_333333));
-                //跳动的动画
-//                final ClickLinearLayout linClick=relClick.get(i);
-//                handler.post(new Runnable() {
-//                    public void run() {
-//                        Animation animation = AnimationUtils.loadAnimation(TabActivity.this, R.anim.tab_anim);
-//                        linClick.startAnimation(animation);
-//                    }
-//                });
+                imgList.get(i).setImageDrawable(getResources().getDrawable(yesClick[i]));
             } else {
-                imgList.get(i).setVisibility(View.VISIBLE);
-                relClick.get(i).setVisibility(View.INVISIBLE);
-                tvList.get(i).setTextColor(getResources().getColor(R.color.color_999999));
+                imgList.get(i).setImageDrawable(getResources().getDrawable(notClick[i]));
             }
         }
         tabhost.setCurrentTab(type);
