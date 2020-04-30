@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LittleFireDrama.iml" filepath="$PROJECT_DIR$/LittleFireDrama.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/module_util/module_util.iml" filepath="$PROJECT_DIR$/module_util/module_util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LittleFireDrama.iml" filepath="$PROJECT_DIR$/LittleFireDrama.iml" group="LittleFireDrama" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="LittleFireDrama/app" />
+      <module fileurl="file://$PROJECT_DIR$/module_util/module_util.iml" filepath="$PROJECT_DIR$/module_util/module_util.iml" group="LittleFireDrama/module_util" />
     </modules>
   </component>
 </project>

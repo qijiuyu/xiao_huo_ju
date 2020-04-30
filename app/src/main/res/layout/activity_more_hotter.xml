@@ -71,7 +71,7 @@
                 android:id="@+id/view_hot"
                 android:layout_width="10dp"
                 android:layout_height="4dp"
-                android:background="@android:color/white"/>
+                android:background="@drawable/textview_color2"/>
 
         </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:visibility="gone"
                 android:layout_width="10dp"
                 android:layout_height="4dp"
-                android:background="@android:color/white"/>
+                android:background="@drawable/textview_color2"/>
 
         </LinearLayout>
 
