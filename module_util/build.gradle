@@ -46,4 +46,14 @@ dependencies {
     //仿ios的loading
     compile 'com.github.gittjy:LoadingDialog:1.0.2'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile files('libs/SecurityEnvSDK-release-1.1.0.jar')
+    compile files('libs/SocialSDK_Sina_Full.jar')
+    compile files('libs/umeng-analytics-8.1.4.jar')
+    compile files('libs/umeng-common-2.1.8.jar')
+    compile files('libs/umeng-share-core-6.9.4.jar')
+    compile files('libs/umeng-share-QQ-simplify-6.9.4.jar')
+    compile files('libs/umeng-share-wechat-simplify-6.9.4.jar')
+    compile files('libs/umeng-sharetool-6.9.4.jar')
+    compile files('libs/utdid4all-1.1.5.3_proguard.jar')
+    compile files('libs/weiboSDKCore_3.1.4.jar')
 }

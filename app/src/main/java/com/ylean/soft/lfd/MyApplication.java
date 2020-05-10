@@ -41,9 +41,8 @@ public class MyApplication extends BaseApplication {
      * 初始化友盟分享
      */
     private void initShare(){
-        UMConfigure.setLogEnabled(true);
         //初始化
-        UMConfigure.init(this,"5e7359a0978eea0774044e44","Android",UMConfigure.DEVICE_TYPE_PHONE,"");
+        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"");
         //微信
         PlatformConfig.setWeixin("wx43eb89624326c53e", "22476afa67667baf5d2e9a99e55a0106");
         //QQ
