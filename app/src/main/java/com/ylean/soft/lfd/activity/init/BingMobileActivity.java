@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.BaseBean;
@@ -155,6 +156,9 @@ public class BingMobileActivity extends BaseActivity {
                           //进入选择喜好的页面
                           setClass(SelectTagActivity.class);
                           finish();
+
+                          //埋点注册
+                          MobclickAgent.onEvent(BingMobileActivity.this, "register");
                       }else{
                           ToastUtil.showLong(login.getDesc());
                       }

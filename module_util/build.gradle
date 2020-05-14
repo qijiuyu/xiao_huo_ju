@@ -46,4 +46,6 @@ dependencies {
     //仿ios的loading
     compile 'com.github.gittjy:LoadingDialog:1.0.2'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile files('libs/SecurityEnvSDK-release-1.1.0.jar')
+    compile files('libs/umeng-analytics-8.1.4.jar')
 }

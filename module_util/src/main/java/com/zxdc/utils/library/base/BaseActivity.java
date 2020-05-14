@@ -5,14 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by Administrator on 2017/10/26 0026.
@@ -86,4 +86,16 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }
