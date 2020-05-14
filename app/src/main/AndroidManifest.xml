@@ -230,6 +230,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- 友盟配置 -->
+        <meta-data android:value="5eb770160cafb21da900013a" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="android" android:name="UMENG_CHANNEL"/>
+
     </application>
 
 </manifest>

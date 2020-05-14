@@ -265,3 +265,16 @@
 -keep class com.bumptech.** {
     *;
 }
+
+#确保指纹module中第三方jar里面的类不被混淆
+-keep class com.umeng.analytics.** {*;}
+
+#友盟统计
+-keep class com.umeng.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
