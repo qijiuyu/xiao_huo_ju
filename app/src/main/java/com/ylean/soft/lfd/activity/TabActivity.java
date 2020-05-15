@@ -1,6 +1,7 @@
 package com.ylean.soft.lfd.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -11,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.focus.FocusActivity;
@@ -18,6 +21,7 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
+import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
@@ -80,6 +84,7 @@ public class TabActivity extends android.app.TabActivity {
     private List<ImageView> imgList = new ArrayList<>();
     private View contentView;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        StatusBarUtils.transparencyBar(this);
@@ -95,6 +100,9 @@ public class TabActivity extends android.app.TabActivity {
 
         //查询最新版本
         new UpdateVersionUtils().getVersion(this);
+
+        // android 7.0系统解决拍照的问题
+        PermissionUtil.initPhotoError();
     }
 
 

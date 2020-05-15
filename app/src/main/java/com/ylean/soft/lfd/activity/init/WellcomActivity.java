@@ -2,13 +2,14 @@ package com.ylean.soft.lfd.activity.init;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.TabActivity;
+import com.ylean.soft.lfd.utils.PermissionCallBack;
+import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.StatusBarUtils;
@@ -42,6 +43,20 @@ public class WellcomActivity extends BaseActivity {
             public void onAnimationRepeat(Animation animation) {
             }
             public void onAnimationEnd(Animation animation) {
+
+            }
+        });
+        linearLayout.setAnimation(myAnimation_Alpha);
+        myAnimation_Alpha.start();
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        PermissionUtil.getPermission(this, new PermissionCallBack() {
+            public void onclick() {
                 if(SPUtil.getInstance(WellcomActivity.this).getBoolean(SPUtil.IS_FIRST_OPEN)){
                     setClass(TabActivity.class);
                 }else{
@@ -50,7 +65,5 @@ public class WellcomActivity extends BaseActivity {
                 finish();
             }
         });
-        linearLayout.setAnimation(myAnimation_Alpha);
-        myAnimation_Alpha.start();
     }
 }
