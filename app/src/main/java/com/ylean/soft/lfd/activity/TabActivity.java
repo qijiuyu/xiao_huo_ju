@@ -1,14 +1,18 @@
 package com.ylean.soft.lfd.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
@@ -17,11 +21,14 @@ import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.MainActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
+import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
+import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.StatusBarUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.error.CockroachUtil;
@@ -31,10 +38,14 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
+
 public class TabActivity extends android.app.TabActivity {
 
     @BindView(R.id.img_main)
@@ -73,6 +84,7 @@ public class TabActivity extends android.app.TabActivity {
     private List<ImageView> imgList = new ArrayList<>();
     private View contentView;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        StatusBarUtils.transparencyBar(this);
@@ -83,9 +95,14 @@ public class TabActivity extends android.app.TabActivity {
 //        new KeyboardUtil(this, contentView);
         ButterKnife.bind(this);
         initView();
+        //设置推送
+        setPush();
 
         //查询最新版本
         new UpdateVersionUtils().getVersion(this);
+
+        // android 7.0系统解决拍照的问题
+        PermissionUtil.initPhotoError();
     }
 
 
@@ -180,6 +197,41 @@ public class TabActivity extends android.app.TabActivity {
         }
         tabhost.setCurrentTab(type);
     }
+
+
+    /**
+     * 设置推送
+     */
+    private void setPush() {
+        String userId = SPUtil.getInstance(this).getString(SPUtil.USER_ID);
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+        //设置极光推送的别名
+        JPushInterface.setAliasAndTags(getApplicationContext(), userId, null, mAliasCallback);
+    }
+
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        public void gotResult(int code, String alias, Set<String> tags) {
+            switch (code) {
+                //设置别名成功
+                case 0:
+                    LogUtils.e("推送设置成功");
+                    break;
+                //设置别名失败
+                case 6002:
+                    LogUtils.e("推送设置失败");
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            setPush();
+                        }
+                    }, 30000);
+                    break;
+                default:
+            }
+        }
+    };
 
 
     /**

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.ylean.soft.lfd.activity.user.NewsActivity;
 import com.zxdc.utils.library.util.LogUtils;
 
 import org.json.JSONException;
@@ -47,11 +48,11 @@ public class MyReceiver extends BroadcastReceiver {
 				LogUtils.e( "[MyReceiver] 用户点击打开了通知");
 
 				//打开自定义的Activity
-//				Intent i = new Intent(context, TestActivity.class);
-//				i.putExtras(bundle);
-//				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-//				context.startActivity(i);
+				Intent i = new Intent(context, NewsActivity.class);
+				i.putExtras(bundle);
+				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+				context.startActivity(i);
 
 			} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
 				LogUtils.e( "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
