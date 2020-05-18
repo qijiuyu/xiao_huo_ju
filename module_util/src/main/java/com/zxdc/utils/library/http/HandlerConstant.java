@@ -62,4 +62,5 @@ public class HandlerConstant {
     public static final int THREE_LOGIN_SUCCESS=10058;
     public static final int BESPOKE_SUCCESS=10059;
     public static final int IS_BIND_SUCCESS=10060;
+    public static final int REFRESH_TOKEN_SUCCESS=10061;
 }

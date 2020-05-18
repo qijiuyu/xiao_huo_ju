@@ -11,7 +11,6 @@ import com.zxdc.utils.library.bean.Author;
 import com.zxdc.utils.library.bean.AuthorDetails;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.Browse;
-import com.zxdc.utils.library.bean.Comment;
 import com.zxdc.utils.library.bean.CommentList;
 import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Focus;
@@ -37,10 +36,8 @@ import com.zxdc.utils.library.util.SPUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,6 +65,24 @@ public class HttpMethod extends BaseRequst {
 //
 //
 //
+
+    /**
+     * 刷新token
+     */
+    public static void refreshToken(String token,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("token",token);
+        Http.getRetrofit().create(HttpApi.class).refreshToken(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+//                BaseRequst.sendMessage(handler, HandlerConstant.REFRESH_TOKEN_SUCCESS, response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
     /**
      * 获取短信验证码
      */

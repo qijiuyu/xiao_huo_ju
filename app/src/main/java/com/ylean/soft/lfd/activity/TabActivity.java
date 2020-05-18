@@ -25,6 +25,7 @@ import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
 import com.zxdc.utils.library.util.LogUtils;
@@ -89,12 +90,19 @@ public class TabActivity extends android.app.TabActivity {
         super.onCreate(savedInstanceState);
 //        StatusBarUtils.transparencyBar(this);
 //        StatusBarUtils.setStatusBarGradiant(this,R.drawable.textview_color);
-        StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
-        contentView = getLayoutInflater().inflate(R.layout.activity_tab_two, null);
-        setContentView(contentView);
+       try {
+           StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
+           contentView = getLayoutInflater().inflate(R.layout.activity_tab_two, null);
+           setContentView(contentView);
+       }catch (Exception e){
+           e.printStackTrace();
+       }
 //        new KeyboardUtil(this, contentView);
         ButterKnife.bind(this);
         initView();
+        //刷新token
+        refreshToken();
+
         //设置推送
         setPush();
 
@@ -186,7 +194,6 @@ public class TabActivity extends android.app.TabActivity {
     /**
      * 切换tab时，更新图片和文字颜色
      */
-    private Handler handler=new Handler();
     private void updateTag(int type) {
         for (int i = 0; i < 4; i++) {
             if (i == type) {
@@ -196,6 +203,18 @@ public class TabActivity extends android.app.TabActivity {
             }
         }
         tabhost.setCurrentTab(type);
+    }
+
+
+
+    /**
+     * 刷新token
+     */
+    private void refreshToken(){
+        final String token=SPUtil.getInstance(this).getString(SPUtil.TOKEN);
+        if(!TextUtils.isEmpty(token)){
+            HttpMethod.refreshToken(token,null);
+        }
     }
 
 
