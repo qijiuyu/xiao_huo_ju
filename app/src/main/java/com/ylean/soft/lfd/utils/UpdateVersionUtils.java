@@ -20,8 +20,8 @@ import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.DownLoad;
 import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.http.HandlerConstant;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
-import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.ArrowDownloadButton;
 
@@ -87,7 +87,7 @@ public class UpdateVersionUtils {
                                     }
 
                                     DownLoad d = new DownLoad();
-                                    d.setDownPath(version.getData().getUrl());
+                                    d.setDownPath(HttpConstant.IP+version.getData().getUrl());
                                     d.setSavePath(savePath);
                                     //下载文件
                                     HttpMethod.download(d, mHandler);
