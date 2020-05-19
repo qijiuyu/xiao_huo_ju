@@ -89,7 +89,7 @@ public class SettingActivity extends BaseActivity {
      */
     private void showBind(){
         openId=SPUtil.getInstance(this).getString(SPUtil.OPEN_ID);
-        tvMobile.setText(SPUtil.getInstance(this).getString(SPUtil.MOBILE));
+        tvMobile.setText(SPUtil.getInstance(this).getString(SPUtil.ACCOUNT));
         if(userBean!=null){
             if(userBean.isBindWx()){
                 tvWx.setText("已绑定");
@@ -187,6 +187,9 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.tv_out:
                 SPUtil.getInstance(this).removeMessage(SPUtil.TOKEN);
+                SPUtil.getInstance(activity).removeMessage(SPUtil.OPEN_ID);
+                SPUtil.getInstance(activity).removeMessage(SPUtil.ACCOUNT);
+                SPUtil.getInstance(activity).removeMessage(SPUtil.PASSWORD);
                 intent.setClass(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

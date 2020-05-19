@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,8 +24,10 @@ import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
+import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ActivitysLifecycle;
 import com.zxdc.utils.library.util.DataCleanManager;
@@ -212,10 +215,47 @@ public class TabActivity extends android.app.TabActivity {
      */
     private void refreshToken(){
         final String token=SPUtil.getInstance(this).getString(SPUtil.TOKEN);
-        if(!TextUtils.isEmpty(token)){
-            HttpMethod.refreshToken(token,null);
+        if(TextUtils.isEmpty(token)){
+            return;
         }
+        final String openId=SPUtil.getInstance(this).getString(SPUtil.OPEN_ID);
+        if(!TextUtils.isEmpty(openId)){
+            HttpMethod.threeLogin(openId,"1","0",null,null,null,null,handler);
+        }else{
+            final boolean isCode=SPUtil.getInstance(this).getBoolean(SPUtil.IS_SMSCODE_LOGIN);
+            final String mobile=SPUtil.getInstance(this).getString(SPUtil.ACCOUNT);
+            final String password=SPUtil.getInstance(this).getString(SPUtil.PASSWORD);
+            if(isCode){
+                HttpMethod.pwdLogin("1",password,mobile,handler);
+            }else{
+                HttpMethod.pwdLogin("0",password,mobile,handler);
+            }
+        }
+
     }
+
+
+    private Handler handler=new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case HandlerConstant.THREE_LOGIN_SUCCESS:
+                case HandlerConstant.PWD_LOGIN_SUCCESS:
+                    Login login= (Login) msg.obj;
+                    if(login==null){
+                        break;
+                    }
+                    //登录成功
+                    if(login.isSussess() && login.getData()!=null){
+                        //存储token
+                        SPUtil.getInstance(TabActivity.this).addString(SPUtil.TOKEN,login.getData().getToken());
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
 
 
     /**

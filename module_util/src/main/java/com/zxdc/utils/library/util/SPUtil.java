@@ -1,6 +1,5 @@
 package com.zxdc.utils.library.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -25,10 +24,14 @@ public class SPUtil {
     public final static String USER_ID="USER_ID";
     //是否通过第三方登录
     public final static String IS_THREE_LOGIN="IS_THREE_LOGIN";
-    //账号
-    public final static String MOBILE="MOBILE";
     //openId
     public final static String OPEN_ID="OPEN_ID";
+    //登录账号
+    public final static String ACCOUNT="ACCOUNT";
+    //登录密码
+    public final static String PASSWORD="PASSWORD";
+    //是否是验证码登录
+    public final static String IS_SMSCODE_LOGIN="IS_SMSCODE_LOGIN";
     //搜索的关键字
     public final static String SEARCH_KEY="SEARCH_KEY";
     private static SPUtil sharUtil = null;

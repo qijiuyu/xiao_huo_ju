@@ -119,8 +119,6 @@ public class ResetPassWordActivity extends BaseActivity {
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          //是否通过第三方登录
                          SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,false);
-                         //存储手机号
-                         SPUtil.getInstance(activity).addString(SPUtil.MOBILE,login.getData().getMobile());
                          //通知关闭上个页面
                          EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
                          //进入选择喜好的页面
@@ -140,6 +138,7 @@ public class ResetPassWordActivity extends BaseActivity {
                      }
                      if(baseBean.isSussess()){
                          EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
+                         setClass(LoginActivity.class);
                          finish();
                      }
                      ToastUtil.showLong(baseBean.getDesc());
@@ -163,6 +162,9 @@ public class ResetPassWordActivity extends BaseActivity {
      */
     private void register(String code,String pwd,String mobile){
         DialogUtil.showProgress(this,"注册中");
+        //存储账号和密码
+        SPUtil.getInstance(activity).addString(SPUtil.ACCOUNT,mobile);
+        SPUtil.getInstance(activity).addString(SPUtil.PASSWORD,pwd);
         HttpMethod.register(code,pwd,mobile,handler);
     }
 

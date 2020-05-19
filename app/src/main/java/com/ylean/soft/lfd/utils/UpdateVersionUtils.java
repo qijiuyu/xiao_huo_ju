@@ -22,10 +22,13 @@ import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.ArrowDownloadButton;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 版本更新工具类
@@ -37,6 +40,7 @@ public class UpdateVersionUtils {
     private Version version;
     private Context mContext;
     private final String savePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xhj.apk";
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     /**
      * 查询最新版本
@@ -45,6 +49,10 @@ public class UpdateVersionUtils {
      */
     public void getVersion(Context mContext) {
         this.mContext = mContext;
+        final String today_time=SPUtil.getInstance(mContext).getString("today_time");
+        if(today_time.equals(sdf.format(new Date()))){
+            return;
+        }
         HttpMethod.version(mHandler);
     }
 
@@ -97,6 +105,8 @@ public class UpdateVersionUtils {
                             tvCalcle.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
                                     dialog.dismiss();
+                                    //记录今天的日期
+                                    SPUtil.getInstance(mContext).addString("today_time",sdf.format(new Date()));
                                 }
                             });
 

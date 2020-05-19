@@ -3,15 +3,18 @@ package com.zxdc.utils.library.http.base;
 import android.text.TextUtils;
 
 import com.zxdc.utils.library.base.BaseApplication;
-import com.zxdc.utils.library.bean.BaseBean;
+import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.http.HttpApi;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -38,8 +41,9 @@ public class LogInterceptor implements Interceptor {
         //如果ACCESS_TOKEN失效，自动重新获取一次
         final int code = getCode(body);
         if(code==-401){
-            BaseBean baseBean=refreshToken();
-            if(baseBean!=null && baseBean.isSussess()){
+            Login login=refreshToken();
+            if(login!=null && login.isSussess()){
+                SPUtil.getInstance(BaseApplication.getContext()).addString(SPUtil.TOKEN,login.getData().getToken());
                 request = addPostParameter(request);
                 response = chain.proceed(request);
                 body = response.body().string();
@@ -104,17 +108,40 @@ public class LogInterceptor implements Interceptor {
     }
 
 
+
     /**
      * 刷新token
-     * @return
      */
-    private BaseBean refreshToken(){
-        final String token=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.TOKEN);
-        Map<String, String> map = new HashMap<>();
-        map.put("token", token);
+    private Login refreshToken(){
+        final String openId=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.OPEN_ID);
+        if(!TextUtils.isEmpty(openId)){
+            Map<String,String> map=new HashMap<>();
+            map.put("openid", openId);
+            map.put("thirdlogintype","1");
+            map.put("type","0");
+            Login  login= null;
+            try {
+                login = Http.getRetrofitNoInterceptor().create(HttpApi.class).threeLogin(map).execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return login;
+        }
+
+        final boolean isCode=SPUtil.getInstance(BaseApplication.getContext()).getBoolean(SPUtil.IS_SMSCODE_LOGIN);
+        final String mobile=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.ACCOUNT);
+        final String password=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.PASSWORD);
+        Map<String,String> map=new HashMap<>();
+        if(isCode){
+            map.put("logintype", "1");
+        }else{
+            map.put("logintype", "0");
+        }
+        map.put("password",password);
+        map.put("phone",mobile);
         try {
-            BaseBean baseBean = Http.getRetrofitNoInterceptor().create(HttpApi.class).refreshToken(map).execute().body();
-            return baseBean;
+            Login  login= Http.getRetrofitNoInterceptor().create(HttpApi.class).pwdLogin(map).execute().body();
+            return login;
         } catch (IOException e) {
             e.printStackTrace();
         }

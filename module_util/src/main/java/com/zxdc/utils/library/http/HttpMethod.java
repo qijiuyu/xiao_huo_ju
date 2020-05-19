@@ -187,8 +187,13 @@ public class HttpMethod extends BaseRequst {
         if(!TextUtils.isEmpty(code)){
             map.put("code",code);
         }
-        map.put("imgurl",imgurl);
-        map.put("nickname",nickname);
+        if(!TextUtils.isEmpty(imgurl)){
+            map.put("imgurl",imgurl);
+        }
+        if(!TextUtils.isEmpty(nickname)){
+            map.put("nickname",nickname);
+        }
+
         if(!TextUtils.isEmpty(phone)){
             map.put("phone",phone);
         }

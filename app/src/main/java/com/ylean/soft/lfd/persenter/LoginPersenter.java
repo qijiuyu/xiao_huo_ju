@@ -1,10 +1,10 @@
 package com.ylean.soft.lfd.persenter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
+import com.ylean.soft.lfd.activity.TabActivity;
 import com.ylean.soft.lfd.activity.init.BingMobileActivity;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.zxdc.utils.library.bean.BaseBean;
@@ -70,8 +70,14 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          //是否通过第三方登录
                          SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,false);
-                         //存储手机号
-                         SPUtil.getInstance(activity).addString(SPUtil.MOBILE,login.getData().getMobile());
+
+                         if(msg.what==HandlerConstant.SMS_LOGIN_SUCCESS){
+                             //存储账号和密码
+                             SPUtil.getInstance(activity).addString(SPUtil.ACCOUNT,login.getData().getMobile());
+                             SPUtil.getInstance(activity).addString(SPUtil.PASSWORD,login.getData().getPassword());
+                         }
+                         Intent intent=new Intent(activity, TabActivity.class);
+                         activity.startActivity(intent);
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
@@ -101,8 +107,12 @@ public class LoginPersenter {
                          SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                          //是否通过第三方登录
                          SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,true);
-                         //存储手机号
-                         SPUtil.getInstance(activity).addString(SPUtil.MOBILE,login.getData().getMobile());
+                         //存储账号和密码
+                         SPUtil.getInstance(activity).addString(SPUtil.ACCOUNT,login.getData().getMobile());
+                         SPUtil.getInstance(activity).addString(SPUtil.PASSWORD,login.getData().getPassword());
+
+                         Intent intent=new Intent(activity, TabActivity.class);
+                         activity.startActivity(intent);
                          activity.finish();
                      }else{
                          ToastUtil.showLong(login.getDesc());
@@ -135,6 +145,7 @@ public class LoginPersenter {
      */
     public void smsLogin(String code,String mobile){
         DialogUtil.showProgress(activity,"登录中");
+        SPUtil.getInstance(activity).addBoolean(SPUtil.IS_SMSCODE_LOGIN,true);
         HttpMethod.smsLogin(code,mobile,handler);
     }
 
@@ -146,6 +157,10 @@ public class LoginPersenter {
      */
     public void pwdLogin(String pwd,String mobile){
         DialogUtil.showProgress(activity,"登录中");
+        SPUtil.getInstance(activity).addBoolean(SPUtil.IS_SMSCODE_LOGIN,false);
+        //存储账号和密码
+        SPUtil.getInstance(activity).addString(SPUtil.ACCOUNT,mobile);
+        SPUtil.getInstance(activity).addString(SPUtil.PASSWORD,pwd);
         HttpMethod.pwdLogin("0",pwd,mobile,handler);
     }
 

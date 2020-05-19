@@ -22,6 +22,7 @@ public class Login extends BaseBean {
         private int id;
         private String mobile;
         private String token;
+        private String password="";
 
         public int getId() {
             return id;
@@ -45,6 +46,14 @@ public class Login extends BaseBean {
 
         public void setToken(String token) {
             this.token = token;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }
