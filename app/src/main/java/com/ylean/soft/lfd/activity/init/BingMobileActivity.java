@@ -149,9 +149,6 @@ public class BingMobileActivity extends BaseActivity {
                           SPUtil.getInstance(activity).addString(SPUtil.USER_ID,login.getData().getId()+"");
                           //是否通过第三方登录
                           SPUtil.getInstance(activity).addBoolean(SPUtil.IS_THREE_LOGIN,true);
-                          //存储账号和密码
-                          SPUtil.getInstance(activity).addString(SPUtil.ACCOUNT,login.getData().getMobile());
-                          SPUtil.getInstance(activity).addString(SPUtil.PASSWORD,login.getData().getPassword());
                           //通知关闭上个页面
                           EventBus.getDefault().post(new EventBusType(EventStatus.CLOSE_PAGE));
                           //进入选择喜好的页面
