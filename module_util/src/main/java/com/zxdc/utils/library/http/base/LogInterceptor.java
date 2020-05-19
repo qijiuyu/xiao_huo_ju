@@ -4,10 +4,13 @@ import android.text.TextUtils;
 
 import com.zxdc.utils.library.base.BaseApplication;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpApi;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -131,20 +134,25 @@ public class LogInterceptor implements Interceptor {
         final boolean isCode=SPUtil.getInstance(BaseApplication.getContext()).getBoolean(SPUtil.IS_SMSCODE_LOGIN);
         final String mobile=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.ACCOUNT);
         final String password=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.PASSWORD);
-        Map<String,String> map=new HashMap<>();
-        if(isCode){
-            map.put("logintype", "1");
+        if(!TextUtils.isEmpty(mobile) && !TextUtils.isEmpty(password)){
+            Map<String,String> map=new HashMap<>();
+            if(isCode){
+                map.put("logintype", "1");
+            }else{
+                map.put("logintype", "0");
+            }
+            map.put("password",password);
+            map.put("phone",mobile);
+            try {
+                Login  login= Http.getRetrofitNoInterceptor().create(HttpApi.class).pwdLogin(map).execute().body();
+                return login;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }else{
-            map.put("logintype", "0");
+            EventBus.getDefault().post(new EventBusType(EventStatus.GO_TO_LOGIN));
         }
-        map.put("password",password);
-        map.put("phone",mobile);
-        try {
-            Login  login= Http.getRetrofitNoInterceptor().create(HttpApi.class).pwdLogin(map).execute().body();
-            return login;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return null;
     }
 

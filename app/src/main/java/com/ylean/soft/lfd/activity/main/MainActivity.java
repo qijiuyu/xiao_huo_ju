@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.activity.main;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.fragment.main.OtherFragment;
 import com.ylean.soft.lfd.fragment.main.SelectFragment;
 import com.ylean.soft.lfd.persenter.main.MainPersenter;
@@ -21,14 +24,15 @@ import com.zxdc.utils.library.base.BaseFragment;
 import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
-import com.zxdc.utils.library.util.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -206,6 +210,13 @@ public class MainActivity extends BaseActivity {
                        }
                   }
                   break;
+                  //重新登录
+            case EventStatus.GO_TO_LOGIN:
+                Intent intent=new Intent(this,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                 break;
             default:
                 break;
         }

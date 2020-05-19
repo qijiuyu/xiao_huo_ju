@@ -121,4 +121,6 @@ public class EventStatus {
 
     public static final int USER_CLEAR_DATA=230;
 
+    public static final int GO_TO_LOGIN=231;
+
 }
