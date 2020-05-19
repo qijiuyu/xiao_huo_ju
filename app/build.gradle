@@ -19,7 +19,7 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME : "com.ylean.soft.lfd",
-                JPUSH_APPKEY : "524c8b283c4876d3f8961da1", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY : "4b63b1f1c1a58e1dc05602c8", //JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
