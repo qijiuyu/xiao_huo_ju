@@ -27,6 +27,22 @@ public class WellcomActivity extends BaseActivity {
         StatusBarUtils.setTranslucentStatus(this);
         setContentView(R.layout.activity_wellcome);
         initView();
+        PermissionUtil.getPermission(this, new PermissionCallBack() {
+            @Override
+            public void onSuccess() {
+                if(SPUtil.getInstance(WellcomActivity.this).getBoolean(SPUtil.IS_FIRST_OPEN)){
+                    setClass(TabActivity.class);
+                }else{
+                    setClass(GuideActivity.class);
+                }
+                finish();
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
     }
 
 
@@ -36,7 +52,6 @@ public class WellcomActivity extends BaseActivity {
     private void initView() {
         LinearLayout linearLayout=findViewById(R.id.lin_wellcome);
         Animation myAnimation_Alpha = new AlphaAnimation(0.1f, 1.0f);
-        myAnimation_Alpha.setDuration(2500);
         myAnimation_Alpha.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
@@ -48,22 +63,5 @@ public class WellcomActivity extends BaseActivity {
         });
         linearLayout.setAnimation(myAnimation_Alpha);
         myAnimation_Alpha.start();
-    }
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        PermissionUtil.getPermission(this, new PermissionCallBack() {
-            public void onclick() {
-                if(SPUtil.getInstance(WellcomActivity.this).getBoolean(SPUtil.IS_FIRST_OPEN)){
-                    setClass(TabActivity.class);
-                }else{
-                    setClass(GuideActivity.class);
-                }
-                finish();
-            }
-        });
     }
 }

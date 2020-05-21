@@ -22,6 +22,7 @@ import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.ArrowDownloadButton;
@@ -68,7 +69,10 @@ public class UpdateVersionUtils {
                     }
                     if(version.isSussess() && version.getData()!=null){
                         //判断是否需要更新
-                        if(!Util.getVersionName(mContext).equals(version.getData().getVersion())){
+                        String versionName=Util.getVersionName(mContext);
+                        String serverName=version.getData().getVersion();
+                        LogUtils.e(Double.parseDouble(versionName)+"+++++++++++++++"+Double.parseDouble(serverName));
+                        if(Double.parseDouble(versionName)<Double.parseDouble(serverName)){
                             View view = LayoutInflater.from(mContext).inflate(R.layout.version_pop, null);
                             TextView tvCalcle =view.findViewById(R.id.tv_cancle);
                             TextView tvConfirm =view.findViewById(R.id.tv_confirm);

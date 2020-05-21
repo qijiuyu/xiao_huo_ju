@@ -54,9 +54,9 @@ public class NewsAdapter extends BaseAdapter {
         }
         News.NewsBean newsBean=list.get(position);
         holder.tvTitle.setText(newsBean.getTitle());
-        if(newsBean.getType()==1){
-//            String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
-            holder.tvDes.setText(Html.fromHtml(newsBean.getContent()));
+        if(newsBean.getSerialId()>0){
+            String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
+            holder.tvDes.setText(Html.fromHtml(content));
         }else{
             holder.tvDes.setText(Html.fromHtml(newsBean.getContent()));
         }
@@ -69,14 +69,9 @@ public class NewsAdapter extends BaseAdapter {
         holder.tvDes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 News.NewsBean newsBean= (News.NewsBean) v.getTag();
-                if(newsBean.getType()==1){
+                if(newsBean.getSerialId()>0){
                     Intent intent=new Intent(activity, VideoPlayActivity.class);
-                    if(newsBean.getEpisodeId()!=0){
-                        intent.putExtra("singleId",newsBean.getEpisodeId());
-                    }
-                    if(newsBean.getSerialId()!=0){
-                        intent.putExtra("serialId",newsBean.getSerialId());
-                    }
+                    intent.putExtra("serialId",newsBean.getSerialId());
                     activity.startActivity(intent);
                 }
             }

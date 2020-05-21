@@ -9,8 +9,8 @@ android {
         applicationId "com.ylean.soft.lfd"
         minSdkVersion Integer.parseInt(MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(TARGET_SDK_VERSION)
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
 
         ndk {
             //设置支持的SO库架构

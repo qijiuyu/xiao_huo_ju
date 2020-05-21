@@ -15,7 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hjq.permissions.Permission;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.utils.PermissionCallBack;
+import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.SelectPhoto;
 import com.ylean.soft.lfd.view.SelectTimeDialog;
 import com.zxdc.utils.library.base.BaseActivity;
@@ -26,9 +29,7 @@ import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
-import com.zxdc.utils.library.util.BitMapUtil;
 import com.zxdc.utils.library.util.DialogUtil;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 
@@ -36,8 +37,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -219,28 +218,38 @@ public class UserInfoActivity extends BaseActivity {
      * 展示选择图片的弹框
      */
     private void showPhotoDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_photo, null);
-        final PopupWindow popupWindow = DialogUtil.showPopWindow(view);
-        popupWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-        //拍照
-        view.findViewById(R.id.tv_picture).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                SelectPhoto.selectPhoto(UserInfoActivity.this,1);
+        if(!PermissionUtil.isPermission(this, new PermissionCallBack() {
+            @Override
+            public void onSuccess() {
+                View view = LayoutInflater.from(activity).inflate(R.layout.dialog_photo, null);
+                final PopupWindow popupWindow = DialogUtil.showPopWindow(view);
+                popupWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+                //拍照
+                view.findViewById(R.id.tv_picture).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                        SelectPhoto.selectPhoto(UserInfoActivity.this,1);
+                    }
+                });
+                //从相册选择
+                view.findViewById(R.id.tv_photo).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                        SelectPhoto.selectPhoto(UserInfoActivity.this,2);
+                    }
+                });
+                view.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
             }
-        });
-        //从相册选择
-        view.findViewById(R.id.tv_photo).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                SelectPhoto.selectPhoto(UserInfoActivity.this,2);
+
+            @Override
+            public void onFail() {
+
             }
-        });
-        view.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        }, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE, Permission.CAMERA)){}
     }
 
 
