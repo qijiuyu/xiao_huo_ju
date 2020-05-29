@@ -7,7 +7,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -86,12 +88,30 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
     private void initView() {
         searchPersenter = new SearchPersenter(this);
         strKey = getIntent().getStringExtra("keys");
+        etKey.setText(strKey);
         etKey.setOnEditorActionListener(this);
         //刷新加载
         reList.setMyRefreshLayoutListener(this);
         listView.setDivider(null);
         searchAdapter = new SearchAdapter(this, listAll);
         listView.setAdapter(searchAdapter);
+
+        etKey.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @OnClick({R.id.img_bank, R.id.lin_refresh})

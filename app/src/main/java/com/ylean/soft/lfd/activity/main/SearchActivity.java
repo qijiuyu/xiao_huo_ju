@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
@@ -33,6 +34,8 @@ public class SearchActivity extends BaseActivity  implements TextView.OnEditorAc
     TagsLayout tagHoistory;
     @BindView(R.id.tag_hot)
     TagsLayout tagHot;
+    @BindView(R.id.rel_search)
+    RelativeLayout relSearch;
     private SearchPersenter searchPersenter;
     //要搜索的关键字
     private String strKey;
@@ -63,6 +66,7 @@ public class SearchActivity extends BaseActivity  implements TextView.OnEditorAc
             case R.id.img_remove:
                 tagHoistory.removeAllViews();
                 SPUtil.getInstance(this).removeMessage(SPUtil.SEARCH_KEY);
+                relSearch.setVisibility(View.GONE);
                 break;
             default:
                 break;
@@ -92,5 +96,13 @@ public class SearchActivity extends BaseActivity  implements TextView.OnEditorAc
     protected void onResume() {
         super.onResume();
         searchPersenter.showHistory(tagHoistory);
+
+        //如果没有搜索记录，就隐藏这个模块
+        final String keyStr= SPUtil.getInstance(activity).getString(SPUtil.SEARCH_KEY);
+        if(!TextUtils.isEmpty(keyStr)) {
+            relSearch.setVisibility(View.VISIBLE);
+        }else{
+            relSearch.setVisibility(View.GONE);
+        }
     }
 }

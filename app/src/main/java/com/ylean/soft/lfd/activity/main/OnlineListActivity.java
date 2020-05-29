@@ -7,17 +7,27 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.OnlineListAdapter;
 import com.zxdc.utils.library.base.BaseActivity;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
+import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -44,6 +54,8 @@ public class OnlineListActivity extends BaseActivity  implements MyRefreshLayout
         setContentView(R.layout.activity_online_list);
         ButterKnife.bind(this);
         initView();
+        //注册eventBus
+        EventBus.getDefault().register(this);
         //获取即将上线
         reList.startRefresh();
     }
@@ -68,6 +80,7 @@ public class OnlineListActivity extends BaseActivity  implements MyRefreshLayout
 
     private Handler handler=new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
+            DialogUtil.closeProgress();
             switch (msg.what){
                 case HandlerConstant.GET_ONLINE_SUCCESS1:
                     reList.refreshComplete();
@@ -77,6 +90,22 @@ public class OnlineListActivity extends BaseActivity  implements MyRefreshLayout
                 case HandlerConstant.GET_ONLINE_SUCCESS2:
                     reList.loadMoreComplete();
                     refresh((HotTop) msg.obj);
+                    break;
+                //关注，或者取消关注
+                case HandlerConstant.FOLLOW_SUCCESS:
+                    BaseBean baseBean = (BaseBean) msg.obj;
+                    if (baseBean == null) {
+                        break;
+                    }
+                    if (baseBean.isSussess()) {
+                        if(dataBean.isFollowUser()){
+                            dataBean.setFollowUser(false);
+                        }else{
+                            dataBean.setFollowUser(true);
+                        }
+                        onlineListAdapter.notifyDataSetChanged();
+                    }
+                    ToastUtil.showLong(baseBean.getDesc());
                     break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());
@@ -141,9 +170,49 @@ public class OnlineListActivity extends BaseActivity  implements MyRefreshLayout
         HttpMethod.getOnline(page, index,handler);
     }
 
+    /**
+     * 关注、取消关注用户
+     */
+    private HotTop.DataBean dataBean;
+    public void followUser(HotTop.DataBean dataBean) {
+        this.dataBean=dataBean;
+        DialogUtil.showProgress(this,"操作中");
+        HttpMethod.follow(dataBean.getUserId(), "0", HandlerConstant.FOLLOW_SUCCESS, handler);
+    }
+
+
+    /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        switch (eventBusType.getStatus()) {
+            //取消用户关注
+            case EventStatus.CANCLE_FOCUS_USER:
+                //关注用户
+            case EventStatus.FOCUS_USER:
+                final int userId= (int) eventBusType.getObject();
+                for (int i=0;i<listAll.size();i++){
+                      if(userId==listAll.get(i).getUserId()){
+                          if(EventStatus.CANCLE_FOCUS_USER==eventBusType.getStatus()){
+                              listAll.get(i).setFollowUser(false);
+                          }else{
+                              listAll.get(i).setFollowUser(true);
+                          }
+                          break;
+                      }
+                }
+                onlineListAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         removeHandler(handler);
+        EventBus.getDefault().unregister(this);
     }
 }

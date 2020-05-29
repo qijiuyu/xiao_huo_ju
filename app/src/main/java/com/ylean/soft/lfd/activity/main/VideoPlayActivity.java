@@ -215,7 +215,7 @@ public class VideoPlayActivity extends BaseActivity {
 
             public void onDrawerOpened(View arg0) {
                 if(videoBean!=null){
-                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
+                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 }
             }
 
@@ -362,7 +362,7 @@ public class VideoPlayActivity extends BaseActivity {
                 break;
             //选集
             case R.id.lin_select_blues:
-                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
+                 EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                  drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             //暂停/播放
@@ -574,18 +574,6 @@ public class VideoPlayActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                   drawerLayout.closeDrawer(Gravity.RIGHT);
                  break;
-            //选择单集视频播放
-            case EventStatus.PLAY_SELECT_BLUES:
-                 //添加浏览记录
-                 if(MyApplication.isLogin()){
-                     videoPlayPersenter.addBrowse(videoBean.getId(),videoView.getCurrentPosition()/1000);
-                 }
-                  drawerLayout.closeDrawer(Gravity.RIGHT);
-                  singleId= (int) eventBusType.getObject();
-                  serialId=0;
-                  //获取视频详情
-                  videoPlayPersenter.videoInfo(singleId,serialId);
-                  break;
             //取消用户关注
             case EventStatus.CANCLE_FOCUS_USER:
                  videoBean.setFollowUser(false);
@@ -635,6 +623,23 @@ public class VideoPlayActivity extends BaseActivity {
         tvComm.setText(String.valueOf(videoBean.getCommentCountDesc()));
         tvBlues.setText("当前："+videoBean.getCurrentEpisode()+"集");
         imgPlay.setVisibility(View.GONE);
+    }
+
+
+    /**
+     * 点击选集切换视频
+     * @param id
+     */
+    public void editVideo(int id){
+        //添加浏览记录
+        if(MyApplication.isLogin()){
+            videoPlayPersenter.addBrowse(videoBean.getId(),videoView.getCurrentPosition()/1000);
+        }
+        drawerLayout.closeDrawer(Gravity.RIGHT);
+        singleId= id;
+        serialId=0;
+        //获取视频详情
+        videoPlayPersenter.videoInfo(singleId,serialId);
     }
 
 

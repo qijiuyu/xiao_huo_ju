@@ -33,6 +33,7 @@ public class HotTop extends BaseBean {
         private String userNickName;
         private String introduction;
         private int userId;
+        private String starttime="";
 
         public int getId() {
             return id;
@@ -136,6 +137,14 @@ public class HotTop extends BaseBean {
 
         public void setPlayCountDesc(String playCountDesc) {
             this.playCountDesc = playCountDesc;
+        }
+
+        public String getStarttime() {
+            return starttime;
+        }
+
+        public void setStarttime(String starttime) {
+            this.starttime = starttime;
         }
     }
 }

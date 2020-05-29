@@ -114,11 +114,6 @@ public class EventStatus {
     //首页精选下各个频道对应的广告
     public static final int CHANNEL_ABVERT=227;
 
-   //发现视频页面查看剧集列表
-   public static final int FUND_SELECT_BLUES=228;
-
-    public static final int PLAY_SELECT_BLUES=229;
-
     public static final int USER_CLEAR_DATA=230;
 
     public static final int GO_TO_LOGIN=231;

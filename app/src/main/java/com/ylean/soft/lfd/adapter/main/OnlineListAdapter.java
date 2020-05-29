@@ -1,6 +1,5 @@
 package com.ylean.soft.lfd.adapter.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
+import com.ylean.soft.lfd.activity.main.OnlineListActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -24,9 +24,9 @@ import butterknife.ButterKnife;
 
 public class OnlineListAdapter extends BaseAdapter {
 
-    private Activity activity;
+    private OnlineListActivity activity;
     private List<HotTop.DataBean> list;
-    public OnlineListAdapter(Activity activity,List<HotTop.DataBean> list) {
+    public OnlineListAdapter(OnlineListActivity activity,List<HotTop.DataBean> list) {
         this.activity = activity;
         this.list=list;
     }
@@ -77,6 +77,34 @@ public class OnlineListAdapter extends BaseAdapter {
         }
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+        holder.tvTime.setText(dataBean.getStarttime());
+
+
+        /**
+         * 进入用户详情页面
+         */
+        holder.tvName.setTag(dataBean.getUserId());
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int userId= (int) v.getTag();
+                Intent intent=new Intent(activity, AuthorDetailsActivity.class);
+                intent.putExtra("id",userId);
+                activity.startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 关注，或者取消关注
+         */
+        holder.tvFocus.setTag(dataBean);
+        holder.tvFocus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+                activity.followUser(dataBean);
+            }
+        });
 
 
         /**
@@ -85,10 +113,10 @@ public class OnlineListAdapter extends BaseAdapter {
         holder.rel.setTag(dataBean);
         holder.rel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
-                Intent intent=new Intent(activity, VideoPlayActivity.class);
-                intent.putExtra("serialId",dataBean.getId());
-                activity.startActivity(intent);
+//                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+//                Intent intent=new Intent(activity, VideoPlayActivity.class);
+//                intent.putExtra("serialId",dataBean.getId());
+//                activity.startActivity(intent);
             }
         });
         return view;

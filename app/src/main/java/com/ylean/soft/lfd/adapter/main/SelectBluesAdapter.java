@@ -10,14 +10,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.zxdc.utils.library.bean.SerialVideo;
-import com.zxdc.utils.library.eventbus.EventBusType;
-import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.view.OvalImageViews;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -28,12 +25,10 @@ public class SelectBluesAdapter extends BaseAdapter {
 
     private Activity activity;
     private List<SerialVideo.SerialVideoBean> lis;
-    private int status;
-    public SelectBluesAdapter(Activity activity,List<SerialVideo.SerialVideoBean> lis,int status) {
+    public SelectBluesAdapter(Activity activity,List<SerialVideo.SerialVideoBean> lis) {
         super();
         this.activity = activity;
         this.lis=lis;
-        this.status=status;
     }
 
     @Override
@@ -83,7 +78,12 @@ public class SelectBluesAdapter extends BaseAdapter {
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int id= (int) v.getTag(R.id.tag1);
-                EventBus.getDefault().post(new EventBusType(status,id));
+                if(activity instanceof VideoPlayActivity){
+                    ((VideoPlayActivity)activity).editVideo(id);
+                }
+                if(activity instanceof RecommendedActivity){
+                    ((RecommendedActivity)activity).editVideo(id);
+                }
             }
         });
         return view;

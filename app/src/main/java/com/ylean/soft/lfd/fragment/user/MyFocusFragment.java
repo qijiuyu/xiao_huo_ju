@@ -1,5 +1,6 @@
 package com.ylean.soft.lfd.fragment.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,8 +8,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.adapter.focus.FocusPopleAdapter;
 import com.zxdc.utils.library.base.BaseFragment;
@@ -17,13 +21,15 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MeasureListView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -57,6 +63,11 @@ public class MyFocusFragment extends BaseFragment{
         listView.setDivider(null);
         focusPopleAdapter = new FocusPopleAdapter(mActivity, listAll);
         listView.setAdapter(focusPopleAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(mActivity, AuthorDetailsActivity.class);
+            }
+        });
 
         //加载数据
         if(isVisibleToUser && view!=null && listAll.size()==0){
@@ -99,6 +110,8 @@ public class MyFocusFragment extends BaseFragment{
             focusPopleAdapter.notifyDataSetChanged();
             if(listAll.size()==0){
                 tvNo.setVisibility(View.VISIBLE);
+            }else{
+                tvNo.setVisibility(View.GONE);
             }
             if(page==1){
                 EventBus.getDefault().post(new EventBusType(EventStatus.USER_POSITION_TOP));

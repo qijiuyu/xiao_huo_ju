@@ -1,8 +1,6 @@
 package com.ylean.soft.lfd.adapter.recommended;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -16,11 +14,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,11 +32,9 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.main.CommentActivity;
-import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.adapter.main.ScreenAdapter;
 import com.ylean.soft.lfd.persenter.main.VideoPlayPersenter;
-import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
 import com.ylean.soft.lfd.utils.MyOnTouchListener;
 import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.utils.ijkplayer.media.AndroidMediaController;
@@ -53,7 +47,6 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
@@ -258,7 +251,7 @@ public class FoundAdapter extends RecyclerView.Adapter<FoundAdapter.ViewHolder> 
                 break;
             //选集
             case R.id.lin_select_blues:
-                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.FUND_SELECT_BLUES));
+                EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 activity.drawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             //暂停/播放

@@ -9,9 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
@@ -23,25 +21,20 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMWeb;
 import com.ylean.soft.lfd.MyApplication;
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.activity.main.UploadVideoActivity;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.adapter.recommended.FoundAdapter;
 import com.ylean.soft.lfd.persenter.recommended.RecommendedPersenter;
-import com.ylean.soft.lfd.utils.KeyboardPatch;
-import com.ylean.soft.lfd.utils.KeyboardUtil;
-import com.ylean.soft.lfd.utils.SoftKeyboardStateHelper;
 import com.ylean.soft.lfd.view.NewDrawerLayout;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,7 +188,7 @@ public class RecommendedActivity extends BaseActivity {
             }
             public void onDrawerOpened(View arg0) {
                 if(videoBean!=null){
-                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId(),EventStatus.PLAY_SELECT_BLUES));
+                    EventBus.getDefault().post(new EventBusType(EventStatus.SELECT_BLUES,videoBean.getSerialId()));
                 }
             }
             public void onDrawerClosed(View arg0) {
@@ -251,19 +244,6 @@ public class RecommendedActivity extends BaseActivity {
             case EventStatus.CLOSE_VIDEO_RIGHT:
                 drawerLayout.closeDrawer(Gravity.RIGHT);
                 break;
-            //选择单集视频播放
-            case EventStatus.FUND_SELECT_BLUES:
-                  int singleId= (int) eventBusType.getObject();
-                  //添加浏览记录
-                  if(MyApplication.isLogin()){
-                      foundAdapter.addBrowse();
-                  }
-
-                  //播放选中的单集视频
-                  intent.setClass(this, VideoPlayActivity.class);
-                  intent.putExtra("singleId",singleId);
-                  startActivity(intent);
-                  break;
             //关注、取消关注用户
             case EventStatus.IS_FOLLOW:
                  if(videoBean.isFollowUser()){
@@ -299,6 +279,24 @@ public class RecommendedActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+
+    /**
+     * 通过点击选择跳转视频播放页面
+     * @param id
+     */
+    public void editVideo(int id){
+        //添加浏览记录
+        if(MyApplication.isLogin()){
+            foundAdapter.addBrowse();
+        }
+
+        //播放选中的单集视频
+        Intent intent=new Intent();
+        intent.setClass(this, VideoPlayActivity.class);
+        intent.putExtra("singleId",id);
+        startActivity(intent);
     }
 
 

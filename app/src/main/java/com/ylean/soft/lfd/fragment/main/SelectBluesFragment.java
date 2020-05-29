@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.adapter.main.SelectBluesAdapter;
 import com.zxdc.utils.library.base.BaseFragment;
@@ -16,14 +17,16 @@ import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -40,12 +43,6 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
     private SelectBluesAdapter selectBluesAdapter;
     //剧情id
     private int serialId;
-    /**
-     * EventStatus.SELECT_BLUES：播放页面进入
-     * EventStatus.FUND_SELECT_BLUES：发现视频页面进入
-     *
-     */
-    private int status;
     private List<SerialVideo.SerialVideoBean> listAll = new ArrayList<>();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +103,7 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
             List<SerialVideo.SerialVideoBean> list = serialVideo.getData();
             listAll.addAll(list);
             if(selectBluesAdapter==null){
-                selectBluesAdapter=new SelectBluesAdapter(mActivity,listAll,status);
+                selectBluesAdapter=new SelectBluesAdapter(mActivity,listAll);
                 listView.setAdapter(selectBluesAdapter);
             }else{
                 selectBluesAdapter.notifyDataSetChanged();
@@ -151,7 +148,6 @@ public class SelectBluesFragment extends BaseFragment implements MyRefreshLayout
         switch (eventBusType.getStatus()) {
             //开始查询剧集列表
             case EventStatus.SELECT_BLUES:
-                  status= (int) eventBusType.getObject2();
                   int id= (int) eventBusType.getObject();
                   if(id==serialId && listAll.size()>0){
                       return;

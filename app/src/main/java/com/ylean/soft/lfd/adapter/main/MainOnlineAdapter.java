@@ -50,6 +50,7 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
             Glide.with(activity).load(headUrl).into(holder.imgPic);
         }
         holder.tvName.setText(dataBean.getUserNickName());
+        holder.tvTime.setText(dataBean.getStarttime().split(" ")[0]);
     }
 
     @Override
@@ -60,12 +61,13 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
     public class MyHolder extends RecyclerView.ViewHolder {
        OvalImageViews imgHead;
         CircleImageView imgPic;
-        TextView tvTitle,tvName;
+        TextView tvTime,tvTitle,tvName;
         RelativeLayout relBespoke;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             imgHead=itemView.findViewById(R.id.img_head);
             imgPic=itemView.findViewById(R.id.img_pic);
+            tvTime=itemView.findViewById(R.id.tv_time);
             tvTitle=itemView.findViewById(R.id.tv_title);
             tvName=itemView.findViewById(R.id.tv_name);
             relBespoke=itemView.findViewById(R.id.rel_bespoke);

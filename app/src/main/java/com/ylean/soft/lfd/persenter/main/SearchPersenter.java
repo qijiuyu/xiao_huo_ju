@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.activity.main.SearchActivity;
 import com.ylean.soft.lfd.activity.main.SearchResultActivity;
 import com.ylean.soft.lfd.view.TagsLayout;
 import com.zxdc.utils.library.bean.HotSearch;
-import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
@@ -133,6 +131,9 @@ public class SearchPersenter {
             textView.setGravity(Gravity.CENTER);
             textView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    //保存搜索过的关键字
+                    addTabKey(((TextView) v).getText().toString());
+                    //跳转搜索结果页
                     gotoSearchList(((TextView) v).getText().toString());
                 }
             });
