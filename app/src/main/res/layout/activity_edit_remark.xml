@@ -18,6 +18,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_item_des"
         android:textSize="15sp"
+        android:maxLength="140"
         android:textColor="@color/color_999999"
         android:hint="请输入个人介绍"
         android:padding="10dp"
