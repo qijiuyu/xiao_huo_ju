@@ -109,11 +109,12 @@ public class TabActivity extends android.app.TabActivity {
         //设置推送
         setPush();
 
-        //查询最新版本
-        new UpdateVersionUtils().getVersion(this);
-
         // android 7.0系统解决拍照的问题
         PermissionUtil.initPhotoError();
+
+        UpdateVersionUtils updateVersionUtils=new UpdateVersionUtils();
+        //查询最新版本
+        updateVersionUtils.getVersion(this);
     }
 
 

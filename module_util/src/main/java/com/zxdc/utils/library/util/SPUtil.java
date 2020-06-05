@@ -34,6 +34,10 @@ public class SPUtil {
     public final static String IS_SMSCODE_LOGIN="IS_SMSCODE_LOGIN";
     //搜索的关键字
     public final static String SEARCH_KEY="SEARCH_KEY";
+    //服务器最新的apk版本名称
+    public final static String SERVER_VERSION="SERVER_VERSION";
+    //apk下载好的时间
+    public final static String UPLOAD_TIME="UPLOAD_TIME";
     private static SPUtil sharUtil = null;
     public static Gson gson=new Gson();
     private SPUtil(Context context, String sharname) {

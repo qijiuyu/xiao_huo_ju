@@ -24,6 +24,7 @@ import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.ArrowDownloadButton;
 
@@ -50,6 +51,53 @@ public class UpdateVersionUtils {
      */
     public void getVersion(Context mContext) {
         this.mContext = mContext;
+        final String serverVersion=SPUtil.getInstance(mContext).getString(SPUtil.SERVER_VERSION);
+        final String appVersion=Util.getVersionName(mContext);
+        if(!TextUtils.isEmpty(serverVersion)){
+            if(Double.parseDouble(appVersion)<Double.parseDouble(serverVersion)){
+                final File file=new File(savePath);
+                if(file.isFile()){
+                    long nowTime=System.currentTimeMillis()/1000;
+                    long updateTime=SPUtil.getInstance(mContext).getLong(SPUtil.UPLOAD_TIME)/1000;
+                    if(nowTime-updateTime>=(12*60*60)){
+                        View view = LayoutInflater.from(mContext).inflate(R.layout.start_apk, null);
+                        TextView tvCalcle =view.findViewById(R.id.tv_cancle);
+                        TextView tvConfirm =view.findViewById(R.id.tv_confirm);
+                        dialog = new Dialog(mContext, R.style.ActionSheetDialogStyle);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setTitle(null);
+                        dialog.setCancelable(false);
+                        dialog.setContentView(view);
+                        Window window = dialog.getWindow();
+                        window.setGravity(Gravity.CENTER);  //此处可以设置dialog显示的位置
+                        dialog.show();
+
+                        tvConfirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                startApk(file);
+                            }
+                        });
+
+                        tvCalcle.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        return;
+                    }
+                }
+            }else{
+                final File file=new File(savePath);
+                if(file.isFile()){
+                    file.delete();
+                }
+            }
+        }
+
+
         final String today_time=SPUtil.getInstance(mContext).getString("today_time");
         if(today_time.equals(sdf.format(new Date()))){
             return;
@@ -88,9 +136,12 @@ public class UpdateVersionUtils {
 
                             tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    View view = LayoutInflater.from(mContext).inflate(R.layout.update_version, null);
-                                    abtn =view.findViewById(R.id.arrow_download_button);
-                                    dialog.setContentView(view);
+                                    dialog.dismiss();
+                                    //记录今天的日期
+                                    SPUtil.getInstance(mContext).addString("today_time",sdf.format(new Date()));
+//                                    View view = LayoutInflater.from(mContext).inflate(R.layout.update_version, null);
+//                                    abtn =view.findViewById(R.id.arrow_download_button);
+//                                    dialog.setContentView(view);
 
                                     //先删除重复安装包文件
                                     File file = new File(savePath);
@@ -103,7 +154,8 @@ public class UpdateVersionUtils {
                                     d.setSavePath(savePath);
                                     //下载文件
                                     HttpMethod.download(d, mHandler);
-                                    abtn.startAnimating();
+                                    ToastUtil.showLong("已在后台进行下载");
+//                                    abtn.startAnimating();
                                 }
                             });
                             tvCalcle.setOnClickListener(new View.OnClickListener() {
@@ -121,40 +173,42 @@ public class UpdateVersionUtils {
                 case HandlerConstant.DOWNLOAD_PRORESS:
                     String progress = (String) msg.obj;
                     if (!TextUtils.isEmpty(progress)) {
-                        progress = progress.replace("%", "");
-                        abtn.setProgress(Integer.parseInt(progress));
+//                        progress = progress.replace("%", "");
+//                        abtn.setProgress(Integer.parseInt(progress));
                     }
                     break;
                 //下载完成后自动安装
                 case HandlerConstant.DOWNLOAD_SUCCESS:
-                    mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            dialog.dismiss();
-                            File file = new File(savePath);
-                            if (file.isFile()) {
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                                    Uri uri;
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 适配Android 7系统版本
-                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
-                                        uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".fileprovider", file);//通过FileProvider创建一个content类型的Uri
-                                    } else {
-                                        uri = Uri.fromFile(file);
-                                    }
-                                    intent.setDataAndType(uri, "application/vnd.android.package-archive"); // 对应apk类型
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    mContext.startActivity(intent);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }, 1000);
+                    LogUtils.e("下载完成+++++++++++++++++++++++++++++"+System.currentTimeMillis());
+
+                    //下载成功后保存服务器的版本号，以及当前的时间戳
+                    SPUtil.getInstance(mContext).addString(SPUtil.SERVER_VERSION,version.getData().getVersion());
+                    SPUtil.getInstance(mContext).addLong(SPUtil.UPLOAD_TIME,System.currentTimeMillis());
+
                     break;
 
             }
             return false;
         }
     });
+
+
+    public void startApk(File file){
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 适配Android 7系统版本
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".fileprovider", file);//通过FileProvider创建一个content类型的Uri
+            } else {
+                uri = Uri.fromFile(file);
+            }
+            intent.setDataAndType(uri, "application/vnd.android.package-archive"); // 对应apk类型
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
