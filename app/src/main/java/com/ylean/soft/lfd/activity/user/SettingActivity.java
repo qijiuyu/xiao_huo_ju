@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.init.AgreementActivity;
 import com.ylean.soft.lfd.activity.init.LoginActivity;
 import com.ylean.soft.lfd.activity.init.VerifyMobileActvity;
+import com.ylean.soft.lfd.utils.UpdateVersionUtils;
 import com.zxdc.utils.library.base.BaseActivity;
 import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.UserInfo;
@@ -32,12 +34,18 @@ import com.zxdc.utils.library.util.DataCleanManager;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.SPUtil;
 import com.zxdc.utils.library.util.ToastUtil;
+import com.zxdc.utils.library.util.Util;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 设置
  * Created by Administrator on 2020/2/8.
@@ -58,6 +66,10 @@ public class SettingActivity extends BaseActivity {
     RelativeLayout relPwd;
     @BindView(R.id.view_pwd)
     View viePwd;
+    @BindView(R.id.img_push)
+    ImageView imgPush;
+    @BindView(R.id.tv_version)
+    TextView tvVersion;
     private UserInfo.UserBean userBean;
     //0：微信，1：qq
     private int type;
@@ -65,6 +77,11 @@ public class SettingActivity extends BaseActivity {
     private UMShareAPI umShareAPI;
     //openId
     private String openId;
+    /**
+     * true：设置推送
+     * false：不推送
+     */
+    private boolean isPush=false;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
@@ -82,6 +99,14 @@ public class SettingActivity extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
         userBean= (UserInfo.UserBean) getIntent().getSerializableExtra("userBean");
+        final int isPush=SPUtil.getInstance(this).getInteger(SPUtil.JPUSH);
+        if(isPush==0){
+            imgPush.setImageDrawable(getResources().getDrawable(R.mipmap.open_news));
+        }else{
+            imgPush.setImageDrawable(getResources().getDrawable(R.mipmap.close_news));
+        }
+
+        tvVersion.setText("V"+Util.getVersionName(this));
     }
 
     /**
@@ -114,7 +139,7 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.img_bank, R.id.rel_mobile, R.id.rel_wx, R.id.rel_qq, R.id.rel_pwd, R.id.rel_agreement, R.id.rel_privacy, R.id.rel_hezuo,R.id.rel_help, R.id.rel_feedback, R.id.rel_cache, R.id.rel_about, R.id.tv_out})
+    @OnClick({R.id.img_bank, R.id.rel_version,R.id.rel_mobile, R.id.rel_wx, R.id.rel_qq, R.id.rel_pwd, R.id.rel_agreement, R.id.rel_privacy, R.id.rel_hezuo,R.id.rel_help, R.id.rel_feedback, R.id.rel_cache, R.id.rel_about, R.id.img_push,R.id.tv_out})
     public void onViewClicked(View view) {
         Intent intent=new Intent();
         switch (view.getId()) {
@@ -124,6 +149,12 @@ public class SettingActivity extends BaseActivity {
 //            case R.id.rel_mobile:
 //                setClass(BingMobileActivity.class);
 //                break;
+            case R.id.rel_version:
+                SPUtil.getInstance(this).removeMessage("today_time");
+                UpdateVersionUtils updateVersionUtils=new UpdateVersionUtils();
+                //查询最新版本
+                updateVersionUtils.getVersion(this,1);
+                 break;
             case R.id.rel_wx:
                  type=0;
                  if(userBean.isBindWx()){
@@ -184,6 +215,22 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rel_about:
                 setClass(AbountActivity.class);
+                break;
+            //设置推送
+            case R.id.img_push:
+                if(isPush){
+                    isPush=false;
+                    imgPush.setImageDrawable(getResources().getDrawable(R.mipmap.close_news));
+                    SPUtil.getInstance(this).addInt(SPUtil.JPUSH,1);
+                    //停止推送
+                    JPushInterface.stopPush(this);
+                }else{
+                    isPush=true;
+                    imgPush.setImageDrawable(getResources().getDrawable(R.mipmap.open_news));
+                    SPUtil.getInstance(this).addInt(SPUtil.JPUSH,0);
+                    //恢复推送
+                    JPushInterface.resumePush(this);
+                }
                 break;
             case R.id.tv_out:
                 SPUtil.getInstance(this).removeMessage(SPUtil.TOKEN);

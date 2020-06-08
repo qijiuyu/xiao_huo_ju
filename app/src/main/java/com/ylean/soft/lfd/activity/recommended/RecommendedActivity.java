@@ -310,7 +310,8 @@ public class RecommendedActivity extends BaseActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share");
+//        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share");
+        UMWeb web = new UMWeb(url);
         web.setTitle("小火剧");
         web.setDescription("提供小视频的娱乐平台");
         new ShareAction(this).setPlatform(share_media)

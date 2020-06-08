@@ -18,6 +18,7 @@ import com.zxdc.utils.library.bean.Help;
 import com.zxdc.utils.library.bean.HotSearch;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.bean.Login;
+import com.zxdc.utils.library.bean.NetCallBack;
 import com.zxdc.utils.library.bean.News;
 import com.zxdc.utils.library.bean.Project;
 import com.zxdc.utils.library.bean.ReplyList;
@@ -30,8 +31,10 @@ import com.zxdc.utils.library.bean.Version;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.http.base.BaseRequst;
 import com.zxdc.utils.library.http.base.Http;
+import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.SPUtil;
+import com.zxdc.utils.library.util.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -455,6 +458,26 @@ public class HttpMethod extends BaseRequst {
             }
             public void onFailure(Call<BaseBean> call, Throwable t) {
                 BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
+     * 关注、取消关注
+     */
+    public static void follow2(int relateid, String type, final NetCallBack netCallBack) {
+        Map<String,String> map=new HashMap<>();
+        map.put("relateid",String.valueOf(relateid));
+        map.put("type",type);
+        Http.getRetrofit().create(HttpApi.class).follow(map).enqueue(new Callback<BaseBean>() {
+            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
+                DialogUtil.closeProgress();
+                netCallBack.onSuccess(response.body());
+            }
+            public void onFailure(Call<BaseBean> call, Throwable t) {
+                DialogUtil.closeProgress();
+                ToastUtil.showLong(t.getMessage());
             }
         });
     }

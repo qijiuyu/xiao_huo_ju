@@ -112,9 +112,19 @@ public class TabActivity extends android.app.TabActivity {
         // android 7.0系统解决拍照的问题
         PermissionUtil.initPhotoError();
 
+        /**
+         * 设置是否推送
+         */
+        final int jpush=SPUtil.getInstance(this).getInteger(SPUtil.JPUSH);
+        if(jpush==0 && MyApplication.isLogin()){
+            JPushInterface.resumePush(this);  		// 恢复推送
+        }else{
+            JPushInterface.stopPush(this);      //停止推送
+        }
+
         UpdateVersionUtils updateVersionUtils=new UpdateVersionUtils();
         //查询最新版本
-        updateVersionUtils.getVersion(this);
+        updateVersionUtils.getVersion(this,0);
     }
 
 

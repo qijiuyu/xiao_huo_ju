@@ -147,6 +147,22 @@ public class MyFocusFragment extends BaseFragment{
                     focusUser();
                 }
                 break;
+            //取消某用户的关注了
+            case EventStatus.CANCLE_FOCUS_USER:
+                 final int id= (int) eventBusType.getObject();
+                 for (int i=0;i<listAll.size();i++){
+                      if(id==listAll.get(i).getId()){
+                          listAll.remove(i);
+                          break;
+                      }
+                 }
+                 focusPopleAdapter.notifyDataSetChanged();
+                if(listAll.size()==0){
+                    tvNo.setVisibility(View.VISIBLE);
+                }else{
+                    tvNo.setVisibility(View.GONE);
+                }
+                 break;
             default:
                 break;
         }

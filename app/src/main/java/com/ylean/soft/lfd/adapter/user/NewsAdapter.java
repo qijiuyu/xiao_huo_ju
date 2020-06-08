@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.ylean.soft.lfd.activity.user.NewsDetailsActivity;
+import com.ylean.soft.lfd.activity.web.WebViewActivity;
 import com.zxdc.utils.library.bean.News;
 
 import java.util.List;
@@ -54,7 +56,7 @@ public class NewsAdapter extends BaseAdapter {
         }
         News.NewsBean newsBean=list.get(position);
         holder.tvTitle.setText(newsBean.getTitle());
-        if(newsBean.getSerialId()>0){
+        if(newsBean.getJumpType()>0){
             String content=newsBean.getContent()+"<font color=\"#FF6D32\"><u>去查看＞</u></font>";
             holder.tvDes.setText(Html.fromHtml(content));
         }else{
@@ -69,10 +71,30 @@ public class NewsAdapter extends BaseAdapter {
         holder.tvDes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 News.NewsBean newsBean= (News.NewsBean) v.getTag();
-                if(newsBean.getSerialId()>0){
-                    Intent intent=new Intent(activity, VideoPlayActivity.class);
-                    intent.putExtra("serialId",newsBean.getSerialId());
-                    activity.startActivity(intent);
+                Intent intent=new Intent();
+                switch (newsBean.getJumpType()){
+                    case 0:
+                         break;
+                    case 1:
+                        intent.setClass(activity, WebViewActivity.class);
+                        intent.putExtra("url",newsBean.getLinkUrl());
+                        intent.putExtra("title",newsBean.getTitle());
+                        activity.startActivity(intent);
+                        break;
+                    case 2:
+                        intent.setClass(activity, NewsDetailsActivity.class);
+                        intent.putExtra("newsBean",newsBean);
+                        activity.startActivity(intent);
+                        break;
+                    case 3:
+                        intent.setClass(activity, VideoPlayActivity.class);
+                        intent.putExtra("serialId",newsBean.getSerialId());
+                        activity.startActivity(intent);
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        break;
                 }
             }
         });

@@ -92,6 +92,7 @@
         <activity android:name=".activity.user.HelpDetailsActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.main.AbvertActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.main.MoreAuthorActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.user.NewsDetailsActivity"  android:screenOrientation="portrait"/>
 
         <!--注册微信回调 WXEntryActivity -->
         <activity

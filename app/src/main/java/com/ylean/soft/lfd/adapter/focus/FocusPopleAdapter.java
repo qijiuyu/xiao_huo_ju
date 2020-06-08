@@ -1,16 +1,21 @@
 package com.ylean.soft.lfd.adapter.focus;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
+import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.zxdc.utils.library.bean.Focus;
+import com.zxdc.utils.library.bean.NetCallBack;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.view.CircleImageView;
 
 import java.util.List;
@@ -22,6 +27,7 @@ public class FocusPopleAdapter extends BaseAdapter {
 
     private Activity activity;
     private List<Focus.FocusBean> list;
+    private Focus.FocusBean playBean;
     public FocusPopleAdapter(Activity activity,List<Focus.FocusBean> list) {
         super();
         this.activity = activity;
@@ -60,11 +66,39 @@ public class FocusPopleAdapter extends BaseAdapter {
             Glide.with(activity).load(headUrl).into(holder.imgHead);
         }
         holder.tvName.setText(focusBean.getNickname());
+
+        /**
+         * 进入作者详情
+         */
+        holder.relClick.setTag(focusBean);
+        holder.relClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Focus.FocusBean focusBean= (Focus.FocusBean) v.getTag();
+                Intent intent=new Intent(activity, AuthorDetailsActivity.class);
+                intent.putExtra("id",focusBean.getId());
+                activity.startActivity(intent);
+            }
+        });
+
+        /**
+         * 取消关注
+         */
+        holder.tvFocus.setTag(focusBean);
+        holder.tvFocus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playBean= (Focus.FocusBean) v.getTag();
+                HttpMethod.follow2(playBean.getId(), "0", netCallBack);
+            }
+        });
         return view;
     }
 
 
     static class ViewHolder {
+        @BindView(R.id.rel_click)
+        RelativeLayout relClick;
         @BindView(R.id.img_head)
         CircleImageView imgHead;
         @BindView(R.id.tv_name)
@@ -76,5 +110,14 @@ public class FocusPopleAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
+
+
+    public NetCallBack netCallBack=new NetCallBack() {
+        @Override
+        public void onSuccess(Object object) {
+            list.remove(playBean);
+            notifyDataSetChanged();
+        }
+    };
 }
 

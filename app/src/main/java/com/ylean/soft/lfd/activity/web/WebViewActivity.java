@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.base.BaseWebView;
@@ -19,6 +20,8 @@ public class WebViewActivity extends BaseWebView {
 
     @BindView(R.id.webview)
     WebView webview;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     private String url;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,8 @@ public class WebViewActivity extends BaseWebView {
      */
     private void initView() {
         url = getIntent().getStringExtra("url");
+        String title = getIntent().getStringExtra("title");
+        tvTitle.setText(title);
         initWebView(webview);
         webview.loadUrl(url);
         findViewById(R.id.img_bank).setOnClickListener(new View.OnClickListener() {
@@ -46,7 +51,7 @@ public class WebViewActivity extends BaseWebView {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             if (webview.canGoBack()) {
                 webview.goBack();
             } else {

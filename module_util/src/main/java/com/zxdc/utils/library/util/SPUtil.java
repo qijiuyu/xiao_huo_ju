@@ -38,6 +38,8 @@ public class SPUtil {
     public final static String SERVER_VERSION="SERVER_VERSION";
     //apk下载好的时间
     public final static String UPLOAD_TIME="UPLOAD_TIME";
+    //推送
+    public final static String JPUSH="JPUSH";
     private static SPUtil sharUtil = null;
     public static Gson gson=new Gson();
     private SPUtil(Context context, String sharname) {

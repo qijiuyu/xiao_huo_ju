@@ -120,6 +120,37 @@
                 android:background="@color/color_F8F8F8"/>
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="推送消息"
+                    android:textSize="15sp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@android:color/black"/>
+
+                <ImageView
+                    android:id="@+id/img_push"
+                    android:layout_width="57dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/open_news"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_D8D8D8"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+            <RelativeLayout
                 android:id="@+id/rel_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="62.5dp"
@@ -360,6 +391,35 @@
                     android:src="@mipmap/more_icon"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rel_version"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="检查更新"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.0.01"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="5dp"/>
 
             </RelativeLayout>
 

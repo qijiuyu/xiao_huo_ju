@@ -28,6 +28,33 @@ public class News extends BaseBean {
         private int status;
         private String title;
         private int type;
+        private String details;
+        private int jumpType;
+        private String linkUrl;
+
+        public String getDetails() {
+            return details;
+        }
+
+        public void setDetails(String details) {
+            this.details = details;
+        }
+
+        public int getJumpType() {
+            return jumpType;
+        }
+
+        public void setJumpType(int jumpType) {
+            this.jumpType = jumpType;
+        }
+
+        public String getLinkUrl() {
+            return linkUrl;
+        }
+
+        public void setLinkUrl(String linkUrl) {
+            this.linkUrl = linkUrl;
+        }
 
         public int getId() {
             return id;

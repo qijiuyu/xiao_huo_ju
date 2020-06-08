@@ -49,7 +49,7 @@ public class UpdateVersionUtils {
      *
      * @param mContext
      */
-    public void getVersion(Context mContext) {
+    public void getVersion(Context mContext,final int type) {
         this.mContext = mContext;
         final String serverVersion=SPUtil.getInstance(mContext).getString(SPUtil.SERVER_VERSION);
         final String appVersion=Util.getVersionName(mContext);
@@ -59,7 +59,7 @@ public class UpdateVersionUtils {
                 if(file.isFile()){
                     long nowTime=System.currentTimeMillis()/1000;
                     long updateTime=SPUtil.getInstance(mContext).getLong(SPUtil.UPLOAD_TIME)/1000;
-                    if(nowTime-updateTime>=(12*60*60)){
+                    if((nowTime-updateTime>=(12*60*60)) || type==1){
                         View view = LayoutInflater.from(mContext).inflate(R.layout.start_apk, null);
                         TextView tvCalcle =view.findViewById(R.id.tv_cancle);
                         TextView tvConfirm =view.findViewById(R.id.tv_confirm);

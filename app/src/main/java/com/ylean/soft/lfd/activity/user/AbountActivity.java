@@ -14,7 +14,6 @@ import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
-import com.zxdc.utils.library.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +27,6 @@ public class AbountActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_version)
-    TextView tvVersion;
     @BindView(R.id.tv_content)
     TextView tvContent;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +35,6 @@ public class AbountActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         tvTitle.setText("关于我们");
-        tvVersion.setText(Util.getVersionName(this));
 
         getAgreement();
     }
