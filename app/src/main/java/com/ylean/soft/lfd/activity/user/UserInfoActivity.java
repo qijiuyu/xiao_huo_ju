@@ -31,6 +31,7 @@ import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
+import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -183,7 +184,14 @@ public class UserInfoActivity extends BaseActivity {
             return;
         }
         Glide.with(this).load(HttpConstant.IP+userBean.getImgurl()).error(R.mipmap.default_head).into(imgHead);
-        tvName.setText(userBean.getNickname());
+        final String nickName=userBean.getNickname();
+        if(!TextUtils.isEmpty(nickName)){
+            if(Util.isPhoneNumber(nickName)){
+                tvName.setText(nickName.substring(0, 3) + "****" + nickName.substring(nickName.length() - 4, nickName.length()));
+            }else{
+                tvName.setText(nickName);
+            }
+        }
         //设置性别背景
         setSexBj(userBean.getSex());
         //设置生日

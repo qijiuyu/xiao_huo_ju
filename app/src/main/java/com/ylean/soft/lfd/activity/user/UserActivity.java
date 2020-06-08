@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
-import com.ylean.soft.lfd.activity.init.SelectTagActivity;
 import com.ylean.soft.lfd.fragment.user.LookHistoryFragment;
 import com.ylean.soft.lfd.fragment.user.MyFocusFragment;
 import com.ylean.soft.lfd.fragment.user.MyLikeFragment;
@@ -26,9 +25,8 @@ import com.zxdc.utils.library.bean.UserInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.Util;
 import com.zxdc.utils.library.view.CircleImageView;
-import com.zxdc.utils.library.view.MyRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,6 +34,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -246,8 +245,14 @@ public class UserActivity extends BaseActivity implements XScrollView.IXScrollVi
         tvFans.setText(String.valueOf(userBean.getFansCountDesc()));
         tvFocus.setText(String.valueOf(userBean.getFollowCountDesc()));
         tvId.setText("ID:"+userBean.getCode());
-        if(!TextUtils.isEmpty(userBean.getNickname())){
-            tvName.setText(userBean.getNickname());
+
+        final String nickName=userBean.getNickname();
+        if(!TextUtils.isEmpty(nickName)){
+            if(Util.isPhoneNumber(nickName)){
+                tvName.setText(nickName.substring(0, 3) + "****" + nickName.substring(nickName.length() - 4, nickName.length()));
+            }else{
+                tvName.setText(nickName);
+            }
         }else{
             tvName.setText("无");
         }

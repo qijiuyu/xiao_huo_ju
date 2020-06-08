@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.ylean.soft.lfd.R;
 import com.zxdc.utils.library.bean.Screen;
+import com.zxdc.utils.library.util.Util;
+
 import java.util.List;
 
 public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> {
@@ -29,7 +32,13 @@ public class ScreenAdapter extends RecyclerView.Adapter<ScreenAdapter.MyHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int i) {
         Screen.ScreenBean screenBean=list.get(i%list.size());
-        holder.tvContent.setText(screenBean.getNickname()+"："+screenBean.getContent());
+        final String nickName=screenBean.getNickname();
+        if(Util.isPhoneNumber(nickName)){
+            holder.tvContent.setText(nickName.substring(0, 3) + "****" + nickName.substring(nickName.length() - 4, nickName.length())+"："+screenBean.getContent());
+        }else{
+            holder.tvContent.setText(screenBean.getNickname()+"："+screenBean.getContent());
+        }
+
     }
 
     @Override

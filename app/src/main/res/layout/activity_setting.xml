@@ -145,10 +145,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/color_D8D8D8"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_height="10dp"
+                android:background="@color/color_F8F8F8"/>
 
             <RelativeLayout
                 android:id="@+id/rel_pwd"
