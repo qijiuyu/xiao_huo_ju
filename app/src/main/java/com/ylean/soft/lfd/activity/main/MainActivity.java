@@ -210,6 +210,15 @@ public class MainActivity extends BaseActivity {
                        }
                   }
                   break;
+            case EventStatus.GO_TO_CHANNEL:
+                 final int id= (int) eventBusType.getObject();
+                 for (int i=0;i<channelList.size();i++){
+                      if(id==channelList.get(i).getId()){
+                          pager.setCurrentItem(i);
+                          break;
+                      }
+                 }
+                break;
                   //重新登录
             case EventStatus.GO_TO_LOGIN:
                 Intent intent=new Intent(this,LoginActivity.class);

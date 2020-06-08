@@ -39,6 +39,7 @@ import com.zxdc.utils.library.util.error.CockroachUtil;
 import com.zxdc.utils.library.view.ClickLinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,8 @@ public class TabActivity extends android.app.TabActivity {
        }
 //        new KeyboardUtil(this, contentView);
         ButterKnife.bind(this);
+        //注册eventBus
+        EventBus.getDefault().register(this);
         initView();
         //刷新token
         refreshToken();
@@ -305,6 +308,22 @@ public class TabActivity extends android.app.TabActivity {
 
 
     /**
+     * EventBus注解
+     */
+    @Subscribe
+    public void onEvent(EventBusType eventBusType) {
+        switch (eventBusType.getStatus()) {
+            case EventStatus.GO_TO_CHANNEL:
+                 StatusBarUtils.setStatusBarMode(this,false,R.color.color_FFBC32);
+                 updateTag(0);
+                 break;
+             default:
+                 break;
+        }
+    }
+
+
+    /**
      * 连续点击两次返回退出
      *
      * @param event
@@ -316,6 +335,7 @@ public class TabActivity extends android.app.TabActivity {
                 ToastUtil.showLong("再按一次退出程序!");
                 exitTime = System.currentTimeMillis();
             } else {
+                EventBus.getDefault().unregister(this);
                 //关闭小强
                 CockroachUtil.clear();
                 ActivitysLifecycle.getInstance().exit();

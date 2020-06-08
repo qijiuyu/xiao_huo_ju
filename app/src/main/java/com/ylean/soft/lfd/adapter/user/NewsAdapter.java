@@ -14,6 +14,10 @@ import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.ylean.soft.lfd.activity.user.NewsDetailsActivity;
 import com.ylean.soft.lfd.activity.web.WebViewActivity;
 import com.zxdc.utils.library.bean.News;
+import com.zxdc.utils.library.eventbus.EventBusType;
+import com.zxdc.utils.library.eventbus.EventStatus;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -92,6 +96,8 @@ public class NewsAdapter extends BaseAdapter {
                         activity.startActivity(intent);
                         break;
                     case 4:
+                        EventBus.getDefault().post(new EventBusType(EventStatus.GO_TO_CHANNEL,newsBean.getSerialId()));
+                        activity.finish();
                         break;
                     default:
                         break;

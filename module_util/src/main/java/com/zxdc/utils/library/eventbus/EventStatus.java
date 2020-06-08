@@ -118,4 +118,6 @@ public class EventStatus {
 
     public static final int GO_TO_LOGIN=231;
 
+    public static final int GO_TO_CHANNEL=232;
+
 }
