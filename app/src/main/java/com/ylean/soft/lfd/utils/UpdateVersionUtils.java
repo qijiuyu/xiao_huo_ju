@@ -41,6 +41,7 @@ public class UpdateVersionUtils {
     private ArrowDownloadButton abtn;
     private Version version;
     private Context mContext;
+    private int type;
     private final String savePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xhj.apk";
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
@@ -51,6 +52,7 @@ public class UpdateVersionUtils {
      */
     public void getVersion(Context mContext,final int type) {
         this.mContext = mContext;
+        this.type=type;
         final String serverVersion=SPUtil.getInstance(mContext).getString(SPUtil.SERVER_VERSION);
         final String appVersion=Util.getVersionName(mContext);
         if(!TextUtils.isEmpty(serverVersion)){
@@ -166,6 +168,10 @@ public class UpdateVersionUtils {
                                 }
                             });
 
+                        }else{
+                            if(type==1){
+                                ToastUtil.showLong("已经是最新版");
+                            }
                         }
                     }
                     break;
