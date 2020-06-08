@@ -12,8 +12,10 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.AuthorDetailsActivity;
 import com.ylean.soft.lfd.activity.main.OnlineListActivity;
+import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -113,10 +115,14 @@ public class OnlineListAdapter extends BaseAdapter {
         holder.rel.setTag(dataBean);
         holder.rel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
-//                Intent intent=new Intent(activity, VideoPlayActivity.class);
-//                intent.putExtra("serialId",dataBean.getId());
-//                activity.startActivity(intent);
+                HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+                if(dataBean.getEpisodeCount()==0){
+                    ToastUtil.showLong("敬请期待");
+                    return;
+                }
+                Intent intent=new Intent(activity, VideoPlayActivity.class);
+                intent.putExtra("serialId",dataBean.getId());
+                activity.startActivity(intent);
             }
         });
         return view;

@@ -65,7 +65,7 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
     //数据集合
     private List<HotTop.DataBean> listAll = new ArrayList<>();
     //页码
-    private int page = 1;
+    private int page = 1,page2=0;
     //旋转动画
     private ObjectAnimator rotation;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,12 +155,15 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
                     refresh((HotTop) msg.obj);
                     break;
                 //获取推荐数据
-                case HandlerConstant.GET_MAIN_BANNER:
+                case HandlerConstant.GET_HOT_TOP_SUCCESS1:
                     HotTop hotTop = (HotTop) msg.obj;
                     if (hotTop == null) {
                         break;
                     }
                     if (hotTop.isSussess()) {
+                        if(hotTop.getData().size()<=5){
+                            page2=0;
+                        }
                         recycle.setLayoutManager(new GridLayoutManager(SearchResultActivity.this, 3));
                         recycle.setAdapter(new RecommendedAdapter(SearchResultActivity.this, hotTop.getData()));
                     } else {
@@ -255,7 +258,8 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
      * 获取推荐数据
      */
     private void mainBanner() {
-        HttpMethod.mainBanner(handler);
+        page2++;
+        HttpMethod.getHot_Top2("1",page2, HandlerConstant.GET_HOT_TOP_SUCCESS1,handler);
     }
 
     @Override

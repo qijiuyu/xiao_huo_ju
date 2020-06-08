@@ -355,6 +355,25 @@ public class HttpMethod extends BaseRequst {
 
 
     /**
+     * 获取热播和精选TOP剧集列表
+     */
+    public static void getHot_Top2(String querytype,int pageindex,final int index,final Handler handler) {
+        Map<String,String> map=new HashMap<>();
+        map.put("querytype",querytype);
+        map.put("pageindex",String.valueOf(pageindex));
+        map.put("pagesize","5");
+        Http.getRetrofit().create(HttpApi.class).getHot_Top(map).enqueue(new Callback<HotTop>() {
+            public void onResponse(Call<HotTop> call, Response<HotTop> response) {
+                BaseRequst.sendMessage(handler, index, response.body());
+            }
+            public void onFailure(Call<HotTop> call, Throwable t) {
+                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+            }
+        });
+    }
+
+
+    /**
      * 猜你喜欢
      */
     public static void guessLike(final Handler handler) {
@@ -1019,15 +1038,16 @@ public class HttpMethod extends BaseRequst {
     /**
      * 预约
      */
-    public static void bespoke(int serialid,final Handler handler) {
+    public static void bespoke(int serialid,final NetCallBack netCallBack) {
         Map<String,String> map=new HashMap<>();
         map.put("serialid",String.valueOf(serialid));
         Http.getRetrofit().create(HttpApi.class).bespoke(map).enqueue(new Callback<BaseBean>() {
             public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
-                BaseRequst.sendMessage(handler, HandlerConstant.BESPOKE_SUCCESS, response.body());
+                DialogUtil.closeProgress();
+                netCallBack.onSuccess(response.body());
             }
             public void onFailure(Call<BaseBean> call, Throwable t) {
-                BaseRequst.sendMessage(handler, HandlerConstant.REQUST_ERROR, t.getMessage());
+                DialogUtil.closeProgress();
             }
         });
     }

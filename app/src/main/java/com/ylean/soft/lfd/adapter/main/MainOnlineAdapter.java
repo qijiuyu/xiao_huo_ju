@@ -13,8 +13,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
+import com.zxdc.utils.library.bean.BaseBean;
 import com.zxdc.utils.library.bean.HotTop;
+import com.zxdc.utils.library.bean.NetCallBack;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
@@ -25,6 +28,7 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
 
     private Activity activity;
     private List<HotTop.DataBean> list;
+    private HotTop.DataBean playBean;
     public MainOnlineAdapter(Activity activity,List<HotTop.DataBean> list) {
         this.activity = activity;
         this.list=list;
@@ -55,6 +59,12 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
         holder.tvName.setText(dataBean.getUserNickName());
         holder.tvTime.setText(dataBean.getStarttime().split(" ")[0]);
 
+        if(dataBean.isAppointment()){
+            holder.relBespoke.setVisibility(View.GONE);
+        }else{
+            holder.relBespoke.setVisibility(View.VISIBLE);
+        }
+
         /**
          * 进入视频详情页面
          */
@@ -69,6 +79,19 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
                 intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 预约
+         */
+        holder.relBespoke.setTag(dataBean);
+        holder.relBespoke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playBean= (HotTop.DataBean) v.getTag();
+                HttpMethod.bespoke(playBean.getId(),netCallBack);
             }
         });
     }
@@ -93,6 +116,21 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
             relBespoke=itemView.findViewById(R.id.rel_bespoke);
         }
     }
+
+
+    public NetCallBack netCallBack=new NetCallBack() {
+        @Override
+        public void onSuccess(Object object) {
+            BaseBean baseBean= (BaseBean) object;
+            if(baseBean.isSussess()){
+                playBean.setAppointment(true);
+                notifyDataSetChanged();
+                ToastUtil.showLong("预约成功");
+            }else{
+                ToastUtil.showLong(baseBean.getDesc());
+            }
+        }
+    };
 
 }
 
