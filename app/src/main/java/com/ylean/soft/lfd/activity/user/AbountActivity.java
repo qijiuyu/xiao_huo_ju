@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ylean.soft.lfd.R;
@@ -14,6 +15,7 @@ import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
 import com.zxdc.utils.library.util.ToastUtil;
+import com.zxdc.utils.library.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +27,12 @@ import butterknife.OnClick;
 
 public class AbountActivity extends BaseActivity {
 
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_version)
+    TextView tvVersion;
     @BindView(R.id.tv_content)
     TextView tvContent;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class AbountActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         tvTitle.setText("关于我们");
+        tvVersion.setText(Util.getVersionName(this));
 
         getAgreement();
     }
@@ -56,6 +63,7 @@ public class AbountActivity extends BaseActivity {
                     }
                     if(agreement.isSussess() && agreement.getData()!=null){
                         tvContent.setText(Html.fromHtml(agreement.getData().getContent()));
+                        scrollView.scrollTo(0,0);
                     }else{
                         ToastUtil.showLong(agreement.getDesc());
                     }
