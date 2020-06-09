@@ -60,9 +60,9 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
         holder.tvTime.setText(dataBean.getStarttime().split(" ")[0]);
 
         if(dataBean.isAppointment()){
-            holder.relBespoke.setVisibility(View.GONE);
+            holder.tvBespoke.setText("已预约");
         }else{
-            holder.relBespoke.setVisibility(View.VISIBLE);
+            holder.tvBespoke.setText("预约");
         }
 
         /**
@@ -91,6 +91,9 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
             @Override
             public void onClick(View v) {
                 playBean= (HotTop.DataBean) v.getTag();
+                if(playBean.isAppointment()){
+                    return;
+                }
                 HttpMethod.bespoke(playBean.getId(),netCallBack);
             }
         });
@@ -104,7 +107,7 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
     public class MyHolder extends RecyclerView.ViewHolder {
        OvalImageViews imgHead;
         CircleImageView imgPic;
-        TextView tvTime,tvTitle,tvName;
+        TextView tvTime,tvTitle,tvName,tvBespoke;
         RelativeLayout relBespoke;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +117,7 @@ public class MainOnlineAdapter extends RecyclerView.Adapter<MainOnlineAdapter.My
             tvTitle=itemView.findViewById(R.id.tv_title);
             tvName=itemView.findViewById(R.id.tv_name);
             relBespoke=itemView.findViewById(R.id.rel_bespoke);
+            tvBespoke=itemView.findViewById(R.id.tv_bespoke);
         }
     }
 
