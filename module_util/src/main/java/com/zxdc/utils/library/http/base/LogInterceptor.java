@@ -116,11 +116,20 @@ public class LogInterceptor implements Interceptor {
      * 刷新token
      */
     private Login refreshToken(){
-        final String openId=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.OPEN_ID);
-        if(!TextUtils.isEmpty(openId)){
+        final String WX_OPEN_ID=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.WX_OPEN_ID);
+        final String QQ_OPEN_ID=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.QQ_OPEN_ID);
+        if(!TextUtils.isEmpty(WX_OPEN_ID) || !TextUtils.isEmpty(QQ_OPEN_ID)){
             Map<String,String> map=new HashMap<>();
-            map.put("openid", openId);
-            map.put("thirdlogintype","1");
+
+            if(!TextUtils.isEmpty(WX_OPEN_ID)){
+                map.put("openid", WX_OPEN_ID);
+                map.put("thirdlogintype","0");
+            }
+            if(!TextUtils.isEmpty(QQ_OPEN_ID)){
+                map.put("openid", QQ_OPEN_ID);
+                map.put("thirdlogintype","1");
+            }
+
             map.put("type","0");
             Login  login= null;
             try {

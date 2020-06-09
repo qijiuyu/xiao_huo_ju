@@ -170,8 +170,6 @@ public class LoginPersenter {
         this.type=type;
         this.userImg=userImg;
         this.nickName=nickName;
-        //存储openId
-        SPUtil.getInstance(activity).addString(SPUtil.OPEN_ID,openId);
         DialogUtil.showProgress(activity,"登录中");
         HttpMethod.threeLogin(openId,type,"0",null,userImg,nickName,null,handler);
     }

@@ -24,8 +24,10 @@ public class SPUtil {
     public final static String USER_ID="USER_ID";
     //是否通过第三方登录
     public final static String IS_THREE_LOGIN="IS_THREE_LOGIN";
-    //openId
-    public final static String OPEN_ID="OPEN_ID";
+    //微信的openId
+    public final static String WX_OPEN_ID="WX_OPEN_ID";
+    //QQ的openid
+    public final static String QQ_OPEN_ID="QQ_OPEN_ID";
     //登录账号
     public final static String ACCOUNT="ACCOUNT";
     //登录密码

@@ -24,6 +24,7 @@ import com.ylean.soft.lfd.activity.recommended.RecommendedActivity;
 import com.ylean.soft.lfd.activity.user.UserActivity;
 import com.ylean.soft.lfd.utils.PermissionUtil;
 import com.ylean.soft.lfd.utils.UpdateVersionUtils;
+import com.zxdc.utils.library.base.BaseApplication;
 import com.zxdc.utils.library.bean.Login;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
@@ -232,9 +233,15 @@ public class TabActivity extends android.app.TabActivity {
         if(TextUtils.isEmpty(token)){
             return;
         }
-        final String openId=SPUtil.getInstance(this).getString(SPUtil.OPEN_ID);
-        if(!TextUtils.isEmpty(openId)){
-            HttpMethod.threeLogin(openId,"1","0",null,null,null,null,handler);
+        final String WX_OPEN_ID=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.WX_OPEN_ID);
+        final String QQ_OPEN_ID=SPUtil.getInstance(BaseApplication.getContext()).getString(SPUtil.QQ_OPEN_ID);
+        if(!TextUtils.isEmpty(WX_OPEN_ID) || !TextUtils.isEmpty(QQ_OPEN_ID)){
+            if(!TextUtils.isEmpty(WX_OPEN_ID)){
+                HttpMethod.threeLogin(WX_OPEN_ID,"0","0",null,null,null,null,handler);
+            }
+            if(!TextUtils.isEmpty(QQ_OPEN_ID)){
+                HttpMethod.threeLogin(QQ_OPEN_ID,"1","0",null,null,null,null,handler);
+            }
         }else{
             final boolean isCode=SPUtil.getInstance(this).getBoolean(SPUtil.IS_SMSCODE_LOGIN);
             final String mobile=SPUtil.getInstance(this).getString(SPUtil.ACCOUNT);

@@ -76,7 +76,7 @@ public class SettingActivity extends BaseActivity {
     private IWXAPI api;
     private UMShareAPI umShareAPI;
     //openId
-    private String openId;
+//    private String openId;
     /**
      * true：设置推送
      * false：不推送
@@ -113,7 +113,6 @@ public class SettingActivity extends BaseActivity {
      * 展示设置信息
      */
     private void showBind(){
-        openId=SPUtil.getInstance(this).getString(SPUtil.OPEN_ID);
         tvMobile.setText(SPUtil.getInstance(this).getString(SPUtil.ACCOUNT));
         if(userBean!=null){
             if(userBean.isBindWx()){
@@ -158,7 +157,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.rel_wx:
                  type=0;
                  if(userBean.isBindWx()){
-                     isBind();
+                     isBind(1);
                  }else{
                      //注册微信d
                      api = WXAPIFactory.createWXAPI(this, Constant.WX_APPID, true);
@@ -176,7 +175,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.rel_qq:
                 type=1;
                 if(userBean.isBindQq()){
-                    isBind();
+                    isBind(2);
                 }else{
                     umShareAPI = UMShareAPI.get(this);
                     umShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, umAuthListener);
@@ -234,7 +233,8 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.tv_out:
                 SPUtil.getInstance(this).removeMessage(SPUtil.TOKEN);
-                SPUtil.getInstance(activity).removeMessage(SPUtil.OPEN_ID);
+                SPUtil.getInstance(activity).removeMessage(SPUtil.WX_OPEN_ID);
+                SPUtil.getInstance(activity).removeMessage(SPUtil.QQ_OPEN_ID);
                 SPUtil.getInstance(activity).removeMessage(SPUtil.ACCOUNT);
                 SPUtil.getInstance(activity).removeMessage(SPUtil.PASSWORD);
                 intent.setClass(this, LoginActivity.class);
@@ -301,9 +301,11 @@ public class SettingActivity extends BaseActivity {
                     return;
                 }
                 String[] str = msg.split(",");
-                openId=str[0];
+                String openId=str[0];
+                //存储openId
+                SPUtil.getInstance(activity).addString(SPUtil.WX_OPEN_ID,openId);
                 //绑定/解绑第三方信息
-                isBind();
+                isBind(1);
                 break;
             default:
                 break;
@@ -318,9 +320,11 @@ public class SettingActivity extends BaseActivity {
         public void onStart(SHARE_MEDIA share_media) {
         }
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            openId = map.get("openid");
+            String openId = map.get("openid");
+            //存储openId
+            SPUtil.getInstance(activity).addString(SPUtil.QQ_OPEN_ID,openId);
             //绑定/解绑第三方信息
-            isBind();
+            isBind(2);
         }
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
         }
@@ -357,9 +361,13 @@ public class SettingActivity extends BaseActivity {
     /**
      * 绑定/解绑第三方信息
      */
-    private void isBind(){
-        //存储openId
-        SPUtil.getInstance(activity).addString(SPUtil.OPEN_ID,openId);
+    private void isBind(int type){
+        String openId;
+        if(type==1){
+            openId=SPUtil.getInstance(this).getString(SPUtil.WX_OPEN_ID);
+        }else{
+           openId=SPUtil.getInstance(this).getString(SPUtil.QQ_OPEN_ID);
+        }
         DialogUtil.showProgress(this,"加载中");
         HttpMethod.isBind(String.valueOf(type),openId,handler);
     }

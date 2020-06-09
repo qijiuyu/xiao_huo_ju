@@ -206,6 +206,8 @@ public class LoginActivity extends BaseActivity {
                  }
                  String[] str = msg.split(",");
                  loginPersenter.threeLogin(str[0],"0", str[1], str[2]);
+                //存储openId
+                SPUtil.getInstance(activity).addString(SPUtil.WX_OPEN_ID,openId);
                  break;
             case EventStatus.CLOSE_PAGE:
                  finish();
@@ -306,6 +308,8 @@ public class LoginActivity extends BaseActivity {
                             userImg=data.get("profile_image_url");
                             nickName=data.get("screen_name");
                             loginPersenter.threeLogin(openId,"1",userImg,nickName);
+                            //存储openId
+                            SPUtil.getInstance(activity).addString(SPUtil.QQ_OPEN_ID,openId);
                         }
                         @Override
                         public void onCancel(SHARE_MEDIA arg0, int arg1) {
