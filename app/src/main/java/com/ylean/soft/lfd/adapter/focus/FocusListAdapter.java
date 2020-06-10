@@ -2,6 +2,7 @@ package com.ylean.soft.lfd.adapter.focus;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,8 @@ import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
-import com.zxdc.utils.library.bean.Tag;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -74,9 +75,19 @@ public class FocusListAdapter extends BaseAdapter {
         }
         holder.tvName.setText(dataBean.getUserNickName());
         holder.tvSize.setText(dataBean.getPlayCountDesc());
-        holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                holder.tvStatus.setText("即将开播");
+                break;
+            case 1:
+                holder.tvStatus.setText(Html.fromHtml("更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                holder.tvStatus.setText(Html.fromHtml("<font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
 
 
         /**
@@ -86,6 +97,10 @@ public class FocusListAdapter extends BaseAdapter {
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                if(dataBean.getUpdateStatus()==0){
+                    ToastUtil.showLong("敬请期待");
+                    return;
+                }
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
                 intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
@@ -106,8 +121,8 @@ public class FocusListAdapter extends BaseAdapter {
         TextView tvName;
         @BindView(R.id.tv_size)
         TextView tvSize;
-        @BindView(R.id.tv_blues)
-        TextView tvBlues;
+        @BindView(R.id.tv_status)
+        TextView tvStatus;
         @BindView(R.id.tv_type)
         TextView tvType;
         @BindView(R.id.tv_des)

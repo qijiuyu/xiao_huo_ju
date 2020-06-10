@@ -63,6 +63,15 @@ public class Project  extends BaseBean {
         private String userNickName;
         private String introduction;
         private int userId;
+        private int updateStatus;
+
+        public int getUpdateStatus() {
+            return updateStatus;
+        }
+
+        public void setUpdateStatus(int updateStatus) {
+            this.updateStatus = updateStatus;
+        }
 
         public int getId() {
             return id;

@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.MoreHotterActivity;
@@ -23,12 +25,10 @@ import com.zxdc.utils.library.http.HandlerConstant;
 import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.http.HttpMethod;
 import com.zxdc.utils.library.util.DialogUtil;
-import com.zxdc.utils.library.util.LogUtils;
 import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.MyRefreshLayout;
 import com.zxdc.utils.library.view.MyRefreshLayoutListener;
-import com.zxdc.utils.library.view.OvalImageViews;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -182,7 +182,18 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         }else{
             tvFocus.setText("未关注");
         }
-        tvDes.setText("播放 "+dataBean.getPlayCountDesc()+"w    更新至 第"+dataBean.getEpisodeCount()+"集");
+        tvDes.append("播放 "+dataBean.getPlayCountDesc()+"w");
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                tvDes.append("   即将开播");
+                break;
+            case 1:
+                tvDes.append(Html.fromHtml("   更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                tvDes.append(Html.fromHtml("   <font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
 
         /**
          * 关注，或者取消关注

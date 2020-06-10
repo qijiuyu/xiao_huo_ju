@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +15,7 @@ import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -52,7 +53,17 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
         }
         holder.tvSize.setText(dataBean.getPlayCountDesc());
         holder.tvTitle.setText(dataBean.getName());
-        holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                holder.tvStatus.setText("即将开播");
+                break;
+            case 1:
+                holder.tvStatus.setText(Html.fromHtml("更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                holder.tvStatus.setText(Html.fromHtml("<font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
 
         /**
          * 进入视频详情页面
@@ -61,6 +72,10 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                if(dataBean.getUpdateStatus()==0){
+                    ToastUtil.showLong("敬请期待");
+                    return;
+                }
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
                 intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
@@ -76,13 +91,13 @@ public class MainLookAdapter extends RecyclerView.Adapter<MainLookAdapter.MyHold
     public class MyHolder extends RecyclerView.ViewHolder {
        OvalImageViews imgHead;
         CircleImageView imgUser;
-        TextView tvTitle,tvNum,tvSize;
+        TextView tvTitle,tvStatus,tvSize;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             imgHead=itemView.findViewById(R.id.img_head);
             imgUser=itemView.findViewById(R.id.img_user);
             tvTitle=itemView.findViewById(R.id.tv_title);
-            tvNum=itemView.findViewById(R.id.tv_num);
+            tvStatus=itemView.findViewById(R.id.tv_status);
             tvSize=itemView.findViewById(R.id.tv_size);
         }
     }

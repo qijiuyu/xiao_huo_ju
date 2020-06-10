@@ -1,7 +1,6 @@
 package com.zxdc.utils.library.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,6 +96,15 @@ public class Tag extends BaseBean {
         private String channelName;//频道名称
         private String userNickName;
         private String introduction;
+        private int updateStatus;
+
+        public int getUpdateStatus() {
+            return updateStatus;
+        }
+
+        public void setUpdateStatus(int updateStatus) {
+            this.updateStatus = updateStatus;
+        }
 
         public int getId() {
             return id;

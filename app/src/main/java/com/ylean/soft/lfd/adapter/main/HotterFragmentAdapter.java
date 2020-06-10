@@ -2,6 +2,7 @@ package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
 import com.zxdc.utils.library.http.HttpConstant;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
 
@@ -99,9 +101,19 @@ public class HotterFragmentAdapter extends BaseAdapter {
             holder.tvFocus.setText("未关注");
         }
         holder.tvSize.setText(dataBean.getPlayCountDesc());
-        holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
         holder.tvType.setText(dataBean.getChannelName());
         holder.tvDes.setText(dataBean.getIntroduction());
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                holder.tvStatus.setText("即将开播");
+                break;
+            case 1:
+                holder.tvStatus.setText(Html.fromHtml("更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                holder.tvStatus.setText(Html.fromHtml("<font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
 
 
         /**
@@ -111,6 +123,10 @@ public class HotterFragmentAdapter extends BaseAdapter {
         holder.tvFocus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag();
+                if(dataBean.getUpdateStatus()==0){
+                    ToastUtil.showLong("敬请期待");
+                    return;
+                }
                 EventBus.getDefault().post(new EventBusType(EventStatus.HOT_PLAY_FOCUS,dataBean));
             }
         });
@@ -144,8 +160,8 @@ public class HotterFragmentAdapter extends BaseAdapter {
         TextView tvName;
         @BindView(R.id.tv_size)
         TextView tvSize;
-        @BindView(R.id.tv_blues)
-        TextView tvBlues;
+        @BindView(R.id.tv_status)
+        TextView tvStatus;
         @BindView(R.id.tv_type)
         TextView tvType;
         @BindView(R.id.tv_des)

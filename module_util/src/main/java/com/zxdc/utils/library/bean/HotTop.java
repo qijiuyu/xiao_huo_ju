@@ -34,6 +34,15 @@ public class HotTop extends BaseBean {
         private String introduction;
         private int userId;
         private String starttime="";
+        private int updateStatus;
+
+        public int getUpdateStatus() {
+            return updateStatus;
+        }
+
+        public void setUpdateStatus(int updateStatus) {
+            this.updateStatus = updateStatus;
+        }
 
         public int getId() {
             return id;

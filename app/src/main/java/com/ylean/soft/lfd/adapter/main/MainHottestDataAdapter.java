@@ -2,21 +2,25 @@ package com.ylean.soft.lfd.adapter.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.ylean.soft.lfd.R;
 import com.ylean.soft.lfd.activity.main.VideoPlayActivity;
 import com.zxdc.utils.library.bean.HotTop;
 import com.zxdc.utils.library.http.HttpConstant;
-import com.zxdc.utils.library.util.LogUtils;
+import com.zxdc.utils.library.util.ToastUtil;
 import com.zxdc.utils.library.view.CircleImageView;
 import com.zxdc.utils.library.view.OvalImageViews;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -93,7 +97,6 @@ public class MainHottestDataAdapter extends BaseAdapter {
         }
         holder.tvName.setText(dataBean.getUserNickName());
         holder.tvSize.setText(dataBean.getPlayCountDesc());
-        holder.tvBlues.setText("第"+dataBean.getEpisodeCount()+"集");
 
 
         /**
@@ -103,11 +106,28 @@ public class MainHottestDataAdapter extends BaseAdapter {
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 HotTop.DataBean dataBean= (HotTop.DataBean) v.getTag(R.id.tag1);
+                if(dataBean.getUpdateStatus()==0){
+                    ToastUtil.showLong("敬请期待");
+                    return;
+                }
                 Intent intent=new Intent(activity, VideoPlayActivity.class);
                 intent.putExtra("serialId",dataBean.getId());
                 activity.startActivity(intent);
             }
         });
+
+
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                holder.tvBlues.setText("即将开播");
+                break;
+            case 1:
+                holder.tvBlues.setText(Html.fromHtml("更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                holder.tvBlues.setText(Html.fromHtml("<font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
         return view;
     }
 

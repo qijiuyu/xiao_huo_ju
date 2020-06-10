@@ -23,6 +23,7 @@
                 android:scaleType="centerCrop"/>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_blues"
                 android:layout_width="48.5dp"
                 android:layout_height="18dp"
@@ -71,19 +72,12 @@
             android:layout_marginTop="5dp">
             
             <TextView
+                android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="更新至"
                 android:textColor="@color/color_999999"
                 android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/tv_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="12sp"
-                android:layout_marginLeft="5dp"/>
 
         </LinearLayout>
 

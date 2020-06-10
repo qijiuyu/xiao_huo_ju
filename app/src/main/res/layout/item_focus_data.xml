@@ -78,20 +78,13 @@
                android:layout_marginLeft="5dp"/>
 
            <TextView
+               android:id="@+id/tv_status"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:text="更新至"
                android:textColor="@color/color_999999"
                android:textSize="12sp"
                android:layout_marginLeft="16dp"/>
-
-           <TextView
-               android:id="@+id/tv_blues"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textSize="12sp"
-               android:textColor="@android:color/black"
-               android:layout_marginLeft="5dp"/>
 
        </LinearLayout>
        
