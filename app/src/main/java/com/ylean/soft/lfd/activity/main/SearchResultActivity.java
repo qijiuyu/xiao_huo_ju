@@ -109,7 +109,9 @@ public class SearchResultActivity extends BaseActivity implements TextView.OnEdi
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if(s.length()==0){
+                    finish();
+                }
             }
         });
     }
