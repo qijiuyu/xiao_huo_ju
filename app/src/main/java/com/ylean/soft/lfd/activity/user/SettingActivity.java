@@ -275,7 +275,7 @@ public class SettingActivity extends BaseActivity {
                           //展示设置信息
                           showBind();
                       }
-                      ToastUtil.showLong(baseBean.getDesc());
+                      ToastUtil.showLong("操作成功");
                       break;
                 case HandlerConstant.REQUST_ERROR:
                     ToastUtil.showLong(msg.obj.toString());

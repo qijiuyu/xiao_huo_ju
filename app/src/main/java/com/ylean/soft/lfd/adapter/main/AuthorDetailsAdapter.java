@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,17 @@ public class AuthorDetailsAdapter extends RecyclerView.Adapter<AuthorDetailsAdap
         }
         holder.tvTitle.setText(dataBean.getName());
         holder.tvSize.setText(dataBean.getPlayCountDesc());
-        holder.tvNum.setText("第"+dataBean.getEpisodeCount()+"集");
+        switch (dataBean.getUpdateStatus()){
+            case 0:
+                holder.tvStatus.setText("即将开播");
+                break;
+            case 1:
+                holder.tvStatus.setText(Html.fromHtml("更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+            case 2:
+                holder.tvStatus.setText(Html.fromHtml("<font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                break;
+        }
 
         holder.imgHead.setTag(R.id.tag1,dataBean);
         holder.imgHead.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +76,12 @@ public class AuthorDetailsAdapter extends RecyclerView.Adapter<AuthorDetailsAdap
 
     public class MyHolder extends RecyclerView.ViewHolder {
        OvalImageViews imgHead;
-        TextView tvTitle,tvNum,tvSize;
+        TextView tvTitle,tvStatus,tvSize;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             imgHead=itemView.findViewById(R.id.img_head);
             tvTitle=itemView.findViewById(R.id.tv_title);
-            tvNum=itemView.findViewById(R.id.tv_num);
+            tvStatus=itemView.findViewById(R.id.tv_status);
             tvSize=itemView.findViewById(R.id.tv_size);
         }
     }

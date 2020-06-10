@@ -92,7 +92,11 @@ public class NewsAdapter extends BaseAdapter {
                         break;
                     case 3:
                         intent.setClass(activity, VideoPlayActivity.class);
-                        intent.putExtra("serialId",newsBean.getEpisodeId());
+                        if(newsBean.getEpisodeId()!=0){
+                            intent.putExtra("singleId",newsBean.getEpisodeId());
+                        }else{
+                            intent.putExtra("serialId",newsBean.getSerialId());
+                        }
                         activity.startActivity(intent);
                         break;
                     case 4:
