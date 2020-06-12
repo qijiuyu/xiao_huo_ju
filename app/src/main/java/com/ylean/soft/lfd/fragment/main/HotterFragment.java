@@ -182,16 +182,15 @@ public class HotterFragment extends BaseFragment  implements MyRefreshLayoutList
         }else{
             tvFocus.setText("未关注");
         }
-        tvDes.append("播放 "+dataBean.getPlayCountDesc()+"w");
         switch (dataBean.getUpdateStatus()){
             case 0:
-                tvDes.append("   即将开播");
+                tvDes.setText("即将开播");
                 break;
             case 1:
-                tvDes.append(Html.fromHtml("   更新至 <font color=\"#000000\">第" + dataBean.getEpisodeCount() + "集</font>"));
+                tvDes.setText(Html.fromHtml("播放 "+dataBean.getPlayCountDesc()+"w   更新至 <font color=\"#ffffff\">第" + dataBean.getEpisodeCount() + "集</font>"));
                 break;
             case 2:
-                tvDes.append(Html.fromHtml("   <font color=\"#000000\">全" + dataBean.getEpisodeCount() + "集</font>"));
+                tvDes.setText(Html.fromHtml("播放 "+dataBean.getPlayCountDesc()+"w    <font color=\"#ffffff\">全" + dataBean.getEpisodeCount() + "集</font>"));
                 break;
         }
 
