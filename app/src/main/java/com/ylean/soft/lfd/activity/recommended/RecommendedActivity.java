@@ -30,6 +30,7 @@ import com.zxdc.utils.library.bean.Screen;
 import com.zxdc.utils.library.bean.VideoInfo;
 import com.zxdc.utils.library.eventbus.EventBusType;
 import com.zxdc.utils.library.eventbus.EventStatus;
+import com.zxdc.utils.library.http.HttpConstant;
 import com.zxdc.utils.library.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -310,7 +311,7 @@ public class RecommendedActivity extends BaseActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share?id="+videoBean.getId());
+        UMWeb web = new UMWeb(HttpConstant.IP+"/api/app/share?id="+videoBean.getId());
 //        UMWeb web = new UMWeb(url);
         web.setTitle("小火剧");
         web.setDescription("提供小视频的娱乐平台");

@@ -7,7 +7,7 @@ public class HttpConstant {
     //¥
 
     //测试IP
-    public static final String IP = "http://xhj.yl-mall.cn";
+    public static final String IP = "http://xhj.hotvod.com.cn";
 
     public static final String GET_CODE="/api/app/sms/send";
 

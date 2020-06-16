@@ -696,7 +696,7 @@ public class VideoPlayActivity extends BaseActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-        UMWeb web = new UMWeb("http://xhj.yl-mall.cn/api/app/share?id="+videoBean.getId());
+        UMWeb web = new UMWeb(HttpConstant.IP+"/api/app/share?id="+videoBean.getId());
 //        UMWeb web = new UMWeb(url);
         web.setTitle("小火剧");
         web.setDescription("提供小视频的娱乐平台");
